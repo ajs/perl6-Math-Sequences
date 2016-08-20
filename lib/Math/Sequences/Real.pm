@@ -50,6 +50,7 @@ class Reals is Range is export {
         Reals.new(:$min, :$max, :$excludes-min, :$excludes-max);
     }
 
+    method Str { self.gist }
     method of { ::Real }
     method Numeric { Inf }
     method is-int { False }

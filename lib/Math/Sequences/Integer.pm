@@ -5,27 +5,74 @@
 
 unit module Math::Sequences::Integer;
 
-role IntegerInfRange {
+class Integers is Range is export {
+    my $name = "ℤ";
+
+    multi method new(
+            :$min = -Inf,
+            :$max = Inf,
+            :$excludes-min = True,
+            :$excludes-max = True) {
+        say "MOO";
+        nextwith :$min, :$max, :$excludes-min, :$excludes-max
+    }
+
+    method is-default {
+        self.min == -Inf and self.max == Inf and
+            self.excludes-min and self.excludes-max;
+    }
+
+    method gist {
+        if self.is-default {
+            self.name;
+        } else {
+            my $emin = self.excludes-min ?? '^' !! '';
+            my $emax = self.excludes-max ?? '^' !! '';
+            "{self.^name}({self.min}{$emin}..{$emax}{self.max})"
+        }
+    }
+
+    method !params {
+        <min max excludes-min excludes-max>.map: -> $param {
+            ":{$param}(" ~ self."$param"() ~ ')'
+        }
+    }
+
+    method perl {
+        "Integers.new(" ~ self!params.join(",") ~ ")"
+    }
+
+    method !min-countable {
+        self.min.succ > self.min;
+    }
+
+    # An iterator based on the current range (full of fail)
+    method iterator {
+        my $counter = self!min-countable ??
+            { $^prev + 1 } !!
+            { fail "Cannot count from infinity" };
+        my $min = self.excludes-min ?? self.min.succ !! self.min;
+        my $op = self.excludes-max ?? &infix:<...^> !! &infix:<...>;
+        my $seq = $op((self.min, $counter), self.max);
+        $seq.iterator
+    }
+
+    # All of the integers >= $n
+    method from(Int $n) {
+        my $min = $n;
+        my $max = self.max;
+        my $excludes-min = self.excludes-min;
+        my $excludes-max = self.excludes-max;
+
+        self.WHAT.new(:$min, :$max, :$excludes-min, :$excludes-max);
+    }
+
     method of { ::Int }
     method Numeric { Inf }
     method is-int { True }
     method infinite { True }
     method elems { Inf }
-}
-
-class Integers is Range does IntegerInfRange is export {
-    method new {
-        nextwith :min(-Inf), :max(Inf),
-            :excludes-min(True), :excludes-max(True)
-    }
-    method iterator {
-        gather loop {
-            take fail "Integers are countable, " ~
-                "but only from a finite starting point";
-        } .iterator
-    }
-    method Str { "ℤ" }
-    method from($n) { ($n..^Inf) but IntegerInfRange }
+    method Str { self.gist }
 }
 
 # Naturals can mean 1..Inf or 0..Inf. Since
@@ -33,10 +80,23 @@ class Integers is Range does IntegerInfRange is export {
 # "wholes" and cover all our bases, we go
 # that way, but there is no "right" answer
 # in mathematics.
-class Naturals is Range does IntegerInfRange is export {
-    method new { nextwith :min(0), :max(Inf) }
-    method Str { "ℕ" }
-    method from($n where * >= 0) { ($n..^Inf) but IntegerInfRange }
+class Naturals is Integers is export {
+    my $name = 'ℕ';
+
+    method new(
+            :$min = 0,
+            :$max = Inf,
+            :$excludes-min = False,
+            :$excludes-max = True) {
+        nextwith :$min, :$max, :$excludes-min, :$excludes-max
+    }
+
+    method is-default {
+        self.min == 0 and self.max == Inf and
+            !self.excludes-min and self.excludes-max;
+    }
+
+    method from($n where * >= 0) { callsame }
 }
 
 our constant \ℤ is export = Integers.new;
