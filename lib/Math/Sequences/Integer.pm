@@ -13,7 +13,6 @@ class Integers is Range is export {
             :$max = Inf,
             :$excludes-min = True,
             :$excludes-max = True) {
-        say "MOO";
         nextwith :$min, :$max, :$excludes-min, :$excludes-max
     }
 
