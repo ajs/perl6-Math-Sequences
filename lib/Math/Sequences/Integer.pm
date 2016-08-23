@@ -47,13 +47,28 @@ class Integers is Range is export {
 
     # An iterator based on the current range (full of fail)
     method iterator {
-        my $counter = self!min-countable ??
-            { $^prev + 1 } !!
-            { fail "Cannot count from infinity" };
-        my $min = self.excludes-min ?? self.min.succ !! self.min;
-        my $op = self.excludes-max ?? &infix:<...^> !! &infix:<...>;
-        my $seq = $op((self.min, $counter), self.max);
-        $seq.iterator
+        my $offset = self.excludes-min ?? 1 !! 0;
+        my $countable = self!min-countable;
+        my &endcmp = self.excludes-max ?? &infix:<< > >> !! &infix:<< >= >>;
+        my &traverse = sub {
+            my $count = (state $n = 0)++;
+
+            my $next = self.min + $count + $offset;
+            if endcmp($next, self.max) {
+                IterationEnd;
+            } elsif $count == 0 and $offset == 0 {
+                self.min;
+            } elsif !$countable {
+                fail "Cannot count from non-finite starting point";
+            } else {
+                $next;
+            }
+        }
+        class :: does Iterator {
+            method new()      { nqp::create(self) }
+            method pull-one() { traverse }
+            method is-lazy()  { True  }
+        }.new
     }
 
     # All of the integers >= $n
