@@ -125,18 +125,18 @@ our $Wholes is export = ℕ.from(1);
 
 # via:
 # https://github.com/perl6/perl6-examples/blob/master/categories/best-of-rosettacode/binomial-coefficient.pl
-sub infix:<choose> { [*] ($^n ... 0) Z/ 1 .. $^p }
-sub infix:<ichoose> { ($^n choose $^p).floor }
+sub infix:<choose>($n, $p) { [*] ($n ... 0) Z/ 1 .. $p }
+sub infix:<ichoose>($n,$p --> Int) { ($n choose $p).floor }
 
+# Per OEIS A000111:
 # 2*a(n+1) = Sum_{k=0..n} binomial(n, k)*a(k)*a(n-k).
-
 sub euler-up-down($i) {
     given $i-1 {
-        when $_ < 2 { 1 }
+        when * < 2 { 1 }
         default {
-            ([+] (0..$_).map: -> $k {
-                ($_ ichoose $k) *
-                    euler-up-down($k) * euler-up-down($_-$k) }) div 2;
+            my $sum = [+] (0..$_).map: -> $k {
+                ($_ ichoose $k) * euler-up-down($k) * euler-up-down($_-$k) };
+            $sum div 2;
         }
     }
 }
