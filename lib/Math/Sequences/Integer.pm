@@ -8,8 +8,6 @@ unit module Math::Sequences::Integer;
 use nqp;
 
 class Integers is Range is export {
-    my $name = "ℤ";
-
     multi method new(
             $min = -Inf,
             $max = Inf,
@@ -17,8 +15,7 @@ class Integers is Range is export {
             :$excludes-max = True) {
         #Seems as if this doesn't get passed on correctly...
         #nextwith $min, $max, :$excludes-min, :$excludes-max
-        # Will this work?
-        self.bless($min, $max, :$excludes-min, :$excludes-max);
+        self.Range::new($min, $max, :$excludes-min, :$excludes-max);
     }
 
     method is-default {
@@ -26,9 +23,10 @@ class Integers is Range is export {
             self.excludes-min and self.excludes-max;
     }
 
+    method symbol { "ℤ" }
     method gist {
         if self.is-default {
-            self.name;
+            self.symbol;
         } else {
             my $emin = self.excludes-min ?? '^' !! '';
             my $emax = self.excludes-max ?? '^' !! '';
@@ -101,8 +99,6 @@ class Integers is Range is export {
 # that way, but there is no "right" answer
 # in mathematics.
 class Naturals is Integers is export {
-    my $name = 'ℕ';
-
     method new(
             $min = 0,
             $max = Inf,
@@ -111,6 +107,7 @@ class Naturals is Integers is export {
         nextwith $min, $max, :$excludes-min, :$excludes-max
     }
 
+    method symbol { 'ℕ' }
     method is-default {
         self.min == 0 and self.max == Inf and
             !self.excludes-min and self.excludes-max;

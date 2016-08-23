@@ -4,7 +4,7 @@ use Test;
 
 plan 3;
 
-subtest "ℕ", {
+subtest {
     plan 8;
 
     is ℕ.elems, Inf, "Infinite naturals";
@@ -16,7 +16,7 @@ subtest "ℕ", {
         is $i, $n, "ℕ[$n] should be $n";
         last if $n++ > 2;
     }
-}
+}, "ℕ";
 
 is $Wholes[0], 1, "Whole numbers from 1";
 is ℕ.from(20)[1], 21, "Arbitrary starting point";
