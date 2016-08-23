@@ -155,6 +155,8 @@ sub kolakoski($n) {
     }
 }
 
+# Per OEIS A000123
+sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 
 # If we don't yet have a formula for a given sequence, we use &NOSEQ in a
 # range to define where our canned data ends. Because we use "fail", the
@@ -233,17 +235,17 @@ our @A000111 is export = lazy ℕ.map: {euler-up-down($_)};
 # A000112 / posets
 our @A000112 is export = 1, 1, 2, 5, 16, 63, 318, 2045, 16999, &NOSEQ ... *;
 # A000120 / 1's in n
-our @A000120 is export = 1, &NOSEQ ... *;
+our @A000120 is export = lazy ℕ.map: {.base(2).comb.grep({+$_}).elems};
 # A000123 / binary partitions
-our @A000123 is export = 1, &NOSEQ ... *;
+our @A000123 is export = lazy ℕ.map: &binpart;
 # A000124 / Lazy Caterer
-our @A000124 is export = 1, &NOSEQ ... *;
+our @A000124 is export = lazy ℕ.map: -> $n {($n * ($n+1)) / 2 + 1};
 # A000129 / Pell
-our @A000129 is export = 1, &NOSEQ ... *;
+our @A000129 is export = 0, 1, * + 2 * * ... *;
 # A000140 / Kendall-Mann
 our @A000140 is export = 1, &NOSEQ ... *;
 # A000142 / n!
-our @A000142 is export = 1, &NOSEQ ... *;
+our @A000142 is export = [\*] ℕ.map: {.succ};
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
