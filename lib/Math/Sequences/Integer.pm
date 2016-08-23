@@ -5,15 +5,20 @@
 
 unit module Math::Sequences::Integer;
 
+use nqp;
+
 class Integers is Range is export {
     my $name = "ℤ";
 
     multi method new(
-            :$min = -Inf,
-            :$max = Inf,
+            $min = -Inf,
+            $max = Inf,
             :$excludes-min = True,
             :$excludes-max = True) {
-        nextwith :$min, :$max, :$excludes-min, :$excludes-max
+        #Seems as if this doesn't get passed on correctly...
+        #nextwith $min, $max, :$excludes-min, :$excludes-max
+        # Will this work?
+        self.bless($min, $max, :$excludes-min, :$excludes-max);
     }
 
     method is-default {
@@ -32,9 +37,10 @@ class Integers is Range is export {
     }
 
     method !params {
-        <min max excludes-min excludes-max>.map: -> $param {
-            ":{$param}(" ~ self."$param"() ~ ')'
-        }
+        self.min.perl, self.max.perl,
+            |(<excludes-min excludes-max>.map: -> $param {
+                ":{$param}(" ~ self."$param"() ~ ')'
+            });
     }
 
     method perl {
@@ -78,7 +84,7 @@ class Integers is Range is export {
         my $excludes-min = self.excludes-min;
         my $excludes-max = self.excludes-max;
 
-        self.WHAT.new(:$min, :$max, :$excludes-min, :$excludes-max);
+        self.WHAT.new($min, $max, :$excludes-min, :$excludes-max);
     }
 
     method of { ::Int }
@@ -98,11 +104,11 @@ class Naturals is Integers is export {
     my $name = 'ℕ';
 
     method new(
-            :$min = 0,
-            :$max = Inf,
+            $min = 0,
+            $max = Inf,
             :$excludes-min = False,
             :$excludes-max = True) {
-        nextwith :$min, :$max, :$excludes-min, :$excludes-max
+        nextwith $min, $max, :$excludes-min, :$excludes-max
     }
 
     method is-default {
