@@ -171,11 +171,11 @@ our @A000032 is export = 2, 1, * + * ... *;
 # A000035 / 0101...
 our @A000035 is export = |(0,1) xx *;
 # A000040 / primes
-our @A000040 is export = ℕ.grep: {.is-prime};
+our @A000040 is export = lazy ℕ.grep: {.is-prime};
 # A000041 / partitions
 our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
 # A000043 / Mersenne
-our @A000043 is export = ℕ.grep: { (2**$_-1).is-prime };
+our @A000043 is export = lazy ℕ.grep: { (2**$_-1).is-prime };
 # A000045 / Fibonacci
 our @A000045 is export = 0, 1, * + * ... *;
 # A000048 / necklaces
@@ -185,7 +185,7 @@ our @A000055 is export = 1, 1, 1, 1, 2, 3, 6, 11, 23, 47, 106, &NOSEQ ... *;
 # A000058 / Sylvester
 our @A000058 is export = 2, { $_**2 - $_ + 1 } ... *;
 # A000069 / odious
-our @A000069 is export = ℕ.grep: -> $n { ([+] $n.base(2).comb) !%% 2 };
+our @A000069 is export = lazy ℕ.grep: -> $n { ([+] $n.base(2).comb) !%% 2 };
 # A000079 / 2^n
 our @A000079 is export = 1, * * 2 ... *;
 # A000081 / rooted trees
@@ -197,7 +197,7 @@ our @A000088 is export = 1, 1, 2, 4, 11, 34, 156, 1044, 12346, &NOSEQ ... *;
 # A000105 / polyominoes
 our @A000105 is export = 1, 1, 1, 2, 5, 12, 35, 108, 369, 1285, &NOSEQ ... *;
 # A000108 / Catalan
-our @A000108 is export = ℕ.map: {(2*$^n choose $^n)/($^n+1)};
+our @A000108 is export = lazy ℕ.map: {(2*$^n choose $^n)/($^n+1)};
 # A000109 / polyhedra
 our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, &NOSEQ ... *;
 # A000110 / Bell
