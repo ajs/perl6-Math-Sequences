@@ -56,8 +56,8 @@ class Integers is Range is export {
         my &endcmp = self.excludes-max ?? &infix:<< > >> !! &infix:<< >= >>;
         my &traverse = sub {
             my $count = (state $n = 0)++;
-
             my $next = self.min + $count + $offset;
+
             if endcmp($next, self.max) {
                 IterationEnd;
             } elsif $count == 0 and $offset == 0 {
@@ -141,12 +141,26 @@ sub euler-up-down($i) {
     }
 }
 
+# Per OEIS A000002
+sub kolakoski($n) {
+    if $n == 1 { 1 }
+    elsif $n <= 3 { 2 }
+    else {
+        my $ksu = 0;
+        for $Wholes -> $k {
+            $ksu += kolakoski($k);
+            if $_ == $ksu { return (3 + -1**$k)/2 }
+            elsif $n == $ksu+1 { return (3 - -1**$k)/2 }
+        }
+    }
+}
+
 
 # If we don't yet have a formula for a given sequence, we use &NOSEQ in a
 # range to define where our canned data ends. Because we use "fail", the
 # failure only happens if you try to use a value past the end of our known
 # entries.
-my &NOSEQ = { fail "This sequence has not yet been defined" };
+sub NOSEQ { fail "This sequence has not yet been defined" }
 
 # These are the "core" OEIS sequences as defined here:
 # http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
@@ -155,7 +169,7 @@ my &NOSEQ = { fail "This sequence has not yet been defined" };
 # groups
 our @A000001 is export = 0, 1, 1, 1, 2, 1, 2, 1, 5, 2, 2, 1, &NOSEQ ... *;
 # Kolakoski
-our @A000002 is export = 1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, &NOSEQ ... *;
+our @A000002 is export = lazy $Wholes.map: &kolakoski;
 # A000004 / 0's
 our @A000004 is export = 0 xx *;
 # A000005 / divisors
@@ -215,7 +229,7 @@ our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, &NOSEQ ... *;
 # A000110 / Bell
 our @A000110 is export = 1, 1, 2, 5, 15, 52, 203, 877, 4140, &NOSEQ ... *;
 # A000111 / Euler
-our @A000111 is export = ℕ.map: {euler-up-down($_)};
+our @A000111 is export = lazy ℕ.map: {euler-up-down($_)};
 # A000112 / posets
 our @A000112 is export = 1, 1, 2, 5, 16, 63, 318, 2045, 16999, &NOSEQ ... *;
 # A000120 / 1's in n
