@@ -5,8 +5,8 @@
     "description" : "Various mathematical sequences of moderate use",
     "authors" : [ "Aaron Sherman" ],
     "provides" : {
-        "Math::Sequences" : "lib/Math/Sequences.pm"
-        "Math::Sequences::Integer" : "lib/Math/Sequences/Integer.pm"
+        "Math::Sequences" : "lib/Math/Sequences.pm",
+        "Math::Sequences::Integer" : "lib/Math/Sequences/Integer.pm",
         "Math::Sequences::Real" : "lib/Math/Sequences/Real.pm"
     },
     "depends" : [ "CompUnit::Util" ],
