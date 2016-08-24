@@ -147,9 +147,9 @@ sub kolakoski($n) {
     elsif $n <= 3 { 2 }
     else {
         my $ksu = 0;
-        for $Wholes -> $k {
+        for ℕ.map({.succ}) -> $k {
             $ksu += kolakoski($k);
-            if $_ == $ksu { return (3 + -1**$k)/2 }
+            if $n == $ksu { return (3 + -1**$k)/2 }
             elsif $n == $ksu+1 { return (3 - -1**$k)/2 }
         }
     }
@@ -171,7 +171,7 @@ sub NOSEQ { fail "This sequence has not yet been defined" }
 # groups
 our @A000001 is export = 0, 1, 1, 1, 2, 1, 2, 1, 5, 2, 2, 1, &NOSEQ ... *;
 # Kolakoski
-our @A000002 is export = lazy $Wholes.map: &kolakoski;
+our @A000002 is export = ℕ.map({.succ}).map: &kolakoski;
 # A000004 / 0's
 our @A000004 is export = 0 xx *;
 # A000005 / divisors
