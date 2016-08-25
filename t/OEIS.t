@@ -887,7 +887,7 @@ plan +@core-sequences;
 
 for @core-sequences {
     my $name = .key;
-    is @::($name)[^.value].flat, .value, $name;
+    is @::($name)[^.value], .value, $name;
     CATCH {
         when ~$_ ~~ rx:s/been defined/ {
             pass "Not yet implemented: $name";
