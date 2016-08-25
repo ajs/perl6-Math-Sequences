@@ -162,7 +162,8 @@ our @A000002 is export = 1, 2, 2, -> $i {
 # A000004 / 0's
 our @A000004 is export = 0 xx *;
 # A000005 / divisors
-our @A000005 is export = $Wholes.map: -> $n { (((1..$n) X (1..$n)).grep: -> ($a,$b) { $a*$b == $n }).elems };
+our @A000005 is export = 1, &NOSEQ ... *;
+    #$Wholes.map: -> $n { (((1..$n) X (1..$n)).grep: -> ($a,$b) { $a*$b == $n }).elems };
 # A000007 / 0^n
 our @A000007 is export = ℕ.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
@@ -326,7 +327,7 @@ our @A001065 is export = 1, &NOSEQ ... *;
 # A001057 / all integers
 our @A001057 is export = 1, &NOSEQ ... *;
 # A001097 / twin primes
-our @A001097 is export = 1, &NOSEQ ... *;
+our @A001097 is export = ℕ.grep: {.is-prime and ($_+2 | $_-2 | $_+1).is-prime};
 # A001113 / e
 our @A001113 is export = 1, &NOSEQ ... *;
 # A001147 / double factorials
