@@ -163,6 +163,9 @@ sub factors($n is copy) {
 # entries.
 sub NOSEQ { fail "This sequence has not yet been defined" }
 
+# Needed for other sequences
+our @A010051 is export = ℕ.map: { .is-prime ?? 1 !! 0 };
+
 # These are the "core" OEIS sequences as defined here:
 # http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
 #
@@ -310,7 +313,7 @@ our @A000670 is export = 1, &NOSEQ ... *;
 # A000688 / abelian groups
 our @A000688 is export = 1, &NOSEQ ... *;
 # A000720 / pi(n)
-our @A000720 is export = 1, &NOSEQ ... *;
+our @A000720 is export = [\+] @A010051;
 # A000793 / Landau
 our @A000793 is export = 1, &NOSEQ ... *;
 # A000796 / Pi
@@ -351,9 +354,9 @@ our @A001157 is export = 1, &NOSEQ ... *;
 # A001190 / Wedderburn-Etherington
 our @A001190 is export = 1, &NOSEQ ... *;
 # A001221 / omega
-our @A001221 is export = 1, &NOSEQ ... *;
+our @A001221 is export = (1..*).map: {factors($_).Set.keys.elems};
 # A001222 / Omega
-our @A001222 is export = 1, &NOSEQ ... *;
+our @A001222 is export = (1..*).map: {factors($_).elems};
 # A001227 / odd divisors
 our @A001227 is export = 1, &NOSEQ ... *;
 # A001285 / Thue-Morse
