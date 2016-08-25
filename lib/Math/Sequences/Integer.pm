@@ -197,7 +197,7 @@ our @A000014 is export = 0, 1, 1, 0, 1, 1, 2, 2, 4, 5, 10, 14, &NOSEQ ... *;
 # A000019 / prim. perm. groups
 our @A000019 is export = 1, 1, 2, 2, 5, 4, 7, 7, 11, 9, 8, 6, &NOSEQ ... *;
 # A000027 / natural numbers
-our @A000027 is export = ℕ;
+our @A000027 is export = |$Wholes; # We chose ℕ[0]=0, OEIS chose ℕ[0]=1
 # A000029 / necklaces
 our @A000029 is export = 1, 2, 3, 4, 6, 8, 13, 18, 30, 46, 78, &NOSEQ ... *;
 # A000031 / necklaces
