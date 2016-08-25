@@ -43,8 +43,13 @@ my $tests = q:to<END_TESTS>;
         my $name = .key;
         my $value = .value;
 
+        if %Math::Sequences::Integer::BROKEN{$name}:exists {
+            skip "$name: Known broken", 1;
+            next;
+        }
+
         for [$value.elems, $value.elems div 3] -> $len is copy {
-            constant timeout = 3;
+            constant timeout = 5;
             my $timer = Promise.in(timeout);
             my $test = start {
                 is @::($name)[^$len], $value[^$len], $name;

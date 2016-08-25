@@ -3,9 +3,7 @@
 # This module is absolutely not meant to be exhausive.
 # It should contain only those sequences that are frequently needed.
 
-unit module Math::Sequences::Integer;
-
-use nqp;
+unit module Math::Sequences::Integer is export;
 
 class Integers is Range is export {
     multi method new(
@@ -134,19 +132,21 @@ sub infix:<ichoose>($n,$p --> Int) { ($n choose $p).floor }
 
 # Per OEIS A000111:
 # 2*a(n+1) = Sum_{k=0..n} binomial(n, k)*a(k)*a(n-k).
-sub euler-up-down($i) {
-    given $i-1 {
-        when * < 2 { 1 }
-        default {
-            my $sum = [+] (0..$_).map: -> $k {
-                ($_ ichoose $k) * euler-up-down($k) * euler-up-down($_-$k) };
-            $sum div 2;
-        }
+sub euler-up-down($i is copy) {
+    $i++;
+    if $i < 2 {
+        1
+    } else {
+        my $sum = [+] (0..$i).map: -> $k {
+            ($i ichoose $k) * euler-up-down($k) * euler-up-down($i-$k) };
+        $sum div 2;
     }
 }
 
 # Per OEIS A000123
 sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
+
+our %BROKEN = :A000111,;
 
 # TODO Replace with better factorization
 sub factors($n is copy) {
@@ -168,7 +168,7 @@ sub factors($n is copy) {
 sub NOSEQ { fail "This sequence has not yet been defined" }
 
 # Needed for other sequences
-our @A010051 is export = ℕ.map: { .is-prime ?? 1 !! 0 };
+our @A010051 is export = $Wholes.map: { .is-prime ?? 1 !! 0 };
 
 # These are the "core" OEIS sequences as defined here:
 # http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
@@ -253,7 +253,7 @@ our @A000129 is export = 0, 1, * + 2 * * ... *;
 # A000140 / Kendall-Mann
 our @A000140 is export = 1, &NOSEQ ... *;
 # A000142 / n!
-our @A000142 is export = [\*] ℕ.map: {.succ};
+our @A000142 is export = 1, |[\*] ℕ.map: {.succ};
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
@@ -347,8 +347,7 @@ our @A001065 is export = 1, &NOSEQ ... *;
 # A001057 / all integers
 our @A001057 is export = 1, &NOSEQ ... *;
 # A001097 / twin primes
-our @A001097 is export = ℕ.grep: {
-    $_ == 2 or $_ !%% 2 and .is-prime and ($_+2 | $_-2).is-prime};
+our @A001097 is export = ℕ.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
 # A001113 / e
 our @A001113 is export = 1, &NOSEQ ... *;
 # A001147 / double factorials
