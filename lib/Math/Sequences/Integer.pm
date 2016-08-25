@@ -54,8 +54,8 @@ class Integers is Range is export {
         my $offset = self.excludes-min ?? 1 !! 0;
         my $countable = self!min-countable;
         my &endcmp = self.excludes-max ?? &infix:<< > >> !! &infix:<< >= >>;
-        my &traverse = sub {
-            my $count = (state $n = 0)++;
+        my &traverse = sub ($n is rw) {
+            my $count = $n++;
             my $next = self.min + $count + $offset;
 
             if endcmp($next, self.max) {
@@ -70,7 +70,7 @@ class Integers is Range is export {
         }
         class :: does Iterator {
             method new()      { nqp::create(self) }
-            method pull-one() { traverse }
+            method pull-one() { traverse(state $n = 0) }
             method is-lazy()  { True  }
         }.new
     }
