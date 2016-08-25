@@ -211,7 +211,7 @@ our @A000040 is export = lazy ℕ.grep: {.is-prime};
 # A000041 / partitions
 our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
 # A000043 / Mersenne
-our @A000043 is export = lazy ℕ.grep: { (2**$_-1).is-prime };
+our @A000043 is export = lazy ℕ.grep: { .is-prime and (2**$_-1).is-prime };
 # A000045 / Fibonacci
 our @A000045 is export = 0, 1, * + * ... *;
 # A000048 / necklaces
