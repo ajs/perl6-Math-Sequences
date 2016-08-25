@@ -41,13 +41,35 @@ my $tests = q:to<END_TESTS>;
 
     for @core-sequences {
         my $name = .key;
-        is @::($name)[^.value], .value, $name;
+        my $value = .value;
+
+        for [$value.elems, $value.elems div 3] -> $len is copy {
+            constant timeout = 3;
+            my $timer = Promise.in(timeout);
+            my $test = start {
+                is @::($name)[^$len], $value[^$len], $name;
+                "complete";
+            }
+            await Promise.anyof($test, $timer);
+
+            if $timer.status !~~ PromiseStatus::Planned {
+                if $len == $value.elems {
+                    warn "Timeout in $name";
+                } else {
+                    flunk "$name: Timeout";
+                }
+            } else {
+                $test.result;
+                last;
+            }
+        }
+
         CATCH {
             when ~$_ ~~ rx:s/been defined/ {
                 pass "Not yet implemented: $name";
             }
             default {
-                flunk $_;
+                flunk ~$_;
             }
         }
     }
