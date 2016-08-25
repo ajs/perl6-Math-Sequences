@@ -69,8 +69,9 @@ class Integers is Range is export {
             }
         }
         class :: does Iterator {
+            has $!n = 0;
             method new()      { nqp::create(self) }
-            method pull-one() { traverse(state $n = 0) }
+            method pull-one() { traverse($!n) }
             method is-lazy()  { True  }
         }.new
     }
