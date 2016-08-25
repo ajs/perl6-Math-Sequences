@@ -144,6 +144,19 @@ sub euler-up-down($i) {
 # Per OEIS A000123
 sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 
+# TODO Replace with better factorization
+sub factors($n is copy) {
+    return $n if $n.is-prime;
+    gather for 2..($n.sqrt.floor) -> $i {
+        while $n > 1 and $n %% $i {
+            $n div= $i;
+            take $i;
+        }
+        last if $n <= 1 or $n.is-prime;
+        LAST { take $n if $n > 1 }
+    }
+}
+
 # If we don't yet have a formula for a given sequence, we use &NOSEQ in a
 # range to define where our canned data ends. Because we use "fail", the
 # failure only happens if you try to use a value past the end of our known
@@ -327,7 +340,8 @@ our @A001065 is export = 1, &NOSEQ ... *;
 # A001057 / all integers
 our @A001057 is export = 1, &NOSEQ ... *;
 # A001097 / twin primes
-our @A001097 is export = ℕ.grep: {.is-prime and ($_+2 | $_-2 | $_+1).is-prime};
+our @A001097 is export = ℕ.grep: {
+    $_ == 2 or $_ !%% 2 and .is-prime and ($_+2 | $_-2).is-prime};
 # A001113 / e
 our @A001113 is export = 1, &NOSEQ ... *;
 # A001147 / double factorials
@@ -349,7 +363,7 @@ our @A001333 is export = 1, &NOSEQ ... *;
 # A001349 / connected graphs
 our @A001349 is export = 1, &NOSEQ ... *;
 # A001358 / semiprimes
-our @A001358 is export = 1, &NOSEQ ... *;
+our @A001358 is export = ℕ.grep: {factors($_).elems == 2};
 # A001405 / binomial(n,n/2)
 our @A001405 is export = 1, &NOSEQ ... *;
 # A001462 / Golomb
