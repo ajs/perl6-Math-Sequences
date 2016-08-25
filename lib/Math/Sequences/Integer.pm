@@ -51,29 +51,32 @@ class Integers is Range is export {
 
     # An iterator based on the current range (full of fail)
     method iterator {
-        my $offset = self.excludes-min ?? 1 !! 0;
-        my $countable = self!min-countable;
-        my &endcmp = self.excludes-max ?? &infix:<< > >> !! &infix:<< >= >>;
-        my &traverse = sub ($n is rw) {
-            my $count = $n++;
-            my $next = self.min + $count + $offset;
-
-            if endcmp($next, self.max) {
-                IterationEnd;
-            } elsif $count == 0 and $offset == 0 {
-                self.min;
-            } elsif !$countable {
-                fail "Cannot count from non-finite starting point";
-            } else {
-                $next;
-            }
-        }
         class :: does Iterator {
-            has $!n = 0;
-            method new()      { nqp::create(self) }
-            method pull-one() { traverse($!n) }
+            has $.min;
+            has $.max;
+            has $.offset;
+            has $.countable;
+            has $.endcmp;
+            has $.cur = 0;
+
             method is-lazy()  { True  }
-        }.new
+
+            method pull-one() {
+                my $count = $!cur++;
+                my $next = $!min + $count + $!offset;
+                my $err = "Cannot count from non-finite starting point";
+                my &endcmp = $!endcmp;
+
+                if      endcmp($next, $!max)          { IterationEnd }
+                elsif   $count == 0 and $!offset == 0 { $!min }
+                elsif   ! $!countable                 { fail $err }
+                else                                  { $next }
+            }
+        }.new(
+            :min(self.min), :max(self.max),
+            :countable(self!min-countable),
+            :offset(self.excludes-min ?? 1 !! 0),
+            :endcmp(self.excludes-max ?? {$^cur > $^end} !! {$^cur >= $^end}));
     }
 
     # All of the integers >= $n
