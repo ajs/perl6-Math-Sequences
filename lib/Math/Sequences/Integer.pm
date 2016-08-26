@@ -161,7 +161,7 @@ sub factors($n is copy) {
     }
 }
 
-sub Pi_digits {
+sub Pi-digits {
     sub nextu(:$j) { 3*(3*$j+1)*(3*$j+2) }
     sub nexty(:$q, :$j, :$r, :$t) { ($q*(27*$j-12)+5*$r) div (5*$t) }
     sub nextq(:$q, :$j) { 10*$q*$j*(2*$j-1) }
@@ -179,6 +179,11 @@ sub Pi_digits {
             nextr(:$r, :$u, :$q, :$j, :$y, :$t),
             nextt(:$t, :$u);
     }
+}
+
+# May as well, while we're here...
+sub FatPi($digits=100) is export {
+    FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
 }
 
 # If we don't yet have a formula for a given sequence, we use &NOSEQ in a
@@ -341,7 +346,7 @@ our @A000720 is export = [\+] @A010051;
 # A000793 / Landau
 our @A000793 is export = 1, &NOSEQ ... *;
 # A000796 / Pi
-our @A000796 is export = lazy Pi_digits;
+our @A000796 is export = lazy Pi-digits;
 # A000798 / quasi-orders or topologies
 our @A000798 is export = 1, &NOSEQ ... *;
 # A000959 / Lucky
