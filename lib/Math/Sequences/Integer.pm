@@ -371,11 +371,15 @@ our @A001349 is export = 1, &NOSEQ ... *;
 # A001358 / semiprimes
 our @A001358 is export = ℕ.grep: {factors($_).elems == 2};
 # A001405 / binomial(n,n/2)
-our @A001405 is export = 1, &NOSEQ ... *;
+our @A001405 is export = ℕ.map: -> $n { $n choose ($n div 2) };
 # A001462 / Golomb
-our @A001462 is export = 1, &NOSEQ ... *;
+our @A001462 is export = $Wholes.map: -> $i {
+    state @a;
+    @a.push: |($i xx (@a ?? @a[0] !! $i));
+    @a.shift;
+}
 # A001477 / integers
-our @A001477 is export = 1, &NOSEQ ... *;
+our @A001477 is export = ℕ;
 # A001478 / negatives
 our @A001478 is export = 1, &NOSEQ ... *;
 # A001481 / sums of 2 squares
