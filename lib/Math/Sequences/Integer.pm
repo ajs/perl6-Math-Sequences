@@ -127,12 +127,12 @@ our $Wholes is export = ℕ.from(1);
 
 # via:
 # https://github.com/perl6/perl6-examples/blob/master/categories/best-of-rosettacode/binomial-coefficient.pl
-sub infix:<choose>($n, $p) { [*] ($n ... 0) Z/ 1 .. $p }
-sub infix:<ichoose>($n,$p --> Int) { ($n choose $p).floor }
+sub infix:<choose>($n, $p) is export(:support) { [*] ($n ... 0) Z/ 1 .. $p }
+sub infix:<ichoose>($n,$p --> Int) is export(:support) { ($n choose $p).floor }
 
 # Per OEIS A000111:
 # 2*a(n+1) = Sum_{k=0..n} binomial(n, k)*a(k)*a(n-k).
-sub euler-up-down($i is copy) {
+sub euler-up-down($i is copy) is export(:support) {
     $i++;
     if $i < 2 {
         1
@@ -149,19 +149,24 @@ sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 our %BROKEN = :A000111,;
 
 # TODO Replace with better factorization
-sub factors($n is copy) {
-    return $n if $n.is-prime;
-    gather for 2..($n.sqrt.floor) -> $i {
-        while $n > 1 and $n %% $i {
-            $n div= $i;
-            take $i;
+sub factors($n is copy, :%map) is export(:support) {
+    if %map{$n}:exists {
+        gather do { take %map{$n} };
+    } elsif $n < 4 or $n.is-prime {
+        gather do { take $n };
+    } else {
+        gather for 2..($n.sqrt.floor) -> $i {
+            while $n > 1 and $n %% $i {
+                $n div= $i;
+                take $i;
+            }
+            last if $n <= 1 or $n.is-prime;
+            LAST { take $n if $n > 1 }
         }
-        last if $n <= 1 or $n.is-prime;
-        LAST { take $n if $n > 1 }
     }
 }
 
-sub Pi-digits {
+sub Pi-digits is export(:support) {
     sub nextu(:$j) { 3*(3*$j+1)*(3*$j+2) }
     sub nexty(:$q, :$j, :$r, :$t) { ($q*(27*$j-12)+5*$r) div (5*$t) }
     sub nextq(:$q, :$j) { 10*$q*$j*(2*$j-1) }
@@ -302,7 +307,7 @@ our @A000244 is export = ℕ.map: -> $n {3**$n};
 # A000262 / sets of lists
 our @A000262 is export = 1, &NOSEQ ... *;
 # A000272 / n^(n-2)
-our @A000272 is export = ℕ.map: -> $n {$n**($n-2)};
+our @A000272 is export = ℕ.map: -> $n {$n ?? $n**($n-2) !! 1};
 # A000273 / directed graphs
 our @A000273 is export = 1, &NOSEQ ... *;
 # A000290 / n^2
@@ -384,9 +389,13 @@ our @A001157 is export = 1, &NOSEQ ... *;
 # A001190 / Wedderburn-Etherington
 our @A001190 is export = 1, &NOSEQ ... *;
 # A001221 / omega
-our @A001221 is export = (1..*).map: -> $n {factors($n).Set.keys.elems};
+our @A001221 is export = $Wholes.map: -> $n {
+    $n >= 2 ?? factors($n).Set.keys.elems !! 0;
+}
 # A001222 / Omega
-our @A001222 is export = (1..*).map: -> $n {factors($n).elems};
+our @A001222 is export = $Wholes.map: -> $n {
+    $n >= 2 ?? factors($n, :map(1=>0)).elems !! 0;
+}
 # A001227 / odd divisors
 our @A001227 is export = 1, &NOSEQ ... *;
 # A001285 / Thue-Morse
@@ -412,7 +421,7 @@ our @A001478 is export = 1, &NOSEQ ... *;
 # A001481 / sums of 2 squares
 our @A001481 is export = 1, &NOSEQ ... *;
 # A001489 / negatives
-our @A001489 is export = $Wholes.map: -> $n {-$n};
+our @A001489 is export = ℕ.map: -> $n {-$n};
 # A001511 / ruler function
 our @A001511 is export = 1, &NOSEQ ... *;
 # A001615 / sublattices
@@ -463,7 +472,7 @@ our @A002654 is export = 1, &NOSEQ ... *;
 our @A002658 is export = 1, &NOSEQ ... *;
 # A002808 / composites
 our @A002808 is export = ℕ.grep: -> $n {
-    not $n.is-prime and Set.new(factors($n)).keys.elems > 1;
+    not $n.is-prime and factors($n).elems > 1;
 }
 # A003094 / connected planar graphs
 our @A003094 is export = 1, &NOSEQ ... *;
@@ -500,7 +509,7 @@ our @A005588 is export = 1, &NOSEQ ... *;
 # A005811 / runs in n
 our @A005811 is export = 1, &NOSEQ ... *;
 # A005843 / even
-our @A005843 is export = $Wholes.map: -> $n {$n*2};
+our @A005843 is export = ℕ.map: -> $n {$n*2};
 # A006318 / royal paths or Schroeder numbers
 our @A006318 is export = 1, &NOSEQ ... *;
 # A006530 / largest prime factor
@@ -526,7 +535,7 @@ our @A008683 is export = 1, &NOSEQ ... *;
 # A010060 / Thue-Morse
 our @A010060 is export = 1, &NOSEQ ... *;
 # A018252 / nonprimes
-our @A018252 is export = $Wholes.map: {not .is-prime};
+our @A018252 is export = $Wholes.grep: {not .is-prime};
 # A020639 / smallest prime factor
 our @A020639 is export = $Wholes.map: -> $n {factors($n).min};
 # A020652 / fractal
