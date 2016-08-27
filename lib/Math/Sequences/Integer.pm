@@ -166,6 +166,32 @@ sub factors($n is copy, :%map) is export(:support) {
     }
 }
 
+sub divisors($n) is export(:support) {
+    gather do {
+        take 1;
+        if $n > 2 {
+            for 2 .. ($n div 2) -> $i {
+                take $i if $n %% $i;
+            }
+        }
+        take $n if $n != 1;
+    }
+}
+
+sub sigma($n, $exponent=1) is export(:support) {
+    [+] divisors($n).map: -> $j { $j ** $exponent };
+}
+
+sub planar-partitions($n) is export(:support) {
+    if $n <= 1 {
+        1;
+    } else {
+        ([+] (1..$n).map: -> $k {
+            planar-partitions($n-$k) * sigma($k, 2)
+        }) div $n;
+    }
+}
+
 sub Pi-digits is export(:support) {
     sub nextu(:$j) { 3*(3*$j+1)*(3*$j+2) }
     sub nexty(:$q, :$j, :$r, :$t) { ($q*(27*$j-12)+5*$r) div (5*$t) }
@@ -293,15 +319,15 @@ our @A000169 is export = 1, &NOSEQ ... *;
 # A000182 / tangent
 our @A000182 is export = 1, &NOSEQ ... *;
 # A000203 / sigma
-our @A000203 is export = 1, &NOSEQ ... *;
+our @A000203 is export = $Wholes.map: -> $n { sigma($n) };
 # A000204 / Lucas
-our @A000204 is export = 1, &NOSEQ ... *;
+our @A000204 is export = 1, 3, *+* ... *;
 # A000217 / triangular
-our @A000217 is export = 1, &NOSEQ ... *;
+our @A000217 is export = ℕ.map: -> $n {($n*($n+1)) div 2};
 # A000219 / planar partitions
-our @A000219 is export = 1, &NOSEQ ... *;
+our @A000219 is export = ℕ.map: -> $n { planar-partitions($n) };
 # A000225 / 2^n-1
-our @A000225 is export = 1, &NOSEQ ... *;
+our @A000225 is export = ℕ.map: -> $n {2**$n-1};
 # A000244 / 3^n
 our @A000244 is export = ℕ.map: -> $n {3**$n};
 # A000262 / sets of lists
@@ -313,7 +339,7 @@ our @A000273 is export = 1, &NOSEQ ... *;
 # A000290 / n^2
 our @A000290 is export = ℕ.map: -> $n {$n**2};
 # A000292 / tetrahedral
-our @A000292 is export = 1, &NOSEQ ... *;
+our @A000292 is export = ℕ.map: -> $n { ($n*($n+1)*($n+2)) div 6 };
 # A000302 / 4^n
 our @A000302 is export = ℕ.map: -> $n {4**$n}
 # A000311 / Schroeder's fourth
@@ -359,7 +385,7 @@ our @A000959 is export = 1, &NOSEQ ... *;
 # A000961 / prime powers
 our @A000961 is export = 1, &NOSEQ ... *;
 # A000984 / binomial(2n,n)
-our @A000984 is export = ℕ.map: {2*$^n choose $^n};
+our @A000984 is export = ℕ.map: -> $n {2*$n choose $n};
 # A001003 / Schroeder's second problem
 our @A001003 is export = 1, &NOSEQ ... *;
 # A001006 / Motzkin
