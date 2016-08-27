@@ -95,11 +95,9 @@ class Integers is Range is export {
     method Str { self.gist }
 }
 
-# Naturals can mean 1..Inf or 0..Inf. Since
-# choosing 0..Inf lets us name the other
-# "wholes" and cover all our bases, we go
-# that way, but there is no "right" answer
-# in mathematics.
+# Naturals can mean 1..Inf or 0..Inf.
+# For ease of naming, we define I using Naturals and ℕ as the same
+# sequence, counting from 1.
 class Naturals is Integers is export {
     method new(
             $min = 0,
@@ -109,7 +107,7 @@ class Naturals is Integers is export {
         nextwith $min, $max, :$excludes-min, :$excludes-max
     }
 
-    method symbol { 'ℕ' }
+    method symbol { 'I' }
     method is-default {
         self.min == 0 and self.max == Inf and
             !self.excludes-min and self.excludes-max;
@@ -119,8 +117,8 @@ class Naturals is Integers is export {
 }
 
 our constant \ℤ is export = Integers.new;
-our constant \ℕ is export = Naturals.new;
-our $Wholes is export = ℕ.from(1);
+our constant \I is export = Naturals.new;
+our constant \ℕ is export = I.from(1);
 
 #####
 # Utilities for the OEIS entires:
@@ -224,7 +222,7 @@ sub FatPi($digits=100) is export {
 sub NOSEQ { fail "This sequence has not yet been defined" }
 
 # Needed for other sequences
-our @A010051 is export = $Wholes.map: { .is-prime ?? 1 !! 0 };
+our @A010051 is export = ℕ.map: { .is-prime ?? 1 !! 0 };
 
 # These are the "core" OEIS sequences as defined here:
 # http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
@@ -239,9 +237,9 @@ our @A000002 is export = 1, 2, 2, -> $i {
 our @A000004 is export = 0 xx *;
 # A000005 / divisors
 our @A000005 is export = 1, &NOSEQ ... *;
-    #$Wholes.map: -> $n { (((1..$n) X (1..$n)).grep: -> ($a,$b) { $a*$b == $n }).elems };
+    #ℕ.map: -> $n { (((1..$n) X (1..$n)).grep: -> ($a,$b) { $a*$b == $n }).elems };
 # A000007 / 0^n
-our @A000007 is export = ℕ.map: -> $n { 0 ** $n };
+our @A000007 is export = I.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
 our @A000009 is export = 1, 1, 1, 2, 2, 3, 4, 5, 6, 8, 10, 12, &NOSEQ ... *;
 # A000010 / totient
@@ -253,7 +251,7 @@ our @A000014 is export = 0, 1, 1, 0, 1, 1, 2, 2, 4, 5, 10, 14, &NOSEQ ... *;
 # A000019 / prim. perm. groups
 our @A000019 is export = 1, 1, 2, 2, 5, 4, 7, 7, 11, 9, 8, 6, &NOSEQ ... *;
 # A000027 / natural numbers
-our @A000027 is export = |$Wholes; # We chose ℕ[0]=0, OEIS chose ℕ[0]=1
+our @A000027 is export = |ℕ; # We chose I[0]=0, OEIS chose I[0]=1
 # A000029 / necklaces
 our @A000029 is export = 1, 2, 3, 4, 6, 8, 13, 18, 30, 46, 78, &NOSEQ ... *;
 # A000031 / necklaces
@@ -263,11 +261,11 @@ our @A000032 is export = 2, 1, * + * ... *;
 # A000035 / 0101...
 our @A000035 is export = |(0,1) xx *;
 # A000040 / primes
-our @A000040 is export = lazy ℕ.grep: {.is-prime};
+our @A000040 is export = lazy I.grep: {.is-prime};
 # A000041 / partitions
 our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
 # A000043 / Mersenne
-our @A000043 is export = lazy ℕ.grep: { .is-prime and (2**$_-1).is-prime };
+our @A000043 is export = lazy I.grep: { .is-prime and (2**$_-1).is-prime };
 # A000045 / Fibonacci
 our @A000045 is export = 0, 1, * + * ... *;
 # A000048 / necklaces
@@ -277,7 +275,7 @@ our @A000055 is export = 1, 1, 1, 1, 2, 3, 6, 11, 23, 47, 106, &NOSEQ ... *;
 # A000058 / Sylvester
 our @A000058 is export = 2, { $_**2 - $_ + 1 } ... *;
 # A000069 / odious
-our @A000069 is export = lazy ℕ.grep: -> $n { ([+] $n.base(2).comb) !%% 2 };
+our @A000069 is export = lazy I.grep: -> $n { ([+] $n.base(2).comb) !%% 2 };
 # A000079 / 2^n
 our @A000079 is export = 1, * * 2 ... *;
 # A000081 / rooted trees
@@ -289,27 +287,27 @@ our @A000088 is export = 1, 1, 2, 4, 11, 34, 156, 1044, 12346, &NOSEQ ... *;
 # A000105 / polyominoes
 our @A000105 is export = 1, 1, 1, 2, 5, 12, 35, 108, 369, 1285, &NOSEQ ... *;
 # A000108 / Catalan
-our @A000108 is export = lazy ℕ.map: {(2*$^n choose $^n)/($^n+1)};
+our @A000108 is export = lazy I.map: {(2*$^n choose $^n)/($^n+1)};
 # A000109 / polyhedra
 our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, &NOSEQ ... *;
 # A000110 / Bell
 our @A000110 is export = 1, 1, 2, 5, 15, 52, 203, 877, 4140, &NOSEQ ... *;
 # A000111 / Euler
-our @A000111 is export = lazy ℕ.map: -> $n {euler-up-down($n)};
+our @A000111 is export = lazy I.map: -> $n {euler-up-down($n)};
 # A000112 / posets
 our @A000112 is export = 1, 1, 2, 5, 16, 63, 318, 2045, 16999, &NOSEQ ... *;
 # A000120 / 1's in n
-our @A000120 is export = lazy ℕ.map: -> $n {$n.base(2).comb.grep({+$_}).elems};
+our @A000120 is export = lazy I.map: -> $n {$n.base(2).comb.grep({+$_}).elems};
 # A000123 / binary partitions
-our @A000123 is export = lazy ℕ.map: &binpart;
+our @A000123 is export = lazy I.map: &binpart;
 # A000124 / Lazy Caterer
-our @A000124 is export = lazy ℕ.map: -> $n {($n * ($n+1)) / 2 + 1};
+our @A000124 is export = lazy I.map: -> $n {($n * ($n+1)) / 2 + 1};
 # A000129 / Pell
 our @A000129 is export = 0, 1, * + 2 * * ... *;
 # A000140 / Kendall-Mann
 our @A000140 is export = 1, &NOSEQ ... *;
 # A000142 / n!
-our @A000142 is export = 1, |[\*] ℕ.map: {.succ};
+our @A000142 is export = 1, |[\*] I.map: {.succ};
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
@@ -319,29 +317,29 @@ our @A000169 is export = 1, &NOSEQ ... *;
 # A000182 / tangent
 our @A000182 is export = 1, &NOSEQ ... *;
 # A000203 / sigma
-our @A000203 is export = $Wholes.map: -> $n { sigma($n) };
+our @A000203 is export = ℕ.map: -> $n { sigma($n) };
 # A000204 / Lucas
 our @A000204 is export = 1, 3, *+* ... *;
 # A000217 / triangular
-our @A000217 is export = ℕ.map: -> $n {($n*($n+1)) div 2};
+our @A000217 is export = I.map: -> $n {($n*($n+1)) div 2};
 # A000219 / planar partitions
-our @A000219 is export = ℕ.map: -> $n { planar-partitions($n) };
+our @A000219 is export = I.map: -> $n { planar-partitions($n) };
 # A000225 / 2^n-1
-our @A000225 is export = ℕ.map: -> $n {2**$n-1};
+our @A000225 is export = I.map: -> $n {2**$n-1};
 # A000244 / 3^n
-our @A000244 is export = ℕ.map: -> $n {3**$n};
+our @A000244 is export = I.map: -> $n {3**$n};
 # A000262 / sets of lists
 our @A000262 is export = 1, &NOSEQ ... *;
 # A000272 / n^(n-2)
-our @A000272 is export = ℕ.map: -> $n {$n ?? $n**($n-2) !! 1};
+our @A000272 is export = I.map: -> $n {$n ?? $n**($n-2) !! 1};
 # A000273 / directed graphs
 our @A000273 is export = 1, &NOSEQ ... *;
 # A000290 / n^2
-our @A000290 is export = ℕ.map: -> $n {$n**2};
+our @A000290 is export = I.map: -> $n {$n**2};
 # A000292 / tetrahedral
-our @A000292 is export = ℕ.map: -> $n { ($n*($n+1)*($n+2)) div 6 };
+our @A000292 is export = I.map: -> $n { ($n*($n+1)*($n+2)) div 6 };
 # A000302 / 4^n
-our @A000302 is export = ℕ.map: -> $n {4**$n}
+our @A000302 is export = I.map: -> $n {4**$n}
 # A000311 / Schroeder's fourth
 our @A000311 is export = 1, &NOSEQ ... *;
 # A000312 / mappings
@@ -357,9 +355,9 @@ our @A000396 is export = 1, &NOSEQ ... *;
 # A000521 / j
 our @A000521 is export = 1, &NOSEQ ... *;
 # A000578 / n^3
-our @A000578 is export = ℕ.map: -> $n {$n ** 3}
+our @A000578 is export = I.map: -> $n {$n ** 3}
 # A000583 / n^4
-our @A000583 is export = ℕ.map: -> $n {$n ** 4}
+our @A000583 is export = I.map: -> $n {$n ** 4}
 # A000593 / sum odd divisors
 our @A000593 is export = 1, &NOSEQ ... *;
 # A000594 / Ramanujan tau
@@ -385,7 +383,7 @@ our @A000959 is export = 1, &NOSEQ ... *;
 # A000961 / prime powers
 our @A000961 is export = 1, &NOSEQ ... *;
 # A000984 / binomial(2n,n)
-our @A000984 is export = ℕ.map: -> $n {2*$n choose $n};
+our @A000984 is export = I.map: -> $n {2*$n choose $n};
 # A001003 / Schroeder's second problem
 our @A001003 is export = 1, &NOSEQ ... *;
 # A001006 / Motzkin
@@ -399,13 +397,13 @@ our @A001045 is export = 1, &NOSEQ ... *;
 # A001055 / multiplicative partition function
 our @A001055 is export = 1, &NOSEQ ... *;
 # A001065 / sum of divisors
-our @A001065 is export = $Wholes.map: -> $n {
+our @A001065 is export = ℕ.map: -> $n {
     [+] (1..^$n).grep: -> $i {$n %% $i};
 }
 # A001057 / all integers
 our @A001057 is export = 1, &NOSEQ ... *;
 # A001097 / twin primes
-our @A001097 is export = ℕ.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
+our @A001097 is export = I.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
 # A001113 / e
 our @A001113 is export = 1, &NOSEQ ... *;
 # A001147 / double factorials
@@ -415,11 +413,11 @@ our @A001157 is export = 1, &NOSEQ ... *;
 # A001190 / Wedderburn-Etherington
 our @A001190 is export = 1, &NOSEQ ... *;
 # A001221 / omega
-our @A001221 is export = $Wholes.map: -> $n {
+our @A001221 is export = ℕ.map: -> $n {
     $n >= 2 ?? factors($n).Set.keys.elems !! 0;
 }
 # A001222 / Omega
-our @A001222 is export = $Wholes.map: -> $n {
+our @A001222 is export = ℕ.map: -> $n {
     $n >= 2 ?? factors($n, :map(1=>0)).elems !! 0;
 }
 # A001227 / odd divisors
@@ -431,23 +429,23 @@ our @A001333 is export = 1, &NOSEQ ... *;
 # A001349 / connected graphs
 our @A001349 is export = 1, &NOSEQ ... *;
 # A001358 / semiprimes
-our @A001358 is export = ℕ.grep: -> $n {factors($n).elems == 2};
+our @A001358 is export = I.grep: -> $n {factors($n).elems == 2};
 # A001405 / binomial(n,n/2)
-our @A001405 is export = ℕ.map: -> $n { $n choose ($n div 2) };
+our @A001405 is export = I.map: -> $n { $n choose ($n div 2) };
 # A001462 / Golomb
-our @A001462 is export = $Wholes.map: -> $i {
+our @A001462 is export = ℕ.map: -> $i {
     state @a;
     @a.push: |($i xx (@a ?? @a[0] !! $i));
     @a.shift;
 }
 # A001477 / integers
-our @A001477 is export = ℕ;
+our @A001477 is export = I;
 # A001478 / negatives
 our @A001478 is export = 1, &NOSEQ ... *;
 # A001481 / sums of 2 squares
 our @A001481 is export = 1, &NOSEQ ... *;
 # A001489 / negatives
-our @A001489 is export = ℕ.map: -> $n {-$n};
+our @A001489 is export = I.map: -> $n {-$n};
 # A001511 / ruler function
 our @A001511 is export = 1, &NOSEQ ... *;
 # A001615 / sublattices
@@ -497,7 +495,7 @@ our @A002654 is export = 1, &NOSEQ ... *;
 # A002658 / 3-trees
 our @A002658 is export = 1, &NOSEQ ... *;
 # A002808 / composites
-our @A002808 is export = ℕ.grep: -> $n {
+our @A002808 is export = I.grep: -> $n {
     not $n.is-prime and factors($n).elems > 1;
 }
 # A003094 / connected planar graphs
@@ -527,7 +525,7 @@ our @A005130 is export = 1, &NOSEQ ... *;
 # A005230 / Stern
 our @A005230 is export = 1, &NOSEQ ... *;
 # A005408 / odd
-our @A005408 is export = ℕ.map: -> $n {$n*2+1};
+our @A005408 is export = I.map: -> $n {$n*2+1};
 # A005470 / planar graphs
 our @A005470 is export = 1, &NOSEQ ... *;
 # A005588 / binary rooted trees
@@ -535,11 +533,11 @@ our @A005588 is export = 1, &NOSEQ ... *;
 # A005811 / runs in n
 our @A005811 is export = 1, &NOSEQ ... *;
 # A005843 / even
-our @A005843 is export = ℕ.map: -> $n {$n*2};
+our @A005843 is export = I.map: -> $n {$n*2};
 # A006318 / royal paths or Schroeder numbers
 our @A006318 is export = 1, &NOSEQ ... *;
 # A006530 / largest prime factor
-our @A006530 is export = $Wholes.map: -> $n {factors($n).max};
+our @A006530 is export = ℕ.map: -> $n {factors($n).max};
 # A006882 / n!!
 our @A006882 is export = 1, &NOSEQ ... *;
 # A006894 / 3-trees
@@ -561,9 +559,9 @@ our @A008683 is export = 1, &NOSEQ ... *;
 # A010060 / Thue-Morse
 our @A010060 is export = 1, &NOSEQ ... *;
 # A018252 / nonprimes
-our @A018252 is export = $Wholes.grep: {not .is-prime};
+our @A018252 is export = ℕ.grep: {not .is-prime};
 # A020639 / smallest prime factor
-our @A020639 is export = $Wholes.map: -> $n {factors($n).min};
+our @A020639 is export = ℕ.map: -> $n {factors($n).min};
 # A020652 / fractal
 our @A020652 is export = 1, &NOSEQ ... *;
 # A020653 / fractal
@@ -587,7 +585,7 @@ our @A049310 is export = 1, &NOSEQ ... *;
 # A055512 / lattices
 our @A055512 is export = 1, &NOSEQ ... *;
 # A070939 / binary length
-our @A070939 is export = ℕ.map: { .base(2).chars };
+our @A070939 is export = I.map: { .base(2).chars };
 # A074206 / ordered factorizations
 our @A074206 is export = 1, &NOSEQ ... *;
 # A104725 / complementing systems
