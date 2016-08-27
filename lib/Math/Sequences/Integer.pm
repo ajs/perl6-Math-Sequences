@@ -148,18 +148,20 @@ our %BROKEN = :A000111,;
 
 # TODO Replace with better factorization
 sub factors($n is copy, :%map) is export(:support) {
-    if %map{$n}:exists {
-        gather do { take %map{$n} };
-    } elsif $n < 4 or $n.is-prime {
-        gather do { take $n };
-    } else {
-        gather for 2..($n.sqrt.floor) -> $i {
-            while $n > 1 and $n %% $i {
-                $n div= $i;
-                take $i;
+    gather do {
+        if %map{$n}:exists {
+            take %map{$n};
+        } elsif $n < 4 or $n.is-prime {
+            take $n;
+        } else {
+            for 2..($n.sqrt.floor) -> $i {
+                while $n > 1 and $n %% $i {
+                    $n div= $i;
+                    take $i;
+                }
+                last if $n <= 1 or $n.is-prime;
+                LAST { take $n if $n > 1 }
             }
-            last if $n <= 1 or $n.is-prime;
-            LAST { take $n if $n > 1 }
         }
     }
 }
