@@ -479,11 +479,18 @@ our @A002275 is export = 1, &NOSEQ ... *;
 # A002322 / psi
 our @A002322 is export = 1, &NOSEQ ... *;
 # A002378 / pronic
-our @A002378 is export = 1, &NOSEQ ... *;
+our @A002378 is export = 𝕀.map: -> $n { $n*($n+1) };
 # A002426 / central trinomial coefficients
-our @A002426 is export = 1, &NOSEQ ... *;
+our @A002426 is export = 1, 1, -> $a, $b {
+    (state $n = 1)++;
+    ((3*($n-1))*$a+(2*$n-1)*$b) div $n;
+} ... *;
 # A002487 / Stern
-our @A002487 is export = 1, &NOSEQ ... *;
+our @A002487 is export = 𝕀.map: -> $n {
+    my &a = &?BLOCK;
+    my $h = $n div 2;
+    $n < 2 ?? $n !! a($h) + ($n%%2 ?? 0 !! a($h+1));
+}
 # A002530 / sqrt(3
 our @A002530 is export = 1, &NOSEQ ... *;
 # A002531 / sqrt(3
