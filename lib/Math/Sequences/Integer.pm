@@ -225,11 +225,7 @@ sub NOSEQ { fail "This sequence has not yet been defined" }
 
 # Needed for other sequences
 our @A010051 is export = ℕ.map: { .is-prime ?? 1 !! 0 };
-our @A080040 is export = 𝕀.map: -> $n {
-    my &a = &?BLOCK;
-    if ($n < 2) { 2 }
-    else { 2*a($n-1) + 2*a($n-2) }
-}
+our @A080040 is export = 2, 2, -> $a, $b {2*$a + 2*$b} ... *;
 
 # These are the "core" OEIS sequences as defined here:
 # http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
