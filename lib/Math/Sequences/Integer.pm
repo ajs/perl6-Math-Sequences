@@ -225,6 +225,11 @@ sub NOSEQ { fail "This sequence has not yet been defined" }
 
 # Needed for other sequences
 our @A010051 is export = ℕ.map: { .is-prime ?? 1 !! 0 };
+our @A080040 is export = 𝕀.map: -> $n {
+    my &a = &?BLOCK;
+    if ($n < 2) { 2 }
+    else { 2*a($n-1) + 2*a($n-2) }
+}
 
 # These are the "core" OEIS sequences as defined here:
 # http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
@@ -498,7 +503,7 @@ our @A002530 is export = 0, |𝕀.map: -> $n {
     }
 }
 # A002531 / sqrt(3)
-our @A002531 is export = 1, &NOSEQ ... *;
+our @A002531 is export = @A080040 Z/ 𝕀.map: -> $n { (2*2**($n div 2)) }
 # A002572 / binary rooted trees
 our @A002572 is export = 1, &NOSEQ ... *;
 # A002620 / quarter-squares
