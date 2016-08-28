@@ -491,9 +491,13 @@ our @A002487 is export = 𝕀.map: -> $n {
     my $h = $n div 2;
     $n < 2 ?? $n !! a($h) + ($n%%2 ?? 0 !! a($h+1));
 }
-# A002530 / sqrt(3
-our @A002530 is export = 1, &NOSEQ ... *;
-# A002531 / sqrt(3
+# A002530 / sqrt(3)
+our @A002530 is export = 0, |𝕀.map: -> $n {
+    [+] (0..($n div 2)).map: -> $k {
+        (($n-$k) choose $k) * 2**(($n - 2*$k) div 2);
+    }
+}
+# A002531 / sqrt(3)
 our @A002531 is export = 1, &NOSEQ ... *;
 # A002572 / binary rooted trees
 our @A002572 is export = 1, &NOSEQ ... *;
