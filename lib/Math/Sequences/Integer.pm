@@ -114,6 +114,15 @@ class Naturals is Integers is export {
     }
 
     method from($n where * >= 0) { callsame }
+
+    # Triangular counting
+    method triangle {
+        lazy gather for |self -> $n {
+            for self.min .. $n -> $k {
+                take ($n, $k);
+            }
+        }
+    }
 }
 
 our constant \ℤ is export = Integers.new;
@@ -561,23 +570,19 @@ our @A006894 is export = 1, &NOSEQ ... *;
 # A006966 / lattices
 our @A006966 is export = 1, &NOSEQ ... *;
 # A007318 / Pascal's triangle
-our @A007318 is export = lazy gather for |𝕀 -> $n {
-    for 0..$n -> $k { take $n choose $k }
-}
+our @A007318 is export = 𝕀.triangle.map: -> ($n,$k) { $n choose $k };
 # A008275 / Stirling 1
 our @A008275 is export = 1, &NOSEQ ... *;
 # A008277 / Stirling 2
 our @A008277 is export = 1, &NOSEQ ... *;
 # A008279 / permutations k at a time
-our @A008279 is export = lazy gather for |𝕀 -> $n {
-    for 0..$n -> $k { take factorial($n)/factorial($n-$k) };
+our @A008279 is export = 𝕀.triangle.map: -> ($n,$k) {
+    factorial($n)/factorial($n-$k);
 }
 # A008292 / Eulerian
-our @A008292 is export = lazy gather for |ℕ -> $n {
-    for 1..$n -> $k {
-        take [+] gather for 0..$k -> $j {
-            take (-1)**$j * ($k-$j)**$n * (($n+1) choose $j);
-        }
+our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
+    [+] (0..$k).map: -> $j {
+        (-1)**$j * ($k-$j)**$n * (($n+1) choose $j);
     }
 }
 # A008683 / Moebius
