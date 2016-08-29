@@ -573,7 +573,13 @@ our @A008279 is export = lazy gather for |𝕀 -> $n {
     for 0..$n -> $k { take factorial($n)/factorial($n-$k) };
 }
 # A008292 / Eulerian
-our @A008292 is export = 1, &NOSEQ ... *;
+our @A008292 is export = lazy gather for |ℕ -> $n {
+    for 1..$n -> $k {
+        take [+] gather for 0..$k -> $j {
+            take (-1)**$j * ($k-$j)**$n * (($n+1) choose $j);
+        }
+    }
+}
 # A008683 / Moebius
 our @A008683 is export = 1, &NOSEQ ... *;
 # A010060 / Thue-Morse
