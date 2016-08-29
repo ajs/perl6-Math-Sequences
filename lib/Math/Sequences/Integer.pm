@@ -146,6 +146,8 @@ sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 
 our %BROKEN = :A000111,;
 
+sub factorial($n) { ([*] 1..$n) or 1 }
+
 # TODO Replace with better factorization
 sub factors($n is copy, :%map) is export(:support) {
     gather do {
@@ -310,7 +312,7 @@ our @A000129 is export = 0, 1, * + 2 * * ... *;
 # A000140 / Kendall-Mann
 our @A000140 is export = 1, &NOSEQ ... *;
 # A000142 / n!
-our @A000142 is export = 1, |[\*] 𝕀.map: {.succ};
+our @A000142 is export = 𝕀.map: -> $n { factorial($n) };
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
@@ -553,19 +555,23 @@ our @A006318 is export = 1, &NOSEQ ... *;
 # A006530 / largest prime factor
 our @A006530 is export = ℕ.map: -> $n {factors($n).max};
 # A006882 / n!!
-our @A006882 is export = 1, &NOSEQ ... *;
+our @A006882 is export = 1, 1, -> $a, $b { (state $n = 2)++ * $a } ... *;
 # A006894 / 3-trees
 our @A006894 is export = 1, &NOSEQ ... *;
 # A006966 / lattices
 our @A006966 is export = 1, &NOSEQ ... *;
 # A007318 / Pascal's triangle
-our @A007318 is export = 1, &NOSEQ ... *;
+our @A007318 is export = lazy gather for |𝕀 -> $n {
+    for 0..$n -> $k { take $n choose $k }
+}
 # A008275 / Stirling 1
 our @A008275 is export = 1, &NOSEQ ... *;
 # A008277 / Stirling 2
 our @A008277 is export = 1, &NOSEQ ... *;
 # A008279 / permutations k at a time
-our @A008279 is export = 1, &NOSEQ ... *;
+our @A008279 is export = lazy gather for |𝕀 -> $n {
+    for 0..$n -> $k { take factorial($n)/factorial($n-$k) };
+}
 # A008292 / Eulerian
 our @A008292 is export = 1, &NOSEQ ... *;
 # A008683 / Moebius
