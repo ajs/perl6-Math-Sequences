@@ -594,7 +594,11 @@ our @A018252 is export = ℕ.grep: {not .is-prime};
 # A020639 / smallest prime factor
 our @A020639 is export = ℕ.map: -> $n {factors($n).min};
 # A020652 / fractal
-our @A020652 is export = 1, &NOSEQ ... *;
+our @A020652 is export = lazy gather for 2..* -> $de {
+    for 1..^$de -> $nu {
+        take $nu if ($nu/$de).numerator == $nu;
+    }
+}
 # A020653 / fractal
 our @A020653 is export = 1, &NOSEQ ... *;
 # A027641 / Bernoulli
