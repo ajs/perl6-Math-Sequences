@@ -649,5 +649,8 @@ our @A085449 is export = Horadam( 0, 1, 4, 2);
 our @A085504 is export = Horadam( 0, 1, 9, 3);
 our @A001076 is export = Horadam( 0, 1, 1, 4);
 
+#Hofstadter sequences
+our @A005206 is export = 0, {++$ - @A005206[@A005206[$++]]} … ∞;
+our @Hofstadters-G is export = @A005206;
 
 # vim: sw=4 softtabstop=4 expandtab ai ft=perl6
