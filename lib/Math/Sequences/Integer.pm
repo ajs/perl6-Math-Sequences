@@ -643,7 +643,11 @@ our @A226898 is export = 1, &NOSEQ ... *;
 # A246655 / prime powers
 our @A246655 is export = 1, &NOSEQ ... *;
 
-#Horadam sequences
+#Horadam sequences. Just the first 10
 our @A085939 is export = Horadam( 0, 1, 6, 4);
+our @A085449 is export = Horadam( 0, 1, 4, 2);
+our @A085504 is export = Horadam( 0, 1, 9, 3);
+our @A001076 is export = Horadam( 0, 1, 1, 4);
+
 
 # vim: sw=4 softtabstop=4 expandtab ai ft=perl6
