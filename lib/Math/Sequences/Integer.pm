@@ -282,6 +282,7 @@ our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
 our @A000043 is export = lazy 𝕀.grep: { .is-prime and (2**$_-1).is-prime };
 # A000045 / Fibonacci
 our @A000045 is export = 0, 1, * + * ... *;
+our @sequence-Fibonacci is export =  @A000045;
 # A000048 / necklaces
 our @A000048 is export = 1, 1, 1, 1, 2, 3, 5, 9, 16, 28, 51, &NOSEQ ... *;
 # A000055 / trees
@@ -318,6 +319,7 @@ our @A000123 is export = lazy 𝕀.map: &binpart;
 our @A000124 is export = lazy 𝕀.map: -> $n {($n * ($n+1)) / 2 + 1};
 # A000129 / Pell
 our @A000129 is export = 0, 1, * + 2 * * ... *;
+our @Pell-sequence is export = @A000129;
 # A000140 / Kendall-Mann
 our @A000140 is export = 1, &NOSEQ ... *;
 # A000142 / n!
