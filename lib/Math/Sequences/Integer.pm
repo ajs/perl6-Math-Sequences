@@ -225,8 +225,14 @@ sub Pi-digits is export(:support) {
 
 # May as well, while we're here...
 sub FatPi($digits=100) is export {
-    FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
+  FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
 }
+
+sub Horadam( Int $p, Int $q, Int $r, Int $s ) {
+  my @horadam = $p, $q, {$^n1 × $r + $^n2 × $s} … ∞;
+  return @horadam;
+}
+
 
 # If we don't yet have a formula for a given sequence, we use &NOSEQ in a
 # range to define where our canned data ends. Because we use "fail", the
@@ -637,6 +643,7 @@ our @A226898 is export = 1, &NOSEQ ... *;
 # A246655 / prime powers
 our @A246655 is export = 1, &NOSEQ ... *;
 
-
+#Horadam sequences
+our @A085939 is export = Horadam( 0, 1, 6, 4);
 
 # vim: sw=4 softtabstop=4 expandtab ai ft=perl6
