@@ -6,7 +6,6 @@ services:
   - docker
 
 install:
-  - ls -R /home/travis/
   - docker pull jjmerelo/test-perl6
   - docker images
 
