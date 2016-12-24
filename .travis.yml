@@ -1,12 +1,13 @@
 sudo: required
 
+language: c
+
 services:
   - docker
 
 install:
-
   - docker pull jjmerelo/test-perl6
   - docker ps -a
 
-script: docker run -t -v /home/travis/perl6-Math-Sequences:/test jjmerelo/test-perl6 /test/perl6-Math-Sequences/t
+script: docker run -t -v /home/travis/JJ/perl6-Math-Sequences:/test jjmerelo/test-perl6 /test/perl6-Math-Sequences/t
 
