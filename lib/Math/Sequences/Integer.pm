@@ -272,6 +272,7 @@ our @A000029 is export = 1, 2, 3, 4, 6, 8, 13, 18, 30, 46, 78, &NOSEQ ... *;
 our @A000031 is export = 1, 2, 3, 4, 6, 8, 14, 20, 36, 60, 108, &NOSEQ ... *;
 # A000032 / Lucas
 our @A000032 is export = 2, 1, * + * ... *;
+our @sequence-Lucas is export =  @A000032;
 # A000035 / 0101...
 our @A000035 is export = |(0,1) xx *;
 # A000040 / primes
