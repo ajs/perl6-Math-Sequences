@@ -6,10 +6,9 @@ services:
   - docker
 
 install:
+  - ls /home/travis
   - docker pull jjmerelo/test-perl6
   - docker ps -a
-  - ls /home/travis/JJ
-  - ls /home/travis/JJ/perl6-Math-Sequences
-  - ls /home/travis
+
 script: docker run -t -v /home/travis/JJ/perl6-Math-Sequences:/test jjmerelo/test-perl6 /test/perl6-Math-Sequences/t
 
