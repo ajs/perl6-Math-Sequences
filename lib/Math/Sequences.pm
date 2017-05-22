@@ -5,15 +5,15 @@ C<Math::Sequences> is a module with integer and floating point sequences and som
 
 =head1 Synopsis
 
-    use Math::Sequences;
+    use Math::Sequences::Integer;  # You have to include one ... 
+    use Math::Sequences::Real;     # ... or the other
 
-    say factorial(33);
-    
+    say factorial(33);    # from  Math::Sequences::Integer;
     say sigma( 8 );
-
     say FatPi;
 
-    say ℝ.gist();
+    say ℝ.gist();         # from  Math::Sequences::Real;
+    say ℝ.from(pi)[0]
 
 =end pod
 
