@@ -639,7 +639,13 @@ our @A074206 is export = 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 3, 1, &NOSEQ ... *;
 # A104725 / complementing systems
 our @A104725 is export = 0, 1, 1, 1, 2, 1, 3, 1, 5, 2, 3, 1, &NOSEQ ... *;
 # A226898 / Hooley's Delta
-our @A226898 is export = 1, &NOSEQ ... *;
+#our @A226898 is export = 1, &NOSEQ ... *;
+our @A226898 is export = ℕ.map: -> $n {
+    my @div = divisors($n);
+    max(gather for 1..$n -> $u {
+        take +@div.grep: -> $f { $f >= $u and $f <= $u*e };
+    });
+};
 # A246655 / prime powers
 our @A246655 is export = 1, &NOSEQ ... *;
 
