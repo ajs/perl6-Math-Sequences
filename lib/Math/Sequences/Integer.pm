@@ -328,13 +328,13 @@ our @A000124 is export = lazy 𝕀.map: -> $n {($n * ($n+1)) / 2 + 1};
 our @A000129 is export = 0, 1, * + 2 * * ... *;
 our @Pell-sequence is export = @A000129;
 # A000140 / Kendall-Mann
-our @A000140 is export = 1, &NOSEQ ... *;
+our @A000140 is export = 1, 1, 2, 6, 22, 101, 573, 3836, 29228, &NOSEQ ... *;
 # A000142 / n!
 our @A000142 is export = 𝕀.map: -> $n { factorial($n) };
 # A000161 / partitions into 2 squares
-our @A000161 is export = 1, &NOSEQ ... *;
+our @A000161 is export = 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, &NOSEQ ... *;
 # A000166 / derangements
-our @A000166 is export = 1, &NOSEQ ... *;
+our @A000166 is export = 1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, &NOSEQ ... *;
 # A000169 / labeled rooted trees
 our @A000169 is export = 1, &NOSEQ ... *;
 # A000182 / tangent
