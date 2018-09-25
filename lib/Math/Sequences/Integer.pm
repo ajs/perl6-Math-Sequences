@@ -494,7 +494,7 @@ our @A002106 is export = 1, &NOSEQ ... *;
 # A002110 / primorials
 our @A002110 is export = 1, &NOSEQ ... *;
 # A002113 / palindromes
-our @A002113 is export = 1, &NOSEQ ... *;
+our @A002113 is export = ℕ.grep: -> $n { $n eq (~$n).reverse };
 # A002275 / repunits
 our @A002275 is export = 1, &NOSEQ ... *;
 # A002322 / psi
