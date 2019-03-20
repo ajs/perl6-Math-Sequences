@@ -204,22 +204,16 @@ sub planar-partitions($n) is export(:support) {
 }
 
 sub Pi-digits is export(:support) {
-    sub nextu(:$j) { 3*(3*$j+1)*(3*$j+2) }
-    sub nexty(:$q, :$j, :$r, :$t) { ($q*(27*$j-12)+5*$r) div (5*$t) }
-    sub nextq(:$q, :$j) { 10*$q*$j*(2*$j-1) }
-    sub nextr(:$u, :$q, :$j, :$r, :$y, :$t) { 10*$u*($q*(5*$j-2)+$r-$y*$t) }
-    sub nextt(:$t, :$u) { $t*$u }
-
     my ($q, $r, $t) = 1, 180, 60;
     gather for 2..* -> $j {
         my ($u,$y) =
-            nextu(:$j),
-            nexty(:$q, :$j, :$r, :$t);
+            3*(3*$j+1)*(3*$j+2),
+            ($q*(27*$j-12)+5*$r) div (5*$t);
         take $y;
         ($q, $r, $t) =
-            nextq(:$q, :$j),
-            nextr(:$r, :$u, :$q, :$j, :$y, :$t),
-            nextt(:$t, :$u);
+            10*$q*$j*(2*$j-1),
+            10*$u*($q*(5*$j-2)+$r-$y*$t),
+            $t*$u;
     }
 }
 
