@@ -203,6 +203,7 @@ sub planar-partitions($n) is export(:support) {
     }
 }
 
+# https://mail.python.org/pipermail/edu-sig/2012-December/010721.html
 sub Pi-digits is export(:support) {
     my ($q, $r, $t) = 1, 180, 60;
     gather for 2..* -> $j {
