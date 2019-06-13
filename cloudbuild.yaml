@@ -1,7 +1,7 @@
 steps:
-#- name: 'gcr.io/github-math-sequences/pull-test'
-#  args: ['clone', 'https://github.com/ajs/perl6-Math-Sequences']
-#  env: ['PROJECT_ROOT=hello']
+- name: 'gcr.io/github-math-sequences/pull-test'
+  args: ['clone', 'https://github.com/ajs/perl6-Math-Sequences']
+  env: ['PROJECT_ROOT=perl6-Math-Sequences']
 - name: 'gcr.io/github-math-sequences/pull-test'
   args: ['build', '-t', 'gcr.io/github-math-sequences/pull-test', '.']
 
