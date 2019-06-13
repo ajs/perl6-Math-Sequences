@@ -642,7 +642,22 @@ our @A226898 is export = ℕ.map: -> $n {
     });
 };
 # A246655 / prime powers
-our @A246655 is export = 1, &NOSEQ ... *;
+our @A246655 is export = lazy gather for @A000040 -> $p {
+    state @p;
+    # Keep a list of each prime's infinite list of powers
+    # [$p^1, $p^2, ...] and the current index
+    @p.push: [(ℕ.map: {$p**$^power}),0];
+    # Step through the prime powers until we hit $p
+    loop {
+        my $next = min(@p, :by({$^entry[0][$^entry[1]]}));
+        my $value = $next[0][$next[1]];
+        take $value;
+        # Bumpt to next index
+        $next[1]++;
+        last if $value == $p;
+    }
+}
+
 
 #Horadam sequences. Just the first 10
 our @A085939 is export = Horadam( 0, 1, 6, 4);
