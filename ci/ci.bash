@@ -2,4 +2,4 @@
 #
 # Within a rakudo star container, run our tests
 
-perl6 /build/t/*.t
+perl6 -I /build/lib /build/t/*.t
