@@ -4,4 +4,5 @@ steps:
 #  env: ['PROJECT_ROOT=perl6-Math-Sequences']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/github-math-sequences/pull-test', '.']
+- name: 'gcr.io/github-math-sequences/pull-test'
 
