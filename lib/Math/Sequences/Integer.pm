@@ -425,7 +425,7 @@ our @A001097 is export = 𝕀.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).
 # A001113 / e
 our @A001113 is export = 1, &NOSEQ ... *;
 # A001147 / double factorials
-our @A001147 is export = 1, &NOSEQ ... *;
+our @A001147 is export = 1, 1, -> $a, $b { ($b/$a + 2) * $b } ... *;
 # A001157 / sum of squares of divisors
 our @A001157 is export = 1, &NOSEQ ... *;
 # A001190 / Wedderburn-Etherington
