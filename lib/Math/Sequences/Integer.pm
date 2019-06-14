@@ -427,7 +427,9 @@ our @A001113 is export = 1, &NOSEQ ... *;
 # A001147 / double factorials
 our @A001147 is export = 1, &NOSEQ ... *;
 # A001157 / sum of squares of divisors
-our @A001157 is export = 1, &NOSEQ ... *;
+our @A001157 is export = ℕ.map: -> $n {
+    divisors($n).map(* ** 2).sum
+}
 # A001190 / Wedderburn-Etherington
 our @A001190 is export = 1, &NOSEQ ... *;
 # A001221 / omega
