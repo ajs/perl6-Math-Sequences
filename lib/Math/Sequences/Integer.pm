@@ -155,7 +155,7 @@ sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 
 our %BROKEN = :A000111,;
 
-sub factorial($n) { ([*] 1..$n) or 1 }
+sub factorial($n) is export(:support) { ([*] 1..$n) or 1 }
 
 # TODO Replace with better factorization
 sub factors($n is copy, :%map) is export(:support) {
@@ -419,7 +419,9 @@ our @A001065 is export = ℕ.map: -> $n {
     [+] (1..^$n).grep: -> $i {$n %% $i};
 }
 # A001057 / all integers
-our @A001057 is export = 1, &NOSEQ ... *;
+our @A001057 is export = (lazy gather for 𝕀 -> $n
+    { $n ?? take $n, -$n !! take 0 }
+).flat;
 # A001097 / twin primes
 our @A001097 is export = 𝕀.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
 # A001113 / e
