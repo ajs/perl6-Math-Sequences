@@ -439,7 +439,9 @@ our @A001222 is export = ℕ.map: -> $n {
     $n >= 2 ?? factors($n, :map(1=>0)).elems !! 0;
 }
 # A001227 / odd divisors
-our @A001227 is export = 1, &NOSEQ ... *;
+our @A001227 is export = ℕ.map: -> $n {
+    divisors($n).grep({$_ mod 2 == 1}).elems
+}
 # A001285 / Thue-Morse
 our @A001285 is export = 1, &NOSEQ ... *;
 # A001333 / sqrt(2)
