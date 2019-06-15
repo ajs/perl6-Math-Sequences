@@ -274,8 +274,7 @@ our @A000002 is export = 1, 2, 2, -> $i {
 # A000004 / 0's
 our @A000004 is export = 0 xx *;
 # A000005 / divisors
-our @A000005 is export = 1, &NOSEQ ... *;
-    #ℕ.map: -> $n { (((1..$n) X (1..$n)).grep: -> ($a,$b) { $a*$b == $n }).elems };
+our @A000005 is export = ℕ.map: { divisors($^n).elems };
 # A000007 / 0^n
 our @A000007 is export = 𝕀.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
