@@ -93,3 +93,7 @@ To enter each of these symbols, however, here are common shortcuts in vim and em
 * `ℝ` - DOUBLE-STRUCK CAPITAL R - U+211D
   * vim - Ctrl-v u 2 1 1 d
   * emacs - Ctrl-x 8 `<enter>` 2 1 1 d `<enter>`
+
+## Examples
+
+See the [examples](./examples) directory for usage.
