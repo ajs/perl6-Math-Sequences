@@ -419,9 +419,7 @@ our @A001065 is export = ℕ.map: -> $n {
     [+] (1..^$n).grep: -> $i {$n %% $i};
 }
 # A001057 / all integers
-our @A001057 is export = (lazy gather for 𝕀 -> $n
-    { $n ?? take $n, -$n !! take 0 }
-).flat;
+our @A001057 is export = flat lazy gather for 𝕀 -> $n { take $n ?? ($n, -$n) !! 0 };
 # A001097 / twin primes
 our @A001097 is export = 𝕀.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
 # A001113 / e
