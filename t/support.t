@@ -6,7 +6,7 @@ use Math::Sequences::Integer :support;
 
 sub postfix:<!>($n) { [*] 1..$n }
 
-plan 15;
+plan 16;
 
 is 10 choose 3, 10! / (3! * (10-3)!), "choose";
 is 10 ichoose 3, 10! div (3! * (10-3)!), "choose";
@@ -25,3 +25,7 @@ is sigma(1), 1, "sigma(1)";
 is sigma(2), 3, "sigma(2)";
 is sigma(3), 4, "sigma(3)";
 is sigma(4), 7, "sigma(4)";
+cmp-ok strict-partitions(10).sort, &infix:<~~>,
+    sort(
+        [10], [9,1], [8,2], [7,3], [6,4], [7,2,1], [6,3,1], [5,4,1],
+        [5,3,2], [4,3,2,1]), "strict-partitions(10)"

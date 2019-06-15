@@ -3,6 +3,8 @@
 # This module is absolutely not meant to be exhausive.
 # It should contain only those sequences that are frequently needed.
 
+use v6.c;
+
 unit module Math::Sequences::Integer is export;
 
 class Integers is Range is export {
@@ -203,6 +205,27 @@ sub planar-partitions($n) is export(:support) {
     }
 }
 
+#= The number of sequences that sum to $target where elements
+#= <= $n and elements in each sum are distinct.
+sub strict-partitions(Int:D $n, Int :$target=$n) is export(:support) {
+    return strict-partitions($n.abs, :$target).map({.map: {-$_}}) if $n < 0;
+    return [$n] if $n==0 and not $target;
+    $target > 0 or die "\$target($target) cannot be < 0";
+    gather for min($n,$target)...1 -> $i {
+        given ($target)-$i -> $remain {
+            when  $remain < 0 { next }
+            when $remain == 0 { take [$i] }
+            when      $i <= 1 { next } # only if $remain != 0 per above
+            default {
+                for strict-partitions($i-1, :target($remain)) -> $rest {
+                    # Merge and add to results
+                    take ($i, $rest).map: |*;
+                }
+            }
+        }
+    }
+}
+
 # https://mail.python.org/pipermail/edu-sig/2012-December/010721.html
 sub Pi-digits is export(:support) {
     my ($q, $r, $t) = 1, 180, 60;
@@ -256,7 +279,7 @@ our @A000005 is export = 1, &NOSEQ ... *;
 # A000007 / 0^n
 our @A000007 is export = 𝕀.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
-our @A000009 is export = 1, 1, 1, 2, 2, 3, 4, 5, 6, 8, 10, 12, &NOSEQ ... *;
+our @A000009 is export = 𝕀.map: { strict-partitions($^i).elems };
 # A000010 / totient
 our @A000010 is export = 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, &NOSEQ ... *;
 # A000012 / 1's
