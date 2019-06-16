@@ -15,6 +15,10 @@ Install this file using
   * `ℕ` - The naturals (from 1) as a range
   * `@AXXXXXX` - All of the core OEIS sequences from
     http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
+  * `%oeis-core` - A mapping of English names to sequences (e.g. `%oeis-core<primes>`)
+  * OEIS - A function that returns the sequence for a given name, but
+    can also search for sequences (`:search` flag) whose names start with the given
+    string, in which case a hash of name/sequence pairs is returned.
 * `Math::Sequences::Real` - Real sequences
   * `class Reals` - generic Real number sequences class
   * `ℝ` - The reals as a range

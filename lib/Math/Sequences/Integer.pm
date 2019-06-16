@@ -306,7 +306,6 @@ our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
 our @A000043 is export = lazy 𝕀.grep: { .is-prime and (2**$_-1).is-prime };
 # A000045 / Fibonacci
 our @A000045 is export = 0, 1, * + * ... *;
-our @sequence-Fibonacci is export =  @A000045;
 # A000048 / necklaces
 our @A000048 is export = 1, 1, 1, 1, 2, 3, 5, 9, 16, 28, 51, &NOSEQ ... *;
 # A000055 / trees
@@ -684,7 +683,6 @@ our @A246655 is export = lazy gather for @A000040 -> $p {
     }
 }
 
-
 #Horadam sequences. Just the first 10
 our @A085939 is export = Horadam( 0, 1, 6, 4);
 our @A085449 is export = Horadam( 0, 1, 4, 2);
@@ -693,8 +691,219 @@ our @A001076 is export = Horadam( 0, 1, 1, 4);
 
 #Hofstadter sequences
 our @A005206 is export = 0, {++$ - @A005206[@A005206[$++]]} … ∞;
-our @Hofstadters-G is export = @A005206;
 our @A005374 is export = 0, {++$ - @A005374[@A005374[@A005374[$++]]]} … ∞;
-our @Hofstadters-H is export = @A005374;
+
+## Aliases
+our %oeis-core is export = (
+    "groups" => @A000001,
+    "kolakoski" => @A000002,
+    "zeroes" => @A000004,
+    "divisors" => @A000005,
+    "zeros-powers" => @A000007,
+    "distinct-partitions" => @A000009,
+    "totient" => @A000010,
+    "ones" => @A000012,
+    "series-reduced-trees" => @A000014,
+    "primitive-permutation-groups" => @A000019,
+    "natural-numbers" => @A000027,
+    "bracelets" => @A000029,
+    "necklaces-two-color" => @A000031,
+    "lucas" => @A000032,
+    "fours-powers" => @A000302,
+    "zero-one" => @A000035,
+    "primes" => @A000040,
+    "partitions" => @A000041,
+    "mersennes" => @A000043,
+    "fibonacci" => @A000045,
+    "necklaces-two-color-interchangable" => @A000048,
+    "trees" => @A000055,
+    "sylvester" => @A000058,
+    "odious" => @A000069,
+    "twos-powers" => @A000079,
+    "rooted-trees" => @A000081,
+    "self-inverse-permutations" => @A000085,
+    "graphs" => @A000088,
+    "polyominoes" => @A000105,
+    "catalan" => @A000108,
+    "polyhedra" => @A000109,
+    "bell" => @A000110,
+    "euler" => @A000111,
+    "posets" => @A000112,
+    "ones-count" => @A000120,
+    "binary-partitions" => @A000123,
+    "lazy-caterer" => @A000124,
+    "pell" => @A000129,
+    "kendall-mann" => @A000140,
+    "factorial" => @A000142,
+    "partitions-two-squares" => @A000161,
+    "derangements" => @A000166,
+    "labeled-rooted-trees" => @A000169,
+    "tangents" => @A000182,
+    "sigma" => @A000203,
+    "lucas-one-three" => @A000204,
+    "triangular" => @A000217,
+    "planar-partitions" => @A000219,
+    "twos-powers-minus-one" => @A000225,
+    "threes-powers" => @A000244,
+    "sets-of-lists" => @A000262,
+    "n-to-n-minus-two" => @A000272,
+    "directed-graphs" => @A000273,
+    "squares" => @A000290,
+    "tetrahedral" => @A000292,
+    "schroeders-fourth" => @A000311,
+    "mappings" => @A000312,
+    "pentagonal" => @A000326,
+    "square-pyramidal" => @A000330,
+    "euler-or-secant" => @A000364,
+    "perfect" => @A000396,
+    "coefficients-j-function" => @A000521,
+    "cubes" => @A000578,
+    "fourth-powers" => @A000583,
+    "sum-odd-divisors" => @A000593,
+    "ramanujan-tau" => @A000594,
+    "hydrocarbons" => @A000602,
+    "threshold-functions" => @A000609,
+    "preferential-arrangements" => @A000670,
+    "abelian-groups" => @A000688,
+    "primes-less-than-n" => @A000720,
+    "landau" => @A000793,
+    "pi-digits" => @A000796,
+    "quasi-orders" => @A000798,
+    "lucky" => @A000959,
+    "prime-powers-from-zero" => @A000961,
+    "binomial-two-n-n" => @A000984,
+    "schroeders-second-problem" => @A001003,
+    "motzkin" => @A001006,
+    "simple-groups" => @A001034,
+    "irreducible-polynomials" => @A001037,
+    "jacobsthal" => @A001045,
+    "multiplicative-partition" => @A001055,
+    "sum-of-divisors" => @A001065,
+    "integers" => @A001057,
+    "twin-primes" => @A001097,
+    "e-digits" => @A001113,
+    "double-factorials" => @A001147,
+    "sum-of-squares-of-divisors" => @A001157,
+    "wedderburn-etherington" => @A001190,
+    "omega-distinct" => @A001221,
+    "omega" => @A001222,
+    "odd-divisors" => @A001227,
+    "thue-morse-ones-twos" => @A001285,
+    "root-two-numerators" => @A001333,
+    "connected-graphs" => @A001349,
+    "semiprimes" => @A001358,
+    "binomial-n-n-over-two" => @A001405,
+    "golomb" => @A001462,
+    "integers-from-zero" => @A001477,
+    "negative-integers" => @A001478,
+    "square-sums" => @A001481,
+    "negative-integers-from-zero" => @A001489,
+    "ruler-function" => @A001511,
+    "sublattices" => @A001615,
+    "binary-trees" => @A001699,
+    "binomial-two-n-plus-one-n-plus-one" => @A001700,
+    "fibonacci-bisection" => @A001519,
+    "binomial-three-n-n-over-two-n-plus-one" => @A001764,
+    "fibonacci-bisection-sums" => @A001906,
+    "evil" => @A001969,
+    "perfect-partitions" => @A002033,
+    "narayana-zidek-capell" => @A002083,
+    "transitive-permutation-groups" => @A002106,
+    "primorials" => @A002110,
+    "palindromes" => @A002113,
+    "repunits" => @A002275,
+    "psi" => @A002322,
+    "carmichael-lambda" => @A002322,
+    "pronic" => @A002378,
+    "central-trinomial-coefficients" => @A002426,
+    "sterns-diatomic-series" => @A002487,
+    "stern-brocot" => @A002487,
+    "root-three-denominators" => @A002530,
+    "root-three-numerators" => @A002531,
+    "binary-rooted-trees" => @A002572,
+    "quarter-squares" => @A002620,
+    "n-as-sums-of-squares" => @A002654,
+    "three-trees" => @A002658,
+    "composites" => @A002808,
+    "connected-planar-graphs" => @A003094,
+    "loeschian" => @A003136,
+    "lcm" => @A003418,
+    "least-common-multiple" => @A003418,
+    "hurwitz-radon" => @A003484,
+    "theta-series-D_4-lattice" => @A004011,
+    "square-lattice" => @A004018,
+    "integers-from-zero-repeated" => @A004526,
+    "dissections" => @A005036,
+    "deficient" => @A005100,
+    "abundant" => @A005101,
+    "squarefree" => @A005117,
+    "robbins" => @A005130,
+    "stern" => @A005230,
+    "odds" => @A005408,
+    "planar-graphs" => @A005470,
+    "binary-rooted-trees" => @A005588,
+    "runs" => @A005811,
+    "evens" => @A005843,
+    "royal-paths" => @A006318,
+    "schroeder-numbers" => @A006318,
+    "largest-prime-factor" => @A006530,
+    "double-factorial" => @A006882,
+    "three-trees" => @A006894,
+    "lattices" => @A006966,
+    "pascals-triangle" => @A007318,
+    "stirling-one" => @A008275,
+    "stirling-two" => @A008277,
+    "permutations-k-at-a-time" => @A008279,
+    "eulerian" => @A008292,
+    "moebius" => @A008683,
+    "thue-morse" => @A010060,
+    "nonprimes" => @A018252,
+    "smallest-prime-factor" => @A020639,
+    "bijection-integers-rationals-numerators-from-one" => @A020652,
+    "bijection-integers-rationals-denominators-from-one" => @A020653,
+    "bernoulli-numerators" => @A027641,
+    "bernoulli-denominaotrs" => @A027642,
+    "mckay-thompson" => @A035099,
+    "bijection-integers-rationals-numerators-from-zero" => @A038566,
+    "bijection-integers-rationals-denominators-from-zero" => @A038567,
+    "bijection-integers-rationals-numerators-from-one-alt" => @A038568,
+    "bijection-integers-rationals-denominators-from-one-alt" => @A038569,
+    "chebyshev" => @A049310,
+    "lattices-labeled" => @A055512,
+    "binary-length" => @A070939,
+    "ordered-factorizations" => @A074206,
+    "complementing-systems" => @A104725,
+    "hooleys-delta" => @A226898,
+    "prime-powers" => @A246655,
+    "horadam-0-1-6-4" => @A085939,
+    "horadam-0-1-4-2" => @A085449,
+    "horadam-0-1-9-3" => @A085504,
+    "horadam-0-1-1-4" => @A001076,
+    "hofstadters-g" => @A005206,
+    "hofstadters-h" => @A005374
+);
+
+#={ OEIS "foo" will give the OEIS entry named or aliased foo
+    OEIS "foo", :search will give a hash of all entries with
+    labels that start with "foo"}
+sub OEIS($name, Bool :$search=False) is export {
+    sub A-entry($name) {
+        given $name {
+            when /^A\d+$/ {
+                @::($name);
+                CATCH { when X::NoSuchSymbol { .resume } }
+            }
+            default { Nil }
+        }
+    }
+    if $search {
+        my %matches = %oeis-core.pairs.grep: -> $kv { $kv.key.starts-with: $name };
+        my $A-entry = A-entry $name;
+        %matches{$name} //= $A-entry if $A-entry.defined;
+        return %matches;
+    } else {
+        return A-entry($name) // %oeis-core{$name};
+    }
+}
 
 # vim: sw=4 softtabstop=4 expandtab ai ft=perl6
