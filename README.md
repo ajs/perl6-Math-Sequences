@@ -16,9 +16,10 @@ Install this file using
   * `@AXXXXXX` - All of the core OEIS sequences from
     http://oeis.org/wiki/Index_to_OEIS:_Section_Cor
   * `%oeis-core` - A mapping of English names to sequences (e.g. `%oeis-core<primes>`)
-  * OEIS - A function that returns the sequence for a given name, but
+  * `OEIS` - A function that returns the sequence for a given name, but
     can also search for sequences (`:search` flag) whose names start with the given
-    string, in which case a hash of name/sequence pairs is returned.
+    string, in which case a hash of name/sequence pairs is returned. Names can be the
+    `%oeis-core` aliases or the OEIS key such as `A000001`.
 * `Math::Sequences::Real` - Real sequences
   * `class Reals` - generic Real number sequences class
   * `ℝ` - The reals as a range
@@ -70,9 +71,9 @@ To gain access to these, use:
 
 ## About Unicode
 
-This library used a few non-ASCII unicode characters that are widely used
+This library uses a few non-ASCII unicode characters that are widely used
 within the mathematical community. They are entirely optional, however, and
-if you wish to use their ASCII equivalents, this table will help you out:
+if you wish to use their ASCII equivalents this table will help you out:
 
 (the following assume `use Math::Sequences::Integer; use Math::Sequences::Real;`)
 
