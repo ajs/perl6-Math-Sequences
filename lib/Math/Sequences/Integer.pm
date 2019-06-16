@@ -485,7 +485,7 @@ our @A001462 is export = ℕ.map: -> $i {
 # A001477 / integers
 our @A001477 is export = 𝕀;
 # A001478 / negatives
-our @A001478 is export = 1, &NOSEQ ... *;
+our @A001478 is export = ℕ.map: -> $n { -$n };
 # A001481 / sums of 2 squares
 our @A001481 is export = 1, &NOSEQ ... *;
 # A001489 / negatives
