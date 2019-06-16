@@ -501,7 +501,7 @@ our @A001700 is export = 1, &NOSEQ ... *;
 # A001519 / Fib. bisection
 our @A001519 is export = 1, &NOSEQ ... *;
 # A001764 / binomial(3n,n)/(2n+1)
-our @A001764 is export = 1, &NOSEQ ... *;
+our @A001764 is export = 𝕀.map: -> $n { (3*$n choose $n)/(2*$n+1) };
 # A001906 / Fib. bisection
 our @A001906 is export = 1, &NOSEQ ... *;
 # A001969 / evil
