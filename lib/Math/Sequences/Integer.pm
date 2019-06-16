@@ -517,7 +517,7 @@ our @A002110 is export = 1, &NOSEQ ... *;
 # A002113 / palindromes
 our @A002113 is export = 1, &NOSEQ ... *;
 # A002275 / repunits
-our @A002275 is export = 1, &NOSEQ ... *;
+our @A002275 is export = 𝕀.map: -> $n { (10**$n - 1) div 9 };
 # A002322 / psi
 our @A002322 is export = 1, &NOSEQ ... *;
 # A002378 / pronic
