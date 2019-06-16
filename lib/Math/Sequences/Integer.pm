@@ -570,7 +570,7 @@ our @A004526 is export = 1, &NOSEQ ... *;
 # A005036 / dissections
 our @A005036 is export = 1, &NOSEQ ... *;
 # A005100 / deficient
-our @A005100 is export = 1, &NOSEQ ... *;
+our @A005100 is export = ℕ.grep: -> $n { sigma($n) < 2 * $n };
 # A005101 / abundant
 our @A005101 is export = 1, &NOSEQ ... *;
 # A005117 / squarefree
