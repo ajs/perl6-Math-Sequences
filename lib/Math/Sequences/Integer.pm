@@ -566,7 +566,7 @@ our @A004011 is export = 1, &NOSEQ ... *;
 # A004018 / square lattice
 our @A004018 is export = 1, &NOSEQ ... *;
 # A004526 / ints repeated
-our @A004526 is export = 1, &NOSEQ ... *;
+our @A004526 is export = 𝕀.map: -> $n {$n div 2};
 # A005036 / dissections
 our @A005036 is export = 1, &NOSEQ ... *;
 # A005100 / deficient
