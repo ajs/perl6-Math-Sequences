@@ -544,7 +544,7 @@ our @A002531 is export = @A080040 Z/ 𝕀.map: -> $n { (2*2**($n div 2)) }
 # A002572 / binary rooted trees
 our @A002572 is export = 1, &NOSEQ ... *;
 # A002620 / quarter-squares
-our @A002620 is export = 1, &NOSEQ ... *;
+our @A002620 is export = 𝕀.map: -> $n { ($n**2 / 4).floor };
 # A002654 / re: sums of squares
 our @A002654 is export = 1, &NOSEQ ... *;
 # A002658 / 3-trees
