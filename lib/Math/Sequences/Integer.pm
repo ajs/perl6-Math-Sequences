@@ -490,7 +490,7 @@ our @A001481 is export = 1, &NOSEQ ... *;
 # A001489 / negatives
 our @A001489 is export = 𝕀.map: -> $n {-$n};
 # A001511 / ruler function
-our @A001511 is export = 1, &NOSEQ ... *;
+our @A001511 is export = ℕ.map: -> $n { 1 + $n.base(2).flip.index('1') };
 # A001615 / sublattices
 our @A001615 is export = 1, &NOSEQ ... *;
 # A001699 / binary trees
