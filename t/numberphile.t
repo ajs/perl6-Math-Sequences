@@ -18,6 +18,8 @@ my %canned = (
 		[13, 17, 31, 37, 71, 73, 79, 97, 107, 113], "emirps"],
 	A002210 => [
 		[2, 6, 8, 5, 4, 5, 2, 0, 0, 1], "Khintchine's constant"],
+	A001462 => [
+		[1, 2, 2, 3, 3, 4, 4, 4, 5, 5], "Golomb's sequence"],
 );
 
 plan 4 + %canned;
@@ -25,7 +27,17 @@ plan 4 + %canned;
 cmp-ok topologically-ordered-numbers[^5], '~~', [1, 4, 8, 48, 88], "topologically-ordered-numbers";
 is topologically-ordered-numbers(:radix(16))[4], :16<88>, "base 16 topologically-ordered-numbers";
 for %canned.sort.map(*.kv) -> ($seq, ($results, $desc)) {
-	cmp-ok @::($seq)[^10], '~~', $results, "$seq\[1-10]: $desc";
+	my @seq;
+	try {
+		@seq := @::($seq);
+		CATCH {
+			when X::NoSuchSymbol {
+				require Math::Sequences::Integer;
+				@seq := @::("Math::Sequences::Integer::" ~ $seq);
+			}
+		}
+	}
+	cmp-ok @seq[^10], '~~', $results, "$seq\[1-10]: $desc";
 }
 
 # These are the only known Wieferich primes even though they are trivial

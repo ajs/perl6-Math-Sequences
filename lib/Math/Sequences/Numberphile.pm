@@ -135,3 +135,15 @@ our @A002210 is export =
 
 # A001220 - Wieferich primes: primes p such that p^2 divides 2^(p-1) - 1.
 our @A001220 is export = ℕ.grep: -> $n { $n.is-prime and (2**($n-1)-1) %% ($n**2) };
+
+# Golomb's sequence: http://oeis.org/A001462
+proto golombs(Any) {*}
+multi golombs(1) { 1 }
+multi golombs($n) { 1 + golombs($n - golombs(golombs($n-1))) }
+
+# A001462 - Golomb's sequence: a(n) is the number of times n occurs,
+# starting with a(1) = 1
+# NOTE: This sequence is already defined in Math::Sequences::Integer,
+# but with a different algorithm, so I'm preserving this version
+# here without exporting it by default, just for historical value.
+our @alt-A001462 is export(:alt) = ℕ.map: -> $n {golombs($n) };
