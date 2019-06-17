@@ -24,4 +24,19 @@ sub topologically-ordered-numbers(:@ordering=[<1 4 8>], :$radix=10) is export(:s
 	}
 }
 
-our @A249572 = topologically-ordered-numbers();
+our @A249572 is export = topologically-ordered-numbers();
+
+# A087409 - Multiples of 6 with digits grouped in pairs and leading
+# zeros omitted.
+sub digit-grouped-multiples(:$of, :$group=2) is export(:support) {
+	lazy gather for ℕ.map({$^n * $of}) -> $multiple {
+		state $accum = '';
+		$accum ~= $multiple;
+		if $accum.chars >= $group {
+			take +$accum.substr(0,$group);
+			$accum = $accum.substr($group);
+		}
+	}
+}
+
+our @A087409 is export = digit-grouped-multiples(:of(6), :group(2));
