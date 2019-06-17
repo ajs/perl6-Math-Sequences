@@ -2,6 +2,8 @@
 # in the core sequences list.
 
 use Math::Sequences::Integer :support, :DEFAULT;
+use Math::Util::Roman;
+use Math::Util::SpellNumbers;
 
 # https://www.youtube.com/watch?v=OeGSQggDkxI
 
@@ -40,3 +42,13 @@ sub digit-grouped-multiples(:$of, :$group=2) is export(:support) {
 }
 
 our @A087409 is export = digit-grouped-multiples(:of(6), :group(2));
+
+# A002904 - Delete all letters except c,d,i,l,m,v,x from n then read
+# as Roman numeral if possible, otherwise 0.
+our @A002904 is export = lazy gather for ℕ -> $n {
+	my $name = as-words($n).subst(regex {<-[cdilmvx]>}, '', :i, :global);
+	try {
+		take from_roman($name);
+		CATCH { when /'not valid'/ { take 0 }}
+	}
+}
