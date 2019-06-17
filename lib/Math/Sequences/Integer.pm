@@ -557,7 +557,7 @@ our @A003094 is export = 1, &NOSEQ ... *;
 # A003136 / Loeschian
 our @A003136 is export = 1, &NOSEQ ... *;
 # A003418 / LCM
-our @A003418 is export = 1, &NOSEQ ... *;
+our @A003418 is export = 𝕀.map: -> $n { [lcm] 1..$n };
 # A003484 / Hurwitz-Radon
 our @A003484 is export = 1, &NOSEQ ... *;
 # A004011 / D_4
