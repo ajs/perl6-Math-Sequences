@@ -52,3 +52,9 @@ our @A002904 is export = lazy gather for ℕ -> $n {
 		CATCH { when /'not valid'/ { take 0 }}
 	}
 }
+
+# A006933 - 'Eban' numbers (the letter 'e' is banned!). 
+sub contains-letters($number, $letters) is export(:support){
+	return as-words(+$number).comb.grep: * ~~ $letters;
+}
+our @A006933 = ℕ.grep: {not contains-letters($^n, <e>)};
