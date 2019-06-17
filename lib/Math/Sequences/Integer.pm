@@ -504,7 +504,7 @@ our @A001764 is export = 1, &NOSEQ ... *;
 # A001906 / Fib. bisection
 our @A001906 is export = 1, &NOSEQ ... *;
 # A001969 / evil
-our @A001969 is export = 1, &NOSEQ ... *;
+our @A001969 is export = 𝕀.grep: -> $n { $n.base(2).comb('1') %% 2 };
 # A002033 / perfect partitions
 our @A002033 is export = 1, &NOSEQ ... *;
 # A002083 / Narayana-Zidek-Capell
