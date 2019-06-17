@@ -132,3 +132,6 @@ our @A002210 is export =
 	6, 5, 9, 5, 5, 4, 5, 0, 2, 5, 1, 3, 0, 4, 1, 9, 6, 8, 1, 8, 6, 5, 0,
 	9, 3, 8, 0, 3, 1, 3, 0, 3, 8, 5, 8, 4, 3, 5, 2, 9, 8, 6, 8, 6, 3, 6,
 	3, 5, 1, 6, &Math::Sequences::Integer::NOSEQ ... *;
+
+# A001220 - Wieferich primes: primes p such that p^2 divides 2^(p-1) - 1.
+our @A001220 is export = ℕ.grep: -> $n { $n.is-prime and (2**($n-1)-1) %% ($n**2) };
