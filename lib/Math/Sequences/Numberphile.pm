@@ -57,4 +57,9 @@ our @A002904 is export = lazy gather for ℕ -> $n {
 sub contains-letters($number, $letters) is export(:support){
 	return as-words(+$number).comb.grep: * ~~ $letters;
 }
-our @A006933 = ℕ.grep: {not contains-letters($^n, <e>)};
+our @A006933 is export = ℕ.grep: {not contains-letters($^n, <e>)};
+
+# A006567 - Emirps (primes whose reversal is a different prime).
+our @A006567 is export = ℕ.grep: {
+	my $rebmun = $^n.flip;
+	$^n.is-prime and $^n ne $rebmun and $rebmun.is-prime };
