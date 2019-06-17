@@ -22,6 +22,6 @@ plan 2 + %canned;
 
 cmp-ok topologically-ordered-numbers[^5], '~~', [1, 4, 8, 48, 88], "topologically-ordered-numbers";
 is topologically-ordered-numbers(:radix(16))[4], :16<88>, "base 16 topologically-ordered-numbers";
-for %canned.sort.Hash.kv -> $seq, ($results, $desc) {
+for %canned.sort.map(*.kv) -> ($seq, ($results, $desc)) {
 	cmp-ok @::($seq)[^10], '~~', $results, "$seq\[1-10]: $desc";
 }
