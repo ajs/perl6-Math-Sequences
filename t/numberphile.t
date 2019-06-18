@@ -24,6 +24,7 @@ my %canned = (
 		[0, 1, 5, 27, 194, 1865, 22875, 342391, 6053444, 123456789],
 		"Largest metadrome"],
 	A010727 => [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7], "All 7s"],
+	A058883 => [[11, 67, 2, 4769, 67], "Wild numebrs"],
 );
 
 plan 4 + %canned;
@@ -41,7 +42,7 @@ for %canned.sort.map(*.kv) -> ($seq, ($results, $desc)) {
 			}
 		}
 	}
-	cmp-ok @seq[^10], '~~', $results, "$seq\[1-10]: $desc";
+	cmp-ok @seq[^(+$results)], '~~', $results, "$seq\[1-{+$results}]: $desc";
 }
 
 # These are the only known Wieferich primes even though they are trivial

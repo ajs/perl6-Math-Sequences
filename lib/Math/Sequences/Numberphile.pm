@@ -155,6 +155,9 @@ our @A023811 = {(state $n = 0)++; [+] (^($n-1)).map: -> $i {$n**($n-$i-2) * ($i+
 # A010727 - All 7s
 our @A010727 = 7 xx *;
 
+# A058883 - The "Wild Numbers", from the novel of the same title (Version 1).
+our @A058883 = 11, 67, 2, 4769, 67;
+
 # From:
 
 #Beastly Primes: https://oeis.org/A131645
