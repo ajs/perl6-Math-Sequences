@@ -186,3 +186,15 @@ our @A125524 is export = lazy @A000040.grep: -> $p {
 our @A125523 is export = lazy @A000040.grep: -> $p {
 	$p.substr(0,$p.chars div 2).is-prime and !$p.substr(* - ($p.chars div 2)).is-prime
 }
+
+# From: https://www.youtube.com/watch?v=etMJxB-igrc
+
+# A181391 - Van Eck's sequence: For n>=1, if there exists an m < n such
+# that a(m) = a(n), take the largest such m and set a(n+1) = n-m;
+# otherwise a(n+1) = 0. Start with a(1)=0.
+our @A181391 = 0, -> $prev {
+	state %seen; (state $n = 0)++;
+	my $next = %seen{$prev}:exists ?? $n-%seen{$prev} !! 0;
+	%seen{$prev} = $n;
+	$next;
+} ... *;
