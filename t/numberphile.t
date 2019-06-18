@@ -25,6 +25,9 @@ my %canned = (
 		"Largest metadrome"],
 	A010727 => [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7], "All 7s"],
 	A058883 => [[11, 67, 2, 4769, 67], "Wild numebrs"],
+	A131645 => [
+		[6661, 16661, 26669, 46663, 56663], # Short for performance
+		"Beastly primes"],
 );
 
 plan 4 + %canned;

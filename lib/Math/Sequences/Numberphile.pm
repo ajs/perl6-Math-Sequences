@@ -158,9 +158,13 @@ our @A010727 = 7 xx *;
 # A058883 - The "Wild Numbers", from the novel of the same title (Version 1).
 our @A058883 = 11, 67, 2, 4769, 67;
 
-# From:
+# From: https://www.youtube.com/watch?v=zk_Q9y_LNzg
 
 #Beastly Primes: https://oeis.org/A131645
 #Belphegor Primes: https://oeis.org/A232448
 #Republican Primes: https://oeis.org/A125524
 #Democratic Primes: https://oeis.org/A125523
+
+# A131645 - Beastly primes (version 2): primes containing 666 as a
+# substring.
+our @A131645 = @A000040.grep: * ~~ /666/;
