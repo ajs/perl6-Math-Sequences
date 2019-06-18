@@ -150,13 +150,14 @@ our @alt-A001462 is export(:alt) = ℕ.map: -> $n {golombs($n) };
 
 # A023811 - Largest metadrome (number with digits in strict ascending order)
 # in base n.
-our @A023811 = {(state $n = 0)++; [+] (^($n-1)).map: -> $i {$n**($n-$i-2) * ($i+1)}}...*;
+our @A023811 is export = {
+	(state $n = 0)++; [+] (^($n-1)).map: -> $i {$n**($n-$i-2) * ($i+1)}}...*;
 
 # A010727 - All 7s
-our @A010727 = 7 xx *;
+our @A010727 is export = 7 xx *;
 
 # A058883 - The "Wild Numbers", from the novel of the same title (Version 1).
-our @A058883 = 11, 67, 2, 4769, 67;
+our @A058883 is export = 11, 67, 2, 4769, 67;
 
 # From: https://www.youtube.com/watch?v=zk_Q9y_LNzg
 
@@ -167,4 +168,21 @@ our @A058883 = 11, 67, 2, 4769, 67;
 
 # A131645 - Beastly primes (version 2): primes containing 666 as a
 # substring.
-our @A131645 = @A000040.grep: * ~~ /666/;
+#our @A131645 is export = @A000040.grep: * ~~ /666/;
+our @A131645 is export = ℕ.map({$^n*2+1}).grep: {$^n ~~ /666/ and $^n.is-prime};
+
+# A232448 - Belphegor primes: numbers n such that the decimal number
+# 1 0...0(n zeros) 666 0...0(n zeros) 1 (i.e. A232449(n)) is prime.
+our @A232448 is export = lazy 𝕀.grep: -> $n { "1{0 x $n}666{0 x $n}1".is-prime };
+
+# A125524 - Republican primes: primes such that the right half of the prime
+# is prime and the left half is not.
+our @A125524 is export = lazy @A000040.grep: -> $p {
+	!$p.substr(0,$p.chars div 2).is-prime and $p.substr(* - ($p.chars div 2)).is-prime
+}
+
+# A125523 - Democratic primes: primes such that the left half of the prime
+# is prime and the right half is not.
+our @A125523 is export = lazy @A000040.grep: -> $p {
+	$p.substr(0,$p.chars div 2).is-prime and !$p.substr(* - ($p.chars div 2)).is-prime
+}

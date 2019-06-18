@@ -28,6 +28,13 @@ my %canned = (
 	A131645 => [
 		[6661, 16661, 26669, 46663, 56663], # Short for performance
 		"Beastly primes"],
+	A232448 => [
+		[0, 13, 42], # Anything larger takes a long time to test
+		"Belphegor primes"],
+	A125524 => [
+		[13, 17, 43, 47, 67, 83, 97, 103, 107, 113], "Republican primes"],
+	A125523 => [
+		[29, 31, 59, 71, 79, 211, 229, 239, 241, 251], "Democratic primes"],
 );
 
 plan 4 + %canned;
