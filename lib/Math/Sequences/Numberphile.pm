@@ -152,6 +152,9 @@ our @alt-A001462 is export(:alt) = ℕ.map: -> $n {golombs($n) };
 # in base n.
 our @A023811 = {(state $n = 0)++; [+] (^($n-1)).map: -> $i {$n**($n-$i-2) * ($i+1)}}...*;
 
+# A010727 - All 7s
+our @A010727 = 7 xx *;
+
 # From:
 
 #Beastly Primes: https://oeis.org/A131645
