@@ -20,6 +20,9 @@ my %canned = (
 		[2, 6, 8, 5, 4, 5, 2, 0, 0, 1], "Khintchine's constant"],
 	alt-A001462 => [
 		[1, 2, 2, 3, 3, 4, 4, 4, 5, 5], "Golomb's sequence"],
+	A023811 => [
+		[0, 1, 5, 27, 194, 1865, 22875, 342391, 6053444, 123456789],
+		"Largest metadrome"],
 );
 
 plan 4 + %canned;

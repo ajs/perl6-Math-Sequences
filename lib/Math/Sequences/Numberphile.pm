@@ -147,3 +147,14 @@ multi golombs($n) { 1 + golombs($n - golombs(golombs($n-1))) }
 # but with a different algorithm, so I'm preserving this version
 # here without exporting it by default, just for historical value.
 our @alt-A001462 is export(:alt) = ℕ.map: -> $n {golombs($n) };
+
+# A023811 - Largest metadrome (number with digits in strict ascending order)
+# in base n.
+our @A023811 = {(state $n = 0)++; [+] (^($n-1)).map: -> $i {$n**($n-$i-2) * ($i+1)}}...*;
+
+# From:
+
+#Beastly Primes: https://oeis.org/A131645
+#Belphegor Primes: https://oeis.org/A232448
+#Republican Primes: https://oeis.org/A125524
+#Democratic Primes: https://oeis.org/A125523
