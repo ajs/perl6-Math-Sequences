@@ -35,6 +35,8 @@ my %canned = (
 		[13, 17, 43, 47, 67, 83, 97, 103, 107, 113], "Republican primes"],
 	A125523 => [
 		[29, 31, 59, 71, 79, 211, 229, 239, 241, 251], "Democratic primes"],
+	A181391 => [
+		[0, 0, 1, 0, 2, 0, 2, 2, 1, 6], "Van Eck's sequence"],
 );
 
 plan 4 + %canned;
