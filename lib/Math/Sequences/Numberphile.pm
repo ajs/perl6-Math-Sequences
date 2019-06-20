@@ -198,3 +198,28 @@ our @A181391 = 0, -> $prev {
 	%seen{$prev} = $n;
 	$next;
 } ... *;
+
+# From: https://www.youtube.com/watch?v=cZkGeR9CWbk
+
+#Lunar Primes: https://oeis.org/A087097
+#Lunar Squares: https://oeis.org/A087019
+
+sub lunar_add(+@nums) is export(:support) {
+	+ flip [~] (roundrobin @nums.map({.flip.comb})).map: {.max}
+}
+sub lunar_mul($a, $b) is export(:support) {
+	my @diga = $a.flip.comb;
+	my @rows = gather for $b.flip.comb.kv -> $i, $d {
+		take flip [~] gather do {
+			take 0 for ^$i;
+			for @diga -> $dd {
+				take min($d, $dd);
+			}
+		}
+	}
+	lunar_add @rows;
+}
+our @A087019 is export = 𝕀.map: -> $n {lunar_mul $n, $n};
+
+# A087097 - Lunar primes (formerly called dismal primes) (cf. A087062).
+#our @A087097 is export = 

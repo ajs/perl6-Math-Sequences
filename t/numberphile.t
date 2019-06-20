@@ -37,9 +37,11 @@ my %canned = (
 		[29, 31, 59, 71, 79, 211, 229, 239, 241, 251], "Democratic primes"],
 	A181391 => [
 		[0, 0, 1, 0, 2, 0, 2, 2, 1, 6], "Van Eck's sequence"],
+	A087019 => [
+		[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "Lunar squares"],
 );
 
-plan 4 + %canned;
+plan 8 + %canned;
 
 cmp-ok topologically-ordered-numbers[^5], '~~', [1, 4, 8, 48, 88], "topologically-ordered-numbers";
 is topologically-ordered-numbers(:radix(16))[4], :16<88>, "base 16 topologically-ordered-numbers";
@@ -61,3 +63,7 @@ for %canned.sort.map(*.kv) -> ($seq, ($results, $desc)) {
 # to test and there are believed to be infinitely many...
 is @A001220[0], 1093, "Wieferich prime [0]";
 is @A001220[1], 3511, "Wieferich prime [1]";
+is lunar_add(234, 321), 334, "lunar_add two three-digit numbers";
+is lunar_add(1,2,3,4), 4, "lunar_add four digits";
+is lunar_mul(4,5), 4, "lunar_mul two digits";
+is lunar_mul(234, 321), 23321, "lunar_mul two three-digit numbers";
