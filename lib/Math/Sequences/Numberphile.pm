@@ -204,10 +204,10 @@ our @A181391 = 0, -> $prev {
 #Lunar Primes: https://oeis.org/A087097
 #Lunar Squares: https://oeis.org/A087019
 
-sub lunar_add(+@nums) is export(:support) {
+sub lunar-add(+@nums) is export(:support) {
 	+ flip [~] (roundrobin @nums.map({.flip.comb})).map: {.max}
 }
-sub lunar_mul($a, $b) is export(:support) {
+sub lunar-mul($a, $b) is export(:support) {
 	my @diga = $a.flip.comb;
 	my @rows = gather for $b.flip.comb.kv -> $i, $d {
 		take flip [~] gather do {

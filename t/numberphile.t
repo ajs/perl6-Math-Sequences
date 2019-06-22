@@ -63,7 +63,7 @@ for %canned.sort.map(*.kv) -> ($seq, ($results, $desc)) {
 # to test and there are believed to be infinitely many...
 is @A001220[0], 1093, "Wieferich prime [0]";
 is @A001220[1], 3511, "Wieferich prime [1]";
-is lunar_add(234, 321), 334, "lunar_add two three-digit numbers";
-is lunar_add(1,2,3,4), 4, "lunar_add four digits";
-is lunar_mul(4,5), 4, "lunar_mul two digits";
-is lunar_mul(234, 321), 23321, "lunar_mul two three-digit numbers";
+is lunar-add(234, 321), 334, "lunar_add two three-digit numbers";
+is lunar-add(1,2,3,4), 4, "lunar_add four digits";
+is lunar-mul(4,5), 4, "lunar_mul two digits";
+is lunar-mul(234, 321), 23321, "lunar_mul two three-digit numbers";
