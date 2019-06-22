@@ -217,9 +217,9 @@ sub lunar-mul($a, $b) is export(:support) {
 			}
 		}
 	}
-	lunar_add @rows;
+	lunar-add @rows;
 }
-our @A087019 is export = 𝕀.map: -> $n {lunar_mul $n, $n};
+our @A087019 is export = 𝕀.map: -> $n {lunar-mul $n, $n};
 
 # A087097 - Lunar primes (formerly called dismal primes) (cf. A087062).
 #our @A087097 is export = 
