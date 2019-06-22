@@ -223,3 +223,44 @@ our @A087019 is export = 𝕀.map: -> $n {lunar-mul $n, $n};
 
 # A087097 - Lunar primes (formerly called dismal primes) (cf. A087062).
 #our @A087097 is export = 
+
+# From: https://www.youtube.com/watch?v=RGQe8waGJ4w
+
+proto spiral-board(Int, Bool :$flip, Int :$rotate) {*}
+multi spiral-board(1) is export(:support) { [[1]] }
+multi spiral-board(Int $size where * !%% 2) is export(:support) {
+	my @prev = spiral-board $size - 2;
+	my @cur = [ |^$size ] xx $size;
+	# Insert the smaller square into the larger
+	@cur[1 <<+<< ^@prev;1 <<+<< ^@prev] = @prev;
+	# Construct the outer edge index list
+	my @outer = ($size**2) <<-<< ^($size**2 - ($size-2)**2);
+	my @bottom = (^$size).reverse >>,>> ($size-1);
+	my @left = 0 <<,<< (^($size-1)).reverse;
+	my @top = (1..^$size) >>,>> 0;
+	my @right = ($size-1) <<,<< (^($size-2))>>.succ;
+	# And put it intp the outer edges
+	for |@bottom, |@left, |@top, |@right -> ($x,$y) {
+		@cur[$x;$y] = @outer.shift;
+	}
+	return @cur;
+}
+multi spiral-board(Int $size) is export(:support) { die "\$size must be odd" }
+multi spiral-board(Int $size where * !%% 2, Bool :$flip, Int :$rotate=0) {
+	my @board = spiral-board($size);
+	if $flip {
+		@board = @board>>.reverse;
+	}
+	for ^$rotate {
+		@board = ((^$size).reverse).map: -> $y { @board[^$size;$y] };
+	}
+	return @board;
+}
+
+sub spiral-knight() {
+
+}
+
+# A316667 - Squares visited by knight moves on a spirally numbered board
+# and moving to the lowest available unvisited square at each step.
+our @A316667 is export = &Math::Sequences::Integer::NOSEQ...*;
