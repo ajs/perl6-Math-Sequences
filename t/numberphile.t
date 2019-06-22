@@ -74,6 +74,8 @@ cmp-ok spiral-board(1), '~~', [[1]], "Board of size 1";
 cmp-ok spiral-board(3), '~~', [[5,6,7],[4,1,8],[3,2,9]], "Board of size 3";
 dies-ok {spiral-board(2)}, "Only odd numbers";
 my @flipped = spiral-board(3,:flip);
+# Somehow this prevents a duplication of the first element of the first sub-list
+my @perl-bug = @flipped.perl;
 cmp-ok @flipped, '~~', [[7,6,5], [8,1,4], [9,2,3]], "Flipped board";
 cmp-ok spiral-board(3, :rotate(1)), '~~', [[7,8,9], [6,1,2], [5,4,3]], "Rotated board";
 cmp-ok spiral-board(3, :rotate(4)), '~~', spiral-board(3), "Rotate board back to start";
