@@ -177,13 +177,17 @@ our @A232448 is export = lazy 𝕀.grep: -> $n { "1{0 x $n}666{0 x $n}1".is-prim
 
 # A125524 - Republican primes: primes such that the right half of the prime
 # is prime and the left half is not.
-our @A125524 is export = lazy @A000040.grep: -> $p {
+# Note: This was causing rakudo issues, so removed for now
+# our @A125524 is export = lazy @A000040.grep: -> $p {
+our @A125524 is export = lazy (1..*).grep(*.is-prime).grep: -> $p {
 	!$p.substr(0,$p.chars div 2).is-prime and $p.substr(* - ($p.chars div 2)).is-prime
 }
 
 # A125523 - Democratic primes: primes such that the left half of the prime
 # is prime and the right half is not.
-our @A125523 is export = lazy @A000040.grep: -> $p {
+# Note: This was causing rakudo issues, so removed for now
+# our @A125523 is export = lazy @A000040.grep: -> $p {
+our @A125523 is export = lazy (1..*).grep(*.is-prime).grep: -> $p {
 	$p.substr(0,$p.chars div 2).is-prime and !$p.substr(* - ($p.chars div 2)).is-prime
 }
 
