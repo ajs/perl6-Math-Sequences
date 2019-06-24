@@ -28,9 +28,11 @@ Install this file using
   * `@AXXXXXX` - As with `Math::Sequences::Integer`, these are exported by
     default and contain the sequence of values for that OEIS entry.
     They include:
-
-    A249572, A087409, A002904, A006933, A006567, A002210, A023811, A010727, A058883,
-    A131645, A232448, A125524, A125523, A001220
+    ```
+    A001220 A002210 A002904 A006567 A006933 A010727 A023811
+    A058883 A087019 A087409 A125523 A125524 A131645 A181391
+    A232448 A249572 A316667
+    ```
   * `topologically-ordered-numbers(:@ordering=[<1 4 8>], :$radix=10)` - A generator
     for "holey" numbers.
   * `digit-grouped-multiples(:$of, :$group=2)` - A generator for sequences of numbers
@@ -39,6 +41,10 @@ Install this file using
     sequence.
   * `contains-letters($number, $letters)` - A test that returns true if the words
     for `$number` (e.g. "one thousand four hundred five") contain the given `$letters`.
+  * `spiral-board(Int $size, Bool :$flip, Int :$rotate=0)` - Returns a list of lists
+    containing a spiral numbering sequence starting from the geometric middle of the
+    square and spiraling out to fill it. This is used by `@A316667`. The optional flip
+    and rotate parameters can be used to modify the orientation of the resulting board.
 
 ## Support routines
 
