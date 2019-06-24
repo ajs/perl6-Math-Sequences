@@ -177,13 +177,17 @@ our @A232448 is export = lazy 𝕀.grep: -> $n { "1{0 x $n}666{0 x $n}1".is-prim
 
 # A125524 - Republican primes: primes such that the right half of the prime
 # is prime and the left half is not.
-our @A125524 is export = lazy @A000040.grep: -> $p {
+# Note: This was causing rakudo issues, so removed for now
+# our @A125524 is export = lazy @A000040.grep: -> $p {
+our @A125524 is export = lazy (1..*).grep(*.is-prime).grep: -> $p {
 	!$p.substr(0,$p.chars div 2).is-prime and $p.substr(* - ($p.chars div 2)).is-prime
 }
 
 # A125523 - Democratic primes: primes such that the left half of the prime
 # is prime and the right half is not.
-our @A125523 is export = lazy @A000040.grep: -> $p {
+# Note: This was causing rakudo issues, so removed for now
+# our @A125523 is export = lazy @A000040.grep: -> $p {
+our @A125523 is export = lazy (1..*).grep(*.is-prime).grep: -> $p {
 	$p.substr(0,$p.chars div 2).is-prime and !$p.substr(* - ($p.chars div 2)).is-prime
 }
 
@@ -204,10 +208,10 @@ our @A181391 = 0, -> $prev {
 #Lunar Primes: https://oeis.org/A087097
 #Lunar Squares: https://oeis.org/A087019
 
-sub lunar_add(+@nums) is export(:support) {
+sub lunar-add(+@nums) is export(:support) {
 	+ flip [~] (roundrobin @nums.map({.flip.comb})).map: {.max}
 }
-sub lunar_mul($a, $b) is export(:support) {
+sub lunar-mul($a, $b) is export(:support) {
 	my @diga = $a.flip.comb;
 	my @rows = gather for $b.flip.comb.kv -> $i, $d {
 		take flip [~] gather do {
@@ -217,9 +221,78 @@ sub lunar_mul($a, $b) is export(:support) {
 			}
 		}
 	}
-	lunar_add @rows;
+	lunar-add @rows;
 }
-our @A087019 is export = 𝕀.map: -> $n {lunar_mul $n, $n};
+our @A087019 is export = 𝕀.map: -> $n {lunar-mul $n, $n};
 
 # A087097 - Lunar primes (formerly called dismal primes) (cf. A087062).
 #our @A087097 is export = 
+
+# From: https://www.youtube.com/watch?v=RGQe8waGJ4w
+
+proto spiral-board(Int, Bool :$flip, Int :$rotate) {*}
+multi spiral-board(1) is export(:support) { [[1]] }
+multi spiral-board(Int $size where * !%% 2) is export(:support) {
+	my @prev = spiral-board $size - 2;
+	my @cur = [ |^$size ] xx $size;
+	# Insert the smaller square into the larger
+	# This should have worked, I thought, but nope...
+	# @cur[1 <<+<< ^@prev;1 <<+<< ^@prev] = @prev;
+	for ^@prev -> $row {
+		for ^@prev -> $col {
+			@cur[$row+1;$col+1] = @prev[$row;$col];
+		}
+	}
+	# Construct the outer edge index list
+	my @outer = ($size**2) <<-<< ^($size**2 - ($size-2)**2);
+	my @bottom = (^$size).reverse >>,>> ($size-1);
+	my @left = 0 <<,<< (^($size-1)).reverse;
+	my @top = (1..^$size) >>,>> 0;
+	my @right = ($size-1) <<,<< (^($size-2))>>.succ;
+	# And put it intp the outer edges
+	for |@bottom, |@left, |@top, |@right -> ($x,$y) {
+		@cur[$x;$y] = @outer.shift;
+	}
+	return @cur;
+}
+multi spiral-board(Int $size) is export(:support) { die "\$size must be odd" }
+multi spiral-board(Int $size where * !%% 2, Bool :$flip, Int :$rotate=0) {
+	my @board = spiral-board($size);
+	if $flip {
+		@board = @board>>.reverse;
+	}
+	for ^$rotate {
+		@board = ((^$size).reverse).map: -> $y { @board[^$size;$y] };
+	}
+	return @board;
+}
+
+sub spiral-knight() {
+	my @knight-moves = <1 2>, <1 -2>, <-1 2>, <-1 -2>, <2 1>, <2 -1>,
+		<-2 1>, <-2 -1>;
+	lazy gather loop {
+		state $size = 5;
+		state $x = 2; state $y = 2;
+		state $sofar = SetHash.new: [1];
+		state @board = spiral-board($size);
+		while $x !~~ 2..^($size-2) or $y !~~ 2..^($size-2) {
+			$size += 2;
+			@board = spiral-board($size);
+			$x++; $y++;
+		}
+		take @board[$x;$y];
+		my @moves = eager @knight-moves.map(-> ($move-x, $move-y) {
+			my $next = ($x + $move-x, $y + $move-y);
+			$sofar{@board[$next[0];$next[1]]} ?? () !! $next;
+		}).grep: *.elems;
+		last if @moves.elems == 0;
+		my $next = @moves.min(-> ($nx,$ny) {@board[$nx;$ny]});
+		$x = $next[0];
+		$y = $next[1];
+		$sofar{@board[$next[0];$next[1]]}++;
+	}
+}
+
+# A316667 - Squares visited by knight moves on a spirally numbered board
+# and moving to the lowest available unvisited square at each step.
+our @A316667 is export = spiral-knight;

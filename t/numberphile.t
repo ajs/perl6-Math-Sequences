@@ -39,9 +39,11 @@ my %canned = (
 		[0, 0, 1, 0, 2, 0, 2, 2, 1, 6], "Van Eck's sequence"],
 	A087019 => [
 		[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "Lunar squares"],
+	A316667 => [
+		[1, 10, 3, 6, 9, 4, 7, 2, 5, 8], "Squares visited by knight moves"],
 );
 
-plan 8 + %canned;
+plan 15 + %canned;
 
 cmp-ok topologically-ordered-numbers[^5], '~~', [1, 4, 8, 48, 88], "topologically-ordered-numbers";
 is topologically-ordered-numbers(:radix(16))[4], :16<88>, "base 16 topologically-ordered-numbers";
@@ -63,7 +65,15 @@ for %canned.sort.map(*.kv) -> ($seq, ($results, $desc)) {
 # to test and there are believed to be infinitely many...
 is @A001220[0], 1093, "Wieferich prime [0]";
 is @A001220[1], 3511, "Wieferich prime [1]";
-is lunar_add(234, 321), 334, "lunar_add two three-digit numbers";
-is lunar_add(1,2,3,4), 4, "lunar_add four digits";
-is lunar_mul(4,5), 4, "lunar_mul two digits";
-is lunar_mul(234, 321), 23321, "lunar_mul two three-digit numbers";
+is lunar-add(234, 321), 334, "lunar_add two three-digit numbers";
+is lunar-add(1,2,3,4), 4, "lunar_add four digits";
+is lunar-mul(4,5), 4, "lunar_mul two digits";
+is lunar-mul(234, 321), 23321, "lunar_mul two three-digit numbers";
+cmp-ok spiral-board(1), '~~', [[1]], "Board of size 1";
+cmp-ok spiral-board(3), '~~', [[5,6,7],[4,1,8],[3,2,9]], "Board of size 3";
+dies-ok {spiral-board(2)}, "Only odd numbers";
+my @flipped = spiral-board(3,:flip);
+cmp-ok @flipped, '~~', [[7,6,5], [8,1,4], [9,2,3]], "Flipped board";
+cmp-ok spiral-board(3, :rotate(1)), '~~', [[7,8,9], [6,1,2], [5,4,3]], "Rotated board";
+cmp-ok spiral-board(3, :rotate(4)), '~~', spiral-board(3), "Rotate board back to start";
+cmp-ok spiral-board(5)[1..3].map({$_[1..3]}), '~~', spiral-board(3), "Center of 5-board is 3-board";
