@@ -236,7 +236,13 @@ multi spiral-board(Int $size where * !%% 2) is export(:support) {
 	my @prev = spiral-board $size - 2;
 	my @cur = [ |^$size ] xx $size;
 	# Insert the smaller square into the larger
-	@cur[1 <<+<< ^@prev;1 <<+<< ^@prev] = @prev;
+	# This should have worked, I thought, but nope...
+	# @cur[1 <<+<< ^@prev;1 <<+<< ^@prev] = @prev;
+	for ^@prev -> $row {
+		for ^@prev -> $col {
+			@cur[$row+1;$col+1] = @prev[$row;$col];
+		}
+	}
 	# Construct the outer edge index list
 	my @outer = ($size**2) <<-<< ^($size**2 - ($size-2)**2);
 	my @bottom = (^$size).reverse >>,>> ($size-1);
@@ -262,9 +268,31 @@ multi spiral-board(Int $size where * !%% 2, Bool :$flip, Int :$rotate=0) {
 }
 
 sub spiral-knight() {
-
+	my @knight-moves = <1 2>, <1 -2>, <-1 2>, <-1 -2>, <2 1>, <2 -1>,
+		<-2 1>, <-2 -1>;
+	lazy gather loop {
+		state $size = 5;
+		state $x = 2; state $y = 2;
+		state $sofar = SetHash.new: [1];
+		state @board = spiral-board($size);
+		while $x !~~ 2..^($size-2) or $y !~~ 2..^($size-2) {
+			$size += 2;
+			@board = spiral-board($size);
+			$x++; $y++;
+		}
+		take @board[$x;$y];
+		my @moves = eager @knight-moves.map(-> ($move-x, $move-y) {
+			my $next = ($x + $move-x, $y + $move-y);
+			$sofar{@board[$next[0];$next[1]]} ?? () !! $next;
+		}).grep: *.elems;
+		last if @moves.elems == 0;
+		my $next = @moves.min(-> ($nx,$ny) {@board[$nx;$ny]});
+		$x = $next[0];
+		$y = $next[1];
+		$sofar{@board[$next[0];$next[1]]}++;
+	}
 }
 
 # A316667 - Squares visited by knight moves on a spirally numbered board
 # and moving to the lowest available unvisited square at each step.
-our @A316667 is export = &Math::Sequences::Integer::NOSEQ...*;
+our @A316667 is export = spiral-knight;
