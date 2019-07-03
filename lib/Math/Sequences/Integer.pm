@@ -379,7 +379,7 @@ our @A000142 is export = 𝕀.map: -> $n { factorial($n) };
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
-our @A000166 is export = 1, &NOSEQ ... *;
+our @A000166 is export = lazy 1, 0, -> $a, $b {state $n++; $n*($a + $n) } ... *;
 # A000169 / labeled rooted trees
 our @A000169 is export = 1, &NOSEQ ... *;
 # A000182 / tangent
