@@ -159,22 +159,51 @@ our %BROKEN = :A000111,;
 
 sub factorial($n) is export(:support) { ([*] 1..$n) or 1 }
 
-# TODO Replace with better factorization
 sub factors($n is copy, :%map) is export(:support) {
     gather do {
         if %map{$n}:exists {
             take %map{$n};
-        } elsif $n < 4 or $n.is-prime {
+        } elsif $n < 4 {
             take $n;
         } else {
-            for 2..($n.sqrt.floor) -> $i {
-                while $n > 1 and $n %% $i {
-                    $n div= $i;
-                    take $i;
-                }
-                last if $n <= 1 or $n.is-prime;
-                LAST { take $n if $n > 1 }
+            .take for prime-factors($n);
+
+            ### Inline factoring code from Perl 6 module Prime::Factor ########
+            ### https://modules.perl6.org/search/?q=Prime+Factor
+            ### Used with permission.
+
+            sub prime-factors ( Int $n where * > 0 ) is export {
+                return $n if $n.is-prime;
+                return [] if $n == 1;
+                my $factor = find-factor( $n );
+                sort flat prime-factors( $factor ), prime-factors( $n div $factor );
             }
+
+            sub find-factor ( Int $n, $constant = 1 ) {
+                return 2 unless $n +& 1;
+                # magic number below: product of primes 3 through 43
+                if (my $gcd = $n gcd 6541380665835015) > 1 {
+                    return $gcd if $gcd != $n
+                }
+                my $x      = 2;
+                my $rho    = 1;
+                my $factor = 1;
+                while $factor == 1 {
+                    $rho = $rho +< 1;
+                    my $fixed = $x;
+                    my int $i = 0;
+                    while $i < $rho {
+                        $x = ( $x * $x + $constant ) % $n;
+                        $factor = ( $x - $fixed ) gcd $n;
+                        last if 1 < $factor;
+                        $i = $i + 1;
+                    }
+                }
+                $factor = find-factor( $n, $constant + 1 ) if $n == $factor;
+                $factor
+            }
+
+            ### End inlined code ###############################################
         }
     }
 }
