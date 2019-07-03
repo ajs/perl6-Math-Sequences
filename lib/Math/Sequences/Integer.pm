@@ -309,7 +309,7 @@ our @A000007 is export = 𝕀.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
 our @A000009 is export = 𝕀.map: { strict-partitions($^i).elems };
 # A000010 / totient
-our @A000010 is export = 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, &NOSEQ ... *;
+our @A000010 is export = (1..*).map: -> $t { +(^$t).grep: * gcd $t == 1 };
 # A000012 / 1's
 our @A000012 is export = 1 xx *;
 # A000014 / series-reduced trees
