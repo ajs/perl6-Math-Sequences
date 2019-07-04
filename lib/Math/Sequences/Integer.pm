@@ -411,7 +411,7 @@ our @A000302 is export = 𝕀.map: -> $n {4**$n}
 # A000311 / Schroeder's fourth
 our @A000311 is export = 1, &NOSEQ ... *;
 # A000312 / mappings
-our @A000312 is export = 1, &NOSEQ ... *;
+our @A000312 is export = 1, {state $n++; $n ** $n } ... *;
 # A000326 / pentagonal
 our @A000326 is export = 1, &NOSEQ ... *;
 # A000330 / square pyramidal
