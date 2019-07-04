@@ -275,6 +275,13 @@ sub FatPi($digits=100) is export {
   FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
 }
 
+sub Eulers-number ( Int $terms = 264 ) {
+    # Generates approximately 1.9 accurate digits of e per term.
+    # Returns first 500 digits by default as a trade-off
+    # between completeness and run time.
+    (sum map { FatRat.new(1,factorial($_)) }, ^$terms).substr(0,$terms*1.9).FatRat
+}
+
 sub Horadam( Int $p, Int $q, Int $r, Int $s ) {
   my @horadam = $p, $q, {$^n1 × $r + $^n2 × $s} … ∞;
   return @horadam;
@@ -475,8 +482,8 @@ our @A001065 is export = ℕ.map: -> $n {
 our @A001057 is export = flat lazy gather for 𝕀 -> $n { take $n ?? ($n, -$n) !! 0 };
 # A001097 / twin primes
 our @A001097 is export = 𝕀.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
-# A001113 / e
-our @A001113 is export = 1, &NOSEQ ... *;
+# A001113 / e - first 500 digits
+our @A001113 is export = Eulers-number.comb.grep( {/\d/} );
 # A001147 / double factorials
 our @A001147 is export = 1, 1, -> $a, $b { ($b/$a + 2) * $b } ... *;
 # A001157 / sum of squares of divisors
