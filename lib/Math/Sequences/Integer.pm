@@ -471,7 +471,7 @@ our @A001034 is export = 1, &NOSEQ ... *;
 # A001037 / irreducible polynomials
 our @A001037 is export = 1, &NOSEQ ... *;
 # A001045 / Jacobsthal
-our @A001045 is export = 1, &NOSEQ ... *;
+our @A001045 is export = 1, 1, -> $a, $b { 2 * $a + $b } ... *;
 # A001055 / multiplicative partition function
 our @A001055 is export = 1, &NOSEQ ... *;
 # A001065 / sum of divisors
