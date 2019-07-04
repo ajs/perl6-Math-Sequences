@@ -669,8 +669,18 @@ our @A020652 is export = lazy gather for 2..* -> $de {
 }
 # A020653 / fractal
 our @A020653 is export = 1, 2, 1, 3, 1, 4, 3, 2, 1, 5, 1, 6, &NOSEQ ... *;
-# A027641 / Bernoulli
-our @A027641 is export = 1, -1, 1, 0, -1, 0, 1, 0, -1, 0, 5, &NOSEQ ... *;
+# A027641 / Bernoulli numerators
+our @A027641 is export = lazy gather {
+                             my @a;
+                             for 𝕀 -> $m {
+                                 @a = FatRat.new(1, $m + 1),
+                                     -> $prev {
+                                         my $j = @a.elems;
+                                         $j * (@a.shift - $prev);
+                                 } ... { not @a.elems }
+                                 take @a.tail.numerator * (@a.elems %% 2 ?? -1 !! 1);
+                             }
+                         };
 # A027642 / Bernoulli
 our @A027642 is export = 1, 2, 6, 1, 30, 1, 42, 1, 30, 1, 66, &NOSEQ ... *;
 # A035099 / j_2
