@@ -415,7 +415,7 @@ our @A000312 is export = 1, {state $n++; $n ** $n } ... *;
 # A000326 / pentagonal
 our @A000326 is export = 0, {state $n++; $n*(3*$n-1)/2 } ... *;
 # A000330 / square pyramidal
-our @A000330 is export = 1, &NOSEQ ... *;
+our @A000330 is export = 0, {state $n++; $n*($n+1)*(2*$n+1)/6 } ... *;
 # A000364 / Euler or secant
 our @A000364 is export = 1, &NOSEQ ... *;
 # A000396 / perfect
