@@ -605,7 +605,7 @@ our @A005100 is export = ℕ.grep: -> $n { sigma($n) < 2 * $n };
 # A005101 / abundant
 our @A005101 is export = ℕ.grep: -> $n { sigma($n) > 2 * $n };
 # A005117 / squarefree
-our @A005117 is export = 1, &NOSEQ ... *;
+our @A005117 is export  = ℕ.grep: { my @v = .&factors.Bag.values; @v.sum/@v <= 1 };
 # A005130 / Robbins
 our @A005130 is export = 1, &NOSEQ ... *;
 # A005230 / Stern
