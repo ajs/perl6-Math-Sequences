@@ -430,7 +430,7 @@ our @A000578 is export = 𝕀.map: -> $n {$n ** 3}
 # A000583 / n^4
 our @A000583 is export = 𝕀.map: -> $n {$n ** 4}
 # A000593 / sum odd divisors
-our @A000593 is export = 1, &NOSEQ ... *;
+our @A000593 is export = 1, {state $n++; sum $n.&divisors.grep: * % 2 } ... *;
 # A000594 / Ramanujan tau
 our @A000594 is export = 1, &NOSEQ ... *;
 # A000602 / hydrocarbons
