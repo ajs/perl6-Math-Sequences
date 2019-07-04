@@ -504,8 +504,8 @@ our @A001222 is export = ℕ.map: -> $n {
 our @A001227 is export = ℕ.map: -> $n {
     divisors($n).grep({$_ mod 2 == 1}).elems
 }
-# A001285 / Thue-Morse
-our @A001285 is export = 1, &NOSEQ ... *;
+# A001285 / Thue-Morse (first 32767 terms)
+our @A001285 is export = (1, { '1' ~ @_.join.trans( "12" => "21", :g) } ... *)[15].comb;
 # A001333 / sqrt(2)
 our @A001333 is export = 1, {state $n++; round((1/2)*(1+sqrt(2))**$n) } ... *;
 # A001349 / connected graphs
