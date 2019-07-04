@@ -419,7 +419,10 @@ our @A000330 is export = 0, {state $n++; $n*($n+1)*(2*$n+1)/6 } ... *;
 # A000364 / Euler or secant
 our @A000364 is export = 1, &NOSEQ ... *;
 # A000396 / perfect
-our @A000396 is export = 1, &NOSEQ ... *;
+our @A000396 is export = lazy gather for @A000040 #`{primes} {
+                             my $n = 2**$_ - 1;
+                             take $n * 2**($_ - 1) if $n.is-prime;
+                         }
 # A000521 / j
 our @A000521 is export = 1, &NOSEQ ... *;
 # A000578 / n^3
