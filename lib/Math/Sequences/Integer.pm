@@ -544,7 +544,7 @@ our @A002083 is export = 1, &NOSEQ ... *;
 # A002106 / transitive perm. groups
 our @A002106 is export = 1, &NOSEQ ... *;
 # A002110 / primorials
-our @A002110 is export = 𝕀.map: -> $n { [*] @A000040[^$n] };
+our @A002110 is export = flat 1, [\*] @A000040
 # A002113 / palindromes
 our @A002113 is export = 1, &NOSEQ ... *;
 # A002275 / repunits
