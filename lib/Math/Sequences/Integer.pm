@@ -655,8 +655,8 @@ our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
 }
 # A008683 / Moebius
 our @A008683 is export = 1, &NOSEQ ... *;
-# A010060 / Thue-Morse
-our @A010060 is export = 1, &NOSEQ ... *;
+# A010060 / Thue-Morse (first 32767 terms)
+our @A010060 is export = (0, { '0' ~ @_.join.trans( "01" => "10", :g) } ... *)[15].comb;
 # A018252 / nonprimes
 our @A018252 is export = ℕ.grep: {not .is-prime};
 # A020639 / smallest prime factor
