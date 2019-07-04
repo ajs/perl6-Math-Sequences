@@ -413,7 +413,7 @@ our @A000311 is export = 1, &NOSEQ ... *;
 # A000312 / mappings
 our @A000312 is export = 1, {state $n++; $n ** $n } ... *;
 # A000326 / pentagonal
-our @A000326 is export = 1, &NOSEQ ... *;
+our @A000326 is export = 0, {state $n++; $n*(3*$n-1)/2 } ... *;
 # A000330 / square pyramidal
 our @A000330 is export = 1, &NOSEQ ... *;
 # A000364 / Euler or secant
