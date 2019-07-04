@@ -397,7 +397,7 @@ our @A000225 is export = 𝕀.map: -> $n {2**$n-1};
 # A000244 / 3^n
 our @A000244 is export = 𝕀.map: -> $n {3**$n};
 # A000262 / sets of lists
-our @A000262 is export = 1, &NOSEQ ... *;
+our @A000262 is export = 1, 1, -> $a, $b {state $n++; (2*($n+1)-1)*$b - $n*($n - 1) * $a } ... *;
 # A000272 / n^(n-2)
 our @A000272 is export = 𝕀.map: -> $n {$n ?? $n**($n-2) !! 1};
 # A000273 / directed graphs
