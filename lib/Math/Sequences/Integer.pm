@@ -681,8 +681,19 @@ our @A027641 is export = lazy gather {
                                  take @a.tail.numerator * (@a.elems %% 2 ?? -1 !! 1);
                              }
                          };
+# A027642 / Bernoulli denominators
+our @A027642 is export = lazy gather {
+                             my @a;
+                             for 𝕀 -> $m {
+                                 @a = FatRat.new(1, $m + 1),
+                                     -> $prev {
+                                         my $j = @a.elems;
+                                         $j * (@a.shift - $prev);
+                                 } ... { not @a.elems }
+                                 take @a.tail.denominator;
+                             }
+                         };
 # A027642 / Bernoulli
-our @A027642 is export = 1, 2, 6, 1, 30, 1, 42, 1, 30, 1, 66, &NOSEQ ... *;
 # A035099 / j_2
 our @A035099 is export = 1, 40, 276, -2048, 11202, -49152, 184024, &NOSEQ ... *;
 # A038566 / fractal
