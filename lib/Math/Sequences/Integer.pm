@@ -191,6 +191,19 @@ sub divisors($n) is export(:support) {
     }
 }
 
+# Helper which fixes factors(1) to be empty
+sub prime-factors($n) is export(:support) {
+    factors($n).grep: {$^d ≥ 2}
+}
+
+# The prime signature of a number is the Bag of the positive
+# exponents that appear in its prime factorization.
+# https://en.wikipedia.org/wiki/Prime_signature
+sub prime-signature($n --> Bag:D) is export(:support) {
+    prime-factors($n).Bag\ # prime factorization bag
+        .values.Bag        # exponent bag
+}
+
 sub sigma($n, $exponent=1) is export(:support) {
     [+] divisors($n).map: -> $j { $j ** $exponent };
 }
