@@ -614,7 +614,7 @@ our @A005101 is export = ℕ.grep: -> $n { sigma($n) > 2 * $n };
 # A005117 / squarefree
 our @A005117 is export  = ℕ.grep: { my @v = .&factors.Bag.values; @v.sum/@v <= 1 };
 # A005130 / Robbins
-our @A005130 is export = 1, 1, -> $a {state $n++; $a * factorial($n) * factorial(3*$n+1) / factorial(2*$n) / factorial(2*$n+1) } ... *;
+our @A005130 is export = lazy 1, 1, -> $a {state $n++; $a * factorial($n) * factorial(3*$n+1) / factorial(2*$n) / factorial(2*$n+1) } ... *;
 # A005230 / Stern
 our @A005230 is export = 1, &NOSEQ ... *;
 # A005408 / odd
