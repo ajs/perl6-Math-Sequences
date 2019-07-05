@@ -365,7 +365,14 @@ our @A000108 is export = lazy 𝕀.map: {(2*$^n choose $^n)/($^n+1)};
 # A000109 / polyhedra
 our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, &NOSEQ ... *;
 # A000110 / Bell
-our @A000110 is export = 1, 1, 2, 5, 15, 52, 203, 877, 4140, &NOSEQ ... *;
+our @A000110 is export = lazy gather {
+    my @bells = lazy [1], -> @b {
+        my @c = @b.tail;
+        @c.push: @b[$_] + @c[$_] for ^@b;
+        @c
+    } ... *;
+    @bells.map: { take .head };
+};
 # A000111 / Euler
 our @A000111 is export = lazy 𝕀.map: -> $n {euler-up-down($n)};
 # A000112 / posets
