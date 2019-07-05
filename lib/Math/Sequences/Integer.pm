@@ -628,7 +628,13 @@ our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
     }
 }
 # A008683 / Moebius
-our @A008683 is export = 1, &NOSEQ ... *;
+our @A008683 is export = ℕ.map: {
+    given .&prime-signature {
+        when *.elems    == 0 { 1 #`{ constant one   } }
+        when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
+        default              { 0 #`{ non-squarefree } }
+    }
+}
 # A010060 / Thue-Morse
 our @A010060 is export = 1, &NOSEQ ... *;
 # A018252 / nonprimes
