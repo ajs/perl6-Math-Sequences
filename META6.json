@@ -1,7 +1,7 @@
 {
     "perl": "6.c",
     "name" : "Math::Sequences",
-    "version" : "0.0.5",
+    "version" : "0.0.6",
     "description" : "Various mathematical sequences of moderate use",
     "authors" : [ "Aaron Sherman", "JJ Merelo" ],
     "provides" : {
@@ -12,7 +12,7 @@
         "Math::Util::SpellNumbers" : "lib/Math/Util/SpellNumbers.pm"
 
     },
-    "depends" : [ "Test::META" ],
+    "depends" : [ "Test::META", "Lingua::EN::Numbers" ],
     "resources" : [ ],
     "source-url" : "https://github.com/ajs/perl6-Math-Sequences.git"
 }
