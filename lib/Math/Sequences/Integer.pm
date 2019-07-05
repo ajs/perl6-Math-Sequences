@@ -316,7 +316,7 @@ our @A000007 is export = 𝕀.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
 our @A000009 is export = 𝕀.map: { strict-partitions($^i).elems };
 # A000010 / totient
-our @A000010 is export = (1..*).map: -> $t { +(^$t).grep: * gcd $t == 1 };
+our @A000010 is export = ℕ.map: -> $t { +(^$t).grep: * gcd $t == 1 };
 # A000012 / 1's
 our @A000012 is export = 1 xx *;
 # A000014 / series-reduced trees
@@ -386,9 +386,9 @@ our @A000142 is export = 𝕀.map: -> $n { factorial($n) };
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
-our @A000166 is export = lazy 1, 0, -> $a, $b {state $n++; $n*($a + $n) } ... *;
+our @A000166 is export = lazy 1, -> $a {state $n++; $n*$a + (-1)**$n } ... *;
 # A000169 / labeled rooted trees
-our @A000169 is export = lazy 1, {state $n++; $n**($n - 1) } ... *;
+our @A000169 is export = {state $n++; $n**($n - 1) } ... *;
 # A000182 / tangent
 our @A000182 is export = 1, &NOSEQ ... *;
 # A000203 / sigma
@@ -418,11 +418,11 @@ our @A000302 is export = 𝕀.map: -> $n {4**$n}
 # A000311 / Schroeder's fourth
 our @A000311 is export = 1, &NOSEQ ... *;
 # A000312 / mappings
-our @A000312 is export = 1, {state $n++; $n ** $n } ... *;
+our @A000312 is export = lazy 1, {state $n++; $n ** $n } ... *;
 # A000326 / pentagonal
-our @A000326 is export = 0, {state $n++; $n*(3*$n-1)/2 } ... *;
+our @A000326 is export = lazy 0, {state $n++; $n*(3*$n-1)/2 } ... *;
 # A000330 / square pyramidal
-our @A000330 is export = 0, {state $n++; $n*($n+1)*(2*$n+1)/6 } ... *;
+our @A000330 is export = lazy 0, {state $n++; $n*($n+1)*(2*$n+1)/6 } ... *;
 # A000364 / Euler or secant
 our @A000364 is export = 1, &NOSEQ ... *;
 # A000396 / perfect
@@ -437,7 +437,7 @@ our @A000578 is export = 𝕀.map: -> $n {$n ** 3}
 # A000583 / n^4
 our @A000583 is export = 𝕀.map: -> $n {$n ** 4}
 # A000593 / sum odd divisors
-our @A000593 is export = 1, {state $n++; sum $n.&divisors.grep: * % 2 } ... *;
+our @A000593 is export = {state $n++; sum $n.&divisors.grep: * % 2 } ... *;
 # A000594 / Ramanujan tau
 our @A000594 is export = 1, &NOSEQ ... *;
 # A000602 / hydrocarbons
@@ -471,7 +471,7 @@ our @A001034 is export = 1, &NOSEQ ... *;
 # A001037 / irreducible polynomials
 our @A001037 is export = 1, &NOSEQ ... *;
 # A001045 / Jacobsthal
-our @A001045 is export = 1, 1, -> $a, $b { 2 * $a + $b } ... *;
+our @A001045 is export = 0, 1, -> $a, $b { 2 * $a + $b } ... *;
 # A001055 / multiplicative partition function
 our @A001055 is export = 1, &NOSEQ ... *;
 # A001065 / sum of divisors
@@ -551,7 +551,7 @@ our @A002083 is export = 1, &NOSEQ ... *;
 # A002106 / transitive perm. groups
 our @A002106 is export = 1, &NOSEQ ... *;
 # A002110 / primorials
-our @A002110 is export = flat 1, [\*] @A000040
+our @A002110 is export = lazy flat 1, [\*] @A000040;
 # A002113 / palindromes
 our @A002113 is export = 𝕀.grep: { $_ == .flip };
 # A002275 / repunits
@@ -614,7 +614,7 @@ our @A005101 is export = ℕ.grep: -> $n { sigma($n) > 2 * $n };
 # A005117 / squarefree
 our @A005117 is export  = ℕ.grep: { my @v = .&factors.Bag.values; @v.sum/@v <= 1 };
 # A005130 / Robbins
-our @A005130 is export = 1, -> $a {state $n++; $a * factorial($n) * factorial(3*$n+1) / factorial(2*$n) / factorial(2*$n+1) } ... *;
+our @A005130 is export = 1, 1, -> $a {state $n++; $a * factorial($n) * factorial(3*$n+1) / factorial(2*$n) / factorial(2*$n+1) } ... *;
 # A005230 / Stern
 our @A005230 is export = 1, &NOSEQ ... *;
 # A005408 / odd
@@ -693,7 +693,6 @@ our @A027642 is export = lazy gather {
                                  take @a.tail.denominator;
                              }
                          };
-# A027642 / Bernoulli
 # A035099 / j_2
 our @A035099 is export = 1, 40, 276, -2048, 11202, -49152, 184024, &NOSEQ ... *;
 # A038566 / fractal
