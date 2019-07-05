@@ -483,7 +483,7 @@ our @A001057 is export = flat lazy gather for 𝕀 -> $n { take $n ?? ($n, -$n) 
 # A001097 / twin primes
 our @A001097 is export = 𝕀.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
 # A001113 / e - first 500 digits
-our @A001113 is export = Eulers-number.comb.grep( {/\d/} );
+our @A001113 is export = Eulers-number.comb( /\d/ );
 # A001147 / double factorials
 our @A001147 is export = 1, 1, -> $a, $b { ($b/$a + 2) * $b } ... *;
 # A001157 / sum of squares of divisors
