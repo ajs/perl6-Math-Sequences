@@ -426,7 +426,7 @@ our @A000984 is export = 𝕀.map: -> $n {2*$n choose $n};
 # A001003 / Schroeder's second problem
 our @A001003 is export = 1, &NOSEQ ... *;
 # A001006 / Motzkin
-our @A001006 is export = 1, &NOSEQ ... *;
+our @A001006 is export = 1, 1, 2, 4, 9, 21, 51, 127, 323, 835, 2188, 5798, &NOSEQ ... *;
 # A001034 / simple groups
 our @A001034 is export = 1, &NOSEQ ... *;
 # A001037 / irreducible polynomials
