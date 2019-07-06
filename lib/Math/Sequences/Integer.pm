@@ -649,6 +649,14 @@ our @A020652 is export = lazy gather for 2..* -> $de {
 }
 # A020653 / fractal
 our @A020653 is export = 1, 2, 1, 3, 1, 4, 3, 2, 1, 5, 1, 6, &NOSEQ ... *;
+# A025487 / products of primorials
+our @A025487 is export = ℕ.map: -> $n {
+    (1 ... ∞).first: {
+        state %cache{Bag};
+        %cache{ .&prime-signature }++;
+        %cache == $n
+    }
+}
 # A027641 / Bernoulli
 our @A027641 is export = 1, -1, 1, 0, -1, 0, 1, 0, -1, 0, 5, &NOSEQ ... *;
 # A027642 / Bernoulli
