@@ -86,12 +86,12 @@ my $footer = q:to<END_FOOTER>;
     # ...
     # 2. The OEIS is made available under the Creative Commons Attribution
     # Non-Commercial 3.0 license.
-    # 
+    #
     # 3. To satisfy the attribution requirements of that license (section 4(c)),
     # attributions should credit The Online Encyclopedia of Integer Sequences
     # and provide a URL to the main page https://oeis.org/ or to a specific
     # sequence (e.g. https://oeis.org/A000108).
-    # 
+    #
     # 4. Commercial uses may be licensed by special arrangement with the OEIS
     # Foundation Inc..
     END_FOOTER

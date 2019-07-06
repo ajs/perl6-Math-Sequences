@@ -3,7 +3,7 @@
 Install this file using
 
 	zef install Math::Sequences
-	
+
 
 ## Included components
 
