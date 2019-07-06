@@ -726,7 +726,7 @@ our @A006318 is export = lazy gather {
     my @Schröder = lazy [1], [1, 2], -> @b {
         my @c = 1;
         @c.push: (@b[$_] // 0) + @b[$_ - 1] + @c[$_ - 1] for 1..@b;
-        [@c]
+        @c
     } ... *;
     @Schröder.map: { take .tail };
 };
