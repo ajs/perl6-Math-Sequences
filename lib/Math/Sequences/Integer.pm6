@@ -131,6 +131,10 @@ our constant \ℤ is export = Integers.new;
 our constant \𝕀 is export = Naturals.new;
 our constant \ℕ is export = 𝕀.from(1);
 
+our constant \Z is export = Integers.new;
+our constant \I is export = Naturals.new;
+our constant \N is export = 𝕀.from(1);
+
 #####
 # Utilities for the OEIS entires:
 
@@ -152,10 +156,28 @@ sub euler-up-down($i is copy) is export(:support) {
     }
 }
 
+# Per OEIS A000111:
+# From Wikipedia:
+#  The Euler zigzag numbers are related to Entringer numbers, from which the zigzag numbers may be computed. The Entringer numbers can be defined recursively as follows:[3]
+
+#    E ( 0 , 0 ) = 1 {\displaystyle E(0,0)=1} E(0,0)=1
+#    E ( n , 0 ) = 0 for  n > 0 {\displaystyle E(n,0)=0\qquad {\mbox{for }}n>0} E(n,0)=0\qquad {\mbox{for }}n>0
+#    E ( n , k ) = E ( n , k − 1 ) + E ( n − 1 , n − k ) {\displaystyle E(n,k)=E(n,k-1)+E(n-1,n-k)} E(n,k)=E(n,k-1)+E(n-1,n-k).
+#
+#  The nth zigzag number is equal to the Entringer number E(n, n).
+
+my %Entringer;
+multi sub Entringer(0, 0 --> 1) { };
+
+multi sub Entringer($ where * > 0, 0 --> 0) { };
+
+multi sub Entringer($n, $k) { %Entringer{"$n,$k"} //= Entringer($n, $k - 1) + Entringer($n - 1, $n - $k) };
+
+
 # Per OEIS A000123
 sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 
-our %BROKEN = :A000111,;
+our %BROKEN = %();
 
 sub factorial($n) is export(:support) { ([*] 1..$n) or 1 }
 
@@ -387,7 +409,7 @@ our @A000110 is export = lazy gather {
     @bells.map: { take .head };
 };
 # A000111 / Euler
-our @A000111 is export = lazy 𝕀.map: -> $n {euler-up-down($n)};
+our @A000111 is export = lazy 𝕀.map: -> $n {Entringer($n, $n)};
 # A000112 / posets
 our @A000112 is export = 1, 1, 2, 5, 16, 63, 318, 2045, 16999, &NOSEQ ... *;
 # A000120 / 1's in n
@@ -458,7 +480,7 @@ our @A000326 is export = lazy 0, {state $n++; $n*(3*$n-1)/2 } ... *;
 # A000330 / square pyramidal
 our @A000330 is export = lazy 0, {state $n++; $n*($n+1)*(2*$n+1)/6 } ... *;
 # A000364 / Euler or secant
-our @A000364 is export = 1, &NOSEQ ... *;
+our @A000364 is export = lazy (0, 2 ... *).map: -> $n {Entringer($n, $n)}
 # A000396 / perfect
 our @A000396 is export = lazy gather for @A000040 #`{primes} {
                              my $n = 2**$_ - 1;

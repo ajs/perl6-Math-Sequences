@@ -60,4 +60,6 @@ class Reals is Range is export {
 
 my constant \ℝ is export = Reals.new;
 
+my constant \R is export = Reals.new;
+
 # vim: sw=4 softtabstop=4 expandtab ai ft=perl6
