@@ -476,7 +476,7 @@ our @A000959 is export = 1, 3,
     $val
 } ... *;
 # A000961 / prime powers
-our @A000961 is export = 1, &NOSEQ ... *;
+our @A000961 is export  = (1..*).grep: { factors($_).unique == 1 };
 # A000984 / binomial(2n,n)
 our @A000984 is export = 𝕀.map: -> $n {2*$n choose $n};
 # A001003 / Schroeder's second problem
