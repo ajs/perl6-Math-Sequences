@@ -398,7 +398,10 @@ our @A000105 is export = 1, 1, 1, 2, 5, 12, 35, 108, 369, 1285, &NOSEQ ... *;
 # A000108 / Catalan
 our @A000108 is export = lazy 𝕀.map: {(2*$^n choose $^n)/($^n+1)};
 # A000109 / polyhedra
-our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, &NOSEQ ... *;
+our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, 49566, 339722,
+                         2406841, 17490241, 129664753, 977526957, 7475907149,
+                         57896349553, 453382272049, 3585853662949, 28615703421545,
+                         &NOSEQ ... *;
 # A000110 / Bell
 our @A000110 is export = lazy gather {
     my @bells = lazy [1], -> @b {
@@ -411,7 +414,9 @@ our @A000110 is export = lazy gather {
 # A000111 / Euler
 our @A000111 is export = lazy 𝕀.map: -> $n {Entringer($n, $n)};
 # A000112 / posets
-our @A000112 is export = 1, 1, 2, 5, 16, 63, 318, 2045, 16999, &NOSEQ ... *;
+our @A000112 is export = 1, 1, 2, 5, 16, 63, 318, 2045, 16999, 183231, 2567284,
+                         46749427, 1104891746, 33823827452, 1338193159771,
+                         68275077901156, 4483130665195087, &NOSEQ ... *;
 # A000120 / 1's in n
 our @A000120 is export = lazy 𝕀.map: -> $n {$n.base(2).comb.grep({+$_}).elems};
 # A000123 / binary partitions
@@ -499,7 +504,9 @@ our @A000594 is export = 1, &NOSEQ ... *;
 # A000602 / hydrocarbons
 our @A000602 is export = 1, &NOSEQ ... *;
 # A000609 / threshold functions
-our @A000609 is export = 1, &NOSEQ ... *;
+our @A000609 is export = 2, 4, 14, 104, 1882, 94572, 15028134,
+                         8378070864, 17561539552946, 144130531453121108,
+                         &NOSEQ ... *;
 # A000670 / preferential arrangements
 our @A000670 is export = 1, &NOSEQ ... *;
 # A000688 / abelian groups
@@ -626,7 +633,11 @@ our @A002033 is export = 1, &NOSEQ ... *;
 # A002083 / Narayana-Zidek-Capell
 our @A002083 is export = 1, &NOSEQ ... *;
 # A002106 / transitive perm. groups
-our @A002106 is export = 1, &NOSEQ ... *;
+our @A002106 is export = 1, 1, 2, 5, 5, 16, 7, 50, 34, 45, 8, 301, 9, 63, 104,
+                         1954, 10, 983, 8, 1117, 164, 59, 7, 25000, 211, 96,
+                         2392, 1854, 8, 5712, 12, 2801324, 162, 115, 407,
+                         121279, 11, 76, 306, 315842, 10, 9491, 10, 2113, 10923,
+                         56, 6, &NOSEQ ... *;
 # A002110 / primorials
 our @A002110 is export = lazy flat 1, [\*] @A000040;
 # A002113 / palindromes
@@ -669,7 +680,8 @@ our @A002808 is export = 𝕀.grep: -> $n {
     not $n.is-prime and factors($n).elems > 1;
 }
 # A003094 / connected planar graphs
-our @A003094 is export = 1, &NOSEQ ... *;
+our @A003094 is export = 1, 1, 1, 2, 6, 20, 99, 646, 5974, 71885, 1052805,
+                         17449299, 313372298, &NOSEQ ... *;
 # A003136 / Loeschian
 our @A003136 is export = lazy flat 0, 1, 3, (4..*).map: -> $n {
     next if $n % 3 == 2;
@@ -711,7 +723,8 @@ our @A005230 is export = 1, &NOSEQ ... *;
 # A005408 / odd
 our @A005408 is export = 𝕀.map: -> $n {$n*2+1};
 # A005470 / planar graphs
-our @A005470 is export = 1, &NOSEQ ... *;
+our @A005470 is export = 1, 1, 2, 4, 11, 33, 142, 822, 6966, 79853, 1140916,
+                         18681008, 333312451, &NOSEQ ... *;
 # A005588 / binary rooted trees
 our @A005588 is export = 1, &NOSEQ ... *;
 # A005811 / runs in n
@@ -737,7 +750,10 @@ our @A006882 is export = 1, 1, -> $a, $b { (state $n = 2)++ * $a } ... *;
 # A006894 / 3-trees
 our @A006894 is export = 1, &NOSEQ ... *;
 # A006966 / lattices
-our @A006966 is export = 1, &NOSEQ ... *;
+our @A006966 is export = 1, 1, 1, 1, 2, 5, 15, 53, 222, 1078, 5994, 37622,
+                         262776, 2018305, 16873364, 152233518, 1471613387,
+                         15150569446, 165269824761, 1901910625578,
+                         23003059864006, &NOSEQ ... *;
 # A007318 / Pascal's triangle
 our @A007318 is export = 𝕀.triangle.map: -> ($n,$k) { $n choose $k };
 # A008275 / Stirling 1
