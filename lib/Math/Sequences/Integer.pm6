@@ -588,7 +588,7 @@ our @A001511 is export = ℕ.map: -> $n { 1 + $n.base(2).flip.index('1') };
 # A001615 / sublattices
 our @A001615 is export = 1, &NOSEQ ... *;
 # A001699 / binary trees
-our @A001699 is export = 1, &NOSEQ ... *;
+our @A001699 is export = flat 1, 1, -> $a, $b { $b * ($a + $b + $b / $a) }...*;
 # A001700 / binomial(2n+1, n+1)
 our @A001700 is export = 𝕀.map: -> $n { (2 * $n + 1) choose ($n + 1) };
 # A001519 / Fib. bisection
