@@ -412,7 +412,7 @@ our @A000688 is export = 1, &NOSEQ ... *;
 # A000720 / pi(n)
 our @A000720 is export = [\+] @A010051;
 # A000793 / Landau
-our @A000793 is export = 1, &NOSEQ ... *;
+our @A000793 is export = 1, { strict-partitions(++$).map({[lcm] $_}).max } ... *;
 # A000796 / Pi
 our @A000796 is export = lazy Pi-digits;
 # A000798 / quasi-orders or topologies
