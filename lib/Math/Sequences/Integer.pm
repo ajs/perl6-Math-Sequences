@@ -159,22 +159,51 @@ our %BROKEN = :A000111,;
 
 sub factorial($n) is export(:support) { ([*] 1..$n) or 1 }
 
-# TODO Replace with better factorization
 sub factors($n is copy, :%map) is export(:support) {
     gather do {
         if %map{$n}:exists {
             take %map{$n};
-        } elsif $n < 4 or $n.is-prime {
+        } elsif $n < 4 {
             take $n;
         } else {
-            for 2..($n.sqrt.floor) -> $i {
-                while $n > 1 and $n %% $i {
-                    $n div= $i;
-                    take $i;
-                }
-                last if $n <= 1 or $n.is-prime;
-                LAST { take $n if $n > 1 }
+            .take for prime-factors($n);
+
+            ### Inline factoring code from Perl 6 module Prime::Factor ########
+            ### https://modules.perl6.org/search/?q=Prime+Factor
+            ### Used with permission.
+
+            sub prime-factors ( Int $n where * > 0 ) is export {
+                return $n if $n.is-prime;
+                return [] if $n == 1;
+                my $factor = find-factor( $n );
+                sort flat prime-factors( $factor ), prime-factors( $n div $factor );
             }
+
+            sub find-factor ( Int $n, $constant = 1 ) {
+                return 2 unless $n +& 1;
+                # magic number below: product of primes 3 through 43
+                if (my $gcd = $n gcd 6541380665835015) > 1 {
+                    return $gcd if $gcd != $n
+                }
+                my $x      = 2;
+                my $rho    = 1;
+                my $factor = 1;
+                while $factor == 1 {
+                    $rho = $rho +< 1;
+                    my $fixed = $x;
+                    my int $i = 0;
+                    while $i < $rho {
+                        $x = ( $x * $x + $constant ) % $n;
+                        $factor = ( $x - $fixed ) gcd $n;
+                        last if 1 < $factor;
+                        $i = $i + 1;
+                    }
+                }
+                $factor = find-factor( $n, $constant + 1 ) if $n == $factor;
+                $factor
+            }
+
+            ### End inlined code ###############################################
         }
     }
 }
@@ -246,6 +275,13 @@ sub FatPi($digits=100) is export {
   FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
 }
 
+sub Eulers-number ( Int $terms = 264 ) {
+    # Generates approximately 1.9 accurate digits of e per term.
+    # Returns first 500 digits by default as a trade-off
+    # between completeness and run time.
+    (sum map { FatRat.new(1,factorial($_)) }, ^$terms).substr(0,$terms*1.9).FatRat
+}
+
 sub Horadam( Int $p, Int $q, Int $r, Int $s ) {
   my @horadam = $p, $q, {$^n1 × $r + $^n2 × $s} … ∞;
   return @horadam;
@@ -280,7 +316,7 @@ our @A000007 is export = 𝕀.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
 our @A000009 is export = 𝕀.map: { strict-partitions($^i).elems };
 # A000010 / totient
-our @A000010 is export = 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, &NOSEQ ... *;
+our @A000010 is export = ℕ.map: -> $t { +(^$t).grep: * gcd $t == 1 };
 # A000012 / 1's
 our @A000012 is export = 1 xx *;
 # A000014 / series-reduced trees
@@ -329,7 +365,14 @@ our @A000108 is export = lazy 𝕀.map: {(2*$^n choose $^n)/($^n+1)};
 # A000109 / polyhedra
 our @A000109 is export = 1, 1, 1, 2, 5, 14, 50, 233, 1249, 7595, &NOSEQ ... *;
 # A000110 / Bell
-our @A000110 is export = 1, 1, 2, 5, 15, 52, 203, 877, 4140, &NOSEQ ... *;
+our @A000110 is export = lazy gather {
+    my @bells = lazy [1], -> @b {
+        my @c = @b.tail;
+        @c.push: @b[$_] + @c[$_] for ^@b;
+        @c
+    } ... *;
+    @bells.map: { take .head };
+};
 # A000111 / Euler
 our @A000111 is export = lazy 𝕀.map: -> $n {euler-up-down($n)};
 # A000112 / posets
@@ -350,9 +393,9 @@ our @A000142 is export = 𝕀.map: -> $n { factorial($n) };
 # A000161 / partitions into 2 squares
 our @A000161 is export = 1, &NOSEQ ... *;
 # A000166 / derangements
-our @A000166 is export = 1, &NOSEQ ... *;
+our @A000166 is export = lazy 1, -> $a {state $n++; $n*$a + (-1)**$n } ... *;
 # A000169 / labeled rooted trees
-our @A000169 is export = 1, &NOSEQ ... *;
+our @A000169 is export = {state $n++; $n**($n - 1) } ... *;
 # A000182 / tangent
 our @A000182 is export = 1, &NOSEQ ... *;
 # A000203 / sigma
@@ -368,7 +411,7 @@ our @A000225 is export = 𝕀.map: -> $n {2**$n-1};
 # A000244 / 3^n
 our @A000244 is export = 𝕀.map: -> $n {3**$n};
 # A000262 / sets of lists
-our @A000262 is export = 1, &NOSEQ ... *;
+our @A000262 is export = 1, 1, -> $a, $b {state $n++; (2*($n+1)-1)*$b - $n*($n - 1) * $a } ... *;
 # A000272 / n^(n-2)
 our @A000272 is export = 𝕀.map: -> $n {$n ?? $n**($n-2) !! 1};
 # A000273 / directed graphs
@@ -382,15 +425,18 @@ our @A000302 is export = 𝕀.map: -> $n {4**$n}
 # A000311 / Schroeder's fourth
 our @A000311 is export = 1, &NOSEQ ... *;
 # A000312 / mappings
-our @A000312 is export = 1, &NOSEQ ... *;
+our @A000312 is export = lazy 1, {state $n++; $n ** $n } ... *;
 # A000326 / pentagonal
-our @A000326 is export = 1, &NOSEQ ... *;
+our @A000326 is export = lazy 0, {state $n++; $n*(3*$n-1)/2 } ... *;
 # A000330 / square pyramidal
-our @A000330 is export = 1, &NOSEQ ... *;
+our @A000330 is export = lazy 0, {state $n++; $n*($n+1)*(2*$n+1)/6 } ... *;
 # A000364 / Euler or secant
 our @A000364 is export = 1, &NOSEQ ... *;
 # A000396 / perfect
-our @A000396 is export = 1, &NOSEQ ... *;
+our @A000396 is export = lazy gather for @A000040 #`{primes} {
+                             my $n = 2**$_ - 1;
+                             take $n * 2**($_ - 1) if $n.is-prime;
+                         }
 # A000521 / j
 our @A000521 is export = 1, &NOSEQ ... *;
 # A000578 / n^3
@@ -398,7 +444,7 @@ our @A000578 is export = 𝕀.map: -> $n {$n ** 3}
 # A000583 / n^4
 our @A000583 is export = 𝕀.map: -> $n {$n ** 4}
 # A000593 / sum odd divisors
-our @A000593 is export = 1, &NOSEQ ... *;
+our @A000593 is export = {state $n++; sum $n.&divisors.grep: * % 2 } ... *;
 # A000594 / Ramanujan tau
 our @A000594 is export = 1, &NOSEQ ... *;
 # A000602 / hydrocarbons
@@ -432,7 +478,7 @@ our @A001034 is export = 1, &NOSEQ ... *;
 # A001037 / irreducible polynomials
 our @A001037 is export = 1, &NOSEQ ... *;
 # A001045 / Jacobsthal
-our @A001045 is export = 1, &NOSEQ ... *;
+our @A001045 is export = 0, 1, -> $a, $b { 2 * $a + $b } ... *;
 # A001055 / multiplicative partition function
 our @A001055 is export = 1, &NOSEQ ... *;
 # A001065 / sum of divisors
@@ -443,8 +489,8 @@ our @A001065 is export = ℕ.map: -> $n {
 our @A001057 is export = flat lazy gather for 𝕀 -> $n { take $n ?? ($n, -$n) !! 0 };
 # A001097 / twin primes
 our @A001097 is export = 𝕀.map({$_*2+1}).grep: { .is-prime and ($_+2 | $_-2).is-prime };
-# A001113 / e
-our @A001113 is export = 1, &NOSEQ ... *;
+# A001113 / e - first 500 digits
+our @A001113 is export = Eulers-number.comb( /\d/ );
 # A001147 / double factorials
 our @A001147 is export = 1, 1, -> $a, $b { ($b/$a + 2) * $b } ... *;
 # A001157 / sum of squares of divisors
@@ -465,10 +511,10 @@ our @A001222 is export = ℕ.map: -> $n {
 our @A001227 is export = ℕ.map: -> $n {
     divisors($n).grep({$_ mod 2 == 1}).elems
 }
-# A001285 / Thue-Morse
-our @A001285 is export = 1, &NOSEQ ... *;
+# A001285 / Thue-Morse (first 32767 terms)
+our @A001285 is export = (1, { '1' ~ @_.join.trans( "12" => "21", :g) } ... *)[15].comb;
 # A001333 / sqrt(2)
-our @A001333 is export = 1, &NOSEQ ... *;
+our @A001333 is export = 1, {state $n++; round((1/2)*(1+sqrt(2))**$n) } ... *;
 # A001349 / connected graphs
 our @A001349 is export = 1, &NOSEQ ... *;
 # A001358 / semiprimes
@@ -512,9 +558,9 @@ our @A002083 is export = 1, &NOSEQ ... *;
 # A002106 / transitive perm. groups
 our @A002106 is export = 1, &NOSEQ ... *;
 # A002110 / primorials
-our @A002110 is export = 𝕀.map: -> $n { [*] @A000040[^$n] };
+our @A002110 is export = lazy flat 1, [\*] @A000040;
 # A002113 / palindromes
-our @A002113 is export = 1, &NOSEQ ... *;
+our @A002113 is export = 𝕀.grep: { $_ == .flip };
 # A002275 / repunits
 our @A002275 is export = 𝕀.map: -> $n { (10**$n - 1) div 9 };
 # A002322 / psi
@@ -547,7 +593,7 @@ our @A002620 is export = 𝕀.map: -> $n { ($n**2 / 4).floor };
 # A002654 / re: sums of squares
 our @A002654 is export = 1, &NOSEQ ... *;
 # A002658 / 3-trees
-our @A002658 is export = 1, &NOSEQ ... *;
+our @A002658 is export = lazy 1, 1, { @_[0 .. *-2].sum * @_.tail +  @_.tail * (@_.tail + 1) / 2 } ... *;
 # A002808 / composites
 our @A002808 is export = 𝕀.grep: -> $n {
     not $n.is-prime and factors($n).elems > 1;
@@ -573,9 +619,9 @@ our @A005100 is export = ℕ.grep: -> $n { sigma($n) < 2 * $n };
 # A005101 / abundant
 our @A005101 is export = ℕ.grep: -> $n { sigma($n) > 2 * $n };
 # A005117 / squarefree
-our @A005117 is export = 1, &NOSEQ ... *;
+our @A005117 is export  = ℕ.grep: { my @v = .&factors.Bag.values; @v.sum/@v <= 1 };
 # A005130 / Robbins
-our @A005130 is export = 1, &NOSEQ ... *;
+our @A005130 is export = lazy 1, 1, -> $a {state $n++; $a * factorial($n) * factorial(3*$n+1) / factorial(2*$n) / factorial(2*$n+1) } ... *;
 # A005230 / Stern
 our @A005230 is export = 1, &NOSEQ ... *;
 # A005408 / odd
@@ -616,8 +662,8 @@ our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
 }
 # A008683 / Moebius
 our @A008683 is export = 1, &NOSEQ ... *;
-# A010060 / Thue-Morse
-our @A010060 is export = 1, &NOSEQ ... *;
+# A010060 / Thue-Morse (first 32767 terms)
+our @A010060 is export = (0, { '0' ~ @_.join.trans( "01" => "10", :g) } ... *)[15].comb;
 # A018252 / nonprimes
 our @A018252 is export = ℕ.grep: {not .is-prime};
 # A020639 / smallest prime factor
@@ -630,10 +676,30 @@ our @A020652 is export = lazy gather for 2..* -> $de {
 }
 # A020653 / fractal
 our @A020653 is export = 1, 2, 1, 3, 1, 4, 3, 2, 1, 5, 1, 6, &NOSEQ ... *;
-# A027641 / Bernoulli
-our @A027641 is export = 1, -1, 1, 0, -1, 0, 1, 0, -1, 0, 5, &NOSEQ ... *;
-# A027642 / Bernoulli
-our @A027642 is export = 1, 2, 6, 1, 30, 1, 42, 1, 30, 1, 66, &NOSEQ ... *;
+# A027641 / Bernoulli numerators
+our @A027641 is export = lazy gather {
+                             my @a;
+                             for 𝕀 -> $m {
+                                 @a = FatRat.new(1, $m + 1),
+                                     -> $prev {
+                                         my $j = @a.elems;
+                                         $j * (@a.shift - $prev);
+                                 } ... { not @a.elems }
+                                 take @a.tail.numerator * (@a.elems %% 2 ?? -1 !! 1);
+                             }
+                         };
+# A027642 / Bernoulli denominators
+our @A027642 is export = lazy gather {
+                             my @a;
+                             for 𝕀 -> $m {
+                                 @a = FatRat.new(1, $m + 1),
+                                     -> $prev {
+                                         my $j = @a.elems;
+                                         $j * (@a.shift - $prev);
+                                 } ... { not @a.elems }
+                                 take @a.tail.denominator;
+                             }
+                         };
 # A035099 / j_2
 our @A035099 is export = 1, 40, 276, -2048, 11202, -49152, 184024, &NOSEQ ... *;
 # A038566 / fractal
