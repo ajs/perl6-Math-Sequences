@@ -486,7 +486,12 @@ our @A001477 is export = 𝕀;
 # A001478 / negatives
 our @A001478 is export = ℕ.map: -> $n { -$n };
 # A001481 / sums of 2 squares
-our @A001481 is export = 1, &NOSEQ ... *;
+our @A001481 is export = 𝕀.grep: {
+    # Based on the comment by Jean-Christophe Hervé, 2013
+    # (Fermat's two-squares theorem)
+    .&factors.grep(* % 4 == 3)\ # interesting prime factors
+        .Bag.values.all %% 2    # have even exponents
+}
 # A001489 / negatives
 our @A001489 is export = 𝕀.map: -> $n {-$n};
 # A001511 / ruler function
