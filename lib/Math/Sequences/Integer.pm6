@@ -165,17 +165,19 @@ sub euler-up-down($i is copy) is export(:support) {
 #    E ( n , k ) = E ( n , k − 1 ) + E ( n − 1 , n − k ) {\displaystyle E(n,k)=E(n,k-1)+E(n-1,n-k)} E(n,k)=E(n,k-1)+E(n-1,n-k).
 #
 #  The nth zigzag number is equal to the Entringer number E(n, n).
+
+my %Entringer;
 multi sub Entringer(0, 0 --> 1) { };
 
 multi sub Entringer($ where * > 0, 0 --> 0) { };
 
-multi sub Entringer($n, $k) { Entringer($n, $k - 1) + Entringer($n - 1, $n - $k) };
+multi sub Entringer($n, $k) { %Entringer{"$n,$k"} //= Entringer($n, $k - 1) + Entringer($n - 1, $n - $k) };
 
 
 # Per OEIS A000123
 sub binpart($n) { $n ?? binpart($n-1) + binpart($n div 2) !! 1 }
 
-our %BROKEN = :A000111,;
+our %BROKEN = %();
 
 sub factorial($n) is export(:support) { ([*] 1..$n) or 1 }
 
