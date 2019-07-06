@@ -131,6 +131,10 @@ our constant \ℤ is export = Integers.new;
 our constant \𝕀 is export = Naturals.new;
 our constant \ℕ is export = 𝕀.from(1);
 
+our constant \ZZ is export = Integers.new;
+our constant \II is export = Naturals.new;
+our constant \NN is export = 𝕀.from(1);
+
 #####
 # Utilities for the OEIS entires:
 
