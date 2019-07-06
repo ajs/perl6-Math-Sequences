@@ -446,7 +446,7 @@ our @A000166 is export = lazy 1, -> $a {state $n++; $n*$a + (-1)**$n } ... *;
 # A000169 / labeled rooted trees
 our @A000169 is export = {state $n++; $n**($n - 1) } ... *;
 # A000182 / tangent
-our @A000182 is export = 1, &NOSEQ ... *;
+our @A000182 is export = lazy (1, 3 ... *).map: -> $n {Entringer($n, $n)}
 # A000203 / sigma
 our @A000203 is export = ℕ.map: -> $n { sigma($n) };
 # A000204 / Lucas
