@@ -661,7 +661,13 @@ our @A002572 is export = 1, &NOSEQ ... *;
 # A002620 / quarter-squares
 our @A002620 is export = 𝕀.map: -> $n { ($n**2 / 4).floor };
 # A002654 / re: sums of squares
-our @A002654 is export = 1, &NOSEQ ... *;
+our @A002654 is export = ℕ.map: -> $n {
+    sum divisors($n).map(* % 4).map: {
+        when 1  { +1 }
+        when 3  { -1 }
+        default {  0 }
+    }
+}
 # A002658 / 3-trees
 our @A002658 is export = lazy 1, 1, { @_[0 .. *-2].sum * @_.tail +  @_.tail * (@_.tail + 1) / 2 } ... *;
 # A002808 / composites
