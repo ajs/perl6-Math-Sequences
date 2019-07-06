@@ -172,7 +172,7 @@ sub factors($n is copy, :%map) is export(:support) {
             ### https://modules.perl6.org/search/?q=Prime+Factor
             ### Used with permission.
 
-            sub prime-factors ( Int $n where * > 0 ) is export {
+            sub prime-factors ( Int $n where * > 0 ) {
                 return $n if $n.is-prime;
                 return [] if $n == 1;
                 my $factor = find-factor( $n );
