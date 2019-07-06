@@ -701,7 +701,10 @@ our @A005470 is export = 1, &NOSEQ ... *;
 # A005588 / binary rooted trees
 our @A005588 is export = 1, &NOSEQ ... *;
 # A005811 / runs in n
-our @A005811 is export = 1, &NOSEQ ... *;
+our @A005811 is export = lazy flat 0, 1, 2, 1, {
+    state @row = 2, 1;
+    @row = flat @row[^(@row.elems div 2)], @row[^(@row.elems div 2)].reverse.map(*+1), @row;
+}...*;
 # A005843 / even
 our @A005843 is export = 𝕀.map: -> $n {$n*2};
 # A006318 / royal paths or Schroeder numbers
