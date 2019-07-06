@@ -53,7 +53,7 @@ our @A002904 is export = lazy gather for ℕ -> $n {
 	}
 }
 
-# A006933 - 'Eban' numbers (the letter 'e' is banned!). 
+# A006933 - 'Eban' numbers (the letter 'e' is banned!).
 sub contains-letters($number, $letters) is export(:support){
 	return as-words(+$number).comb.grep: * ~~ $letters;
 }
@@ -226,7 +226,7 @@ sub lunar-mul($a, $b) is export(:support) {
 our @A087019 is export = 𝕀.map: -> $n {lunar-mul $n, $n};
 
 # A087097 - Lunar primes (formerly called dismal primes) (cf. A087062).
-#our @A087097 is export = 
+#our @A087097 is export =
 
 # From: https://www.youtube.com/watch?v=RGQe8waGJ4w
 
