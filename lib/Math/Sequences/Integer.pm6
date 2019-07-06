@@ -531,7 +531,13 @@ our @A000961 is export  = (1..*).grep: { factors($_).unique == 1 };
 # A000984 / binomial(2n,n)
 our @A000984 is export = 𝕀.map: -> $n {2*$n choose $n};
 # A001003 / Schroeder's second problem
-our @A001003 is export = 1, &NOSEQ ... *;
+my %A001003;
+multi sub A001003(0 --> 1) { };
+
+multi sub A001003(1 --> 1) { };
+
+multi sub A001003($n) { %A001003{$n} //= ((6 * $n - 3) * A001003($n - 1) - ($n - 2) * A001003($n - 2)) / ($n + 1) }
+our @A001003 is export = lazy 𝕀.map: -> $n { A001003($n) };
 # A001006 / Motzkin
 our @A001006 is export = 1, 1, -> $Mn2, $Mn1 {
     state $n = 1;
