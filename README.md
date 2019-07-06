@@ -104,6 +104,13 @@ if you wish to use their ASCII equivalents this table will help you out:
 * `ℕ` - `Naturals.new.from(1)`
 * `ℝ` - `Reals.new`
 
+The following are 'ASCII equivalent' constants:
+
+* 'ZZ'
+* 'II'
+* 'NN'
+* 'RR'
+
 ### Entering symbols
 
 To enter each of these symbols, however, here are common shortcuts in vim and emacs:
