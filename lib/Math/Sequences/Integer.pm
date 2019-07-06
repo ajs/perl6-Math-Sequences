@@ -601,7 +601,24 @@ our @A002808 is export = 𝕀.grep: -> $n {
 # A003094 / connected planar graphs
 our @A003094 is export = 1, &NOSEQ ... *;
 # A003136 / Loeschian
-our @A003136 is export = 1, &NOSEQ ... *;
+our @A003136 is export = lazy flat 0, 1, 3, (4..*).map: -> $n {
+    next if $n % 3 == 2;
+    my $m = (2*sqrt($n/3)).round;
+    my $val;
+    my $last;
+    for 0..$m -> $y {
+        for 0..$y -> $x {
+            if $n == $x * $x + $x*$y + $y * $y {
+                $val = $n;
+                ++$last;
+                last
+            }
+        last if $last;
+        }
+    }
+    next unless $val;
+    $val
+}
 # A003418 / LCM
 our @A003418 is export = 𝕀.map: -> $n { [lcm] 1..$n };
 # A003484 / Hurwitz-Radon
