@@ -93,7 +93,7 @@ To gain access to these, use:
 
 ## About Unicode
 
-This library uses a few non-ASCII unicode characters that are widely used
+This library uses a few non-ASCII Unicode characters that are widely used
 within the mathematical community. They are entirely optional, however, and
 if you wish to use their ASCII equivalents this table will help you out:
 
@@ -113,7 +113,7 @@ The following, respectively, are defined 'ASCII equivalent' constants for each o
 
 ### Entering symbols
 
-To enter each of these symbols, however, here are common shortcuts in vim and emacs:
+To enter each of these Unicode symbols, here are common shortcuts in vim and emacs:
 
 * `ℤ` - DOUBLE-STRUCK CAPITAL Z - U+2124
   * vim - Ctrl-v u 2 1 2 4
