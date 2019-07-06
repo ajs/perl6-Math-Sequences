@@ -700,7 +700,14 @@ our @A005811 is export = lazy flat 0, 1, 2, 1, {
 # A005843 / even
 our @A005843 is export = 𝕀.map: -> $n {$n*2};
 # A006318 / royal paths or Schroeder numbers
-our @A006318 is export = 1, &NOSEQ ... *;
+our @A006318 is export = lazy gather {
+    my @Schröder = lazy [1], [1, 2], -> @b {
+        my @c = 1;
+        @c.push: (@b[$_] // 0) + @b[$_ - 1] + @c[$_ - 1] for 1..@b;
+        [@c]
+    } ... *;
+    @Schröder.map: { take .tail };
+};
 # A006530 / largest prime factor
 our @A006530 is export = ℕ.map: -> $n {factors($n).max};
 # A006882 / n!!
