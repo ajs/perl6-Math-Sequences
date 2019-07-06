@@ -99,7 +99,7 @@ my $footer = q:to<END_FOOTER>;
 if not "t".IO ~~ :d {
     die "Cannot find test subdir 't'";
 }
-my $test-script = "t/OEIS.t";
+my $test-script = "t/OEIS.t6";
 my $test-script-temp = $test-script ~ ".tmp";
 my $fh = open($test-script-temp, :w);
 $fh.say($preamble);
