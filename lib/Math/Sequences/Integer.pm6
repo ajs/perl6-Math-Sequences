@@ -464,17 +464,19 @@ our @A000796 is export = lazy Pi-digits;
 # A000798 / quasi-orders or topologies
 our @A000798 is export = 1, &NOSEQ ... *;
 # A000959 / Lucky
-# kickstart the sequence manually to make sure we don't rotorize with 0 elems
-my $lucky-iterator = ((1…∞).rotor(1 => 1).flat.rotor(2 => 1).flat).skip(2).iterator;
-our @A000959 is export = 1, 3,
-{
-    my $val = $lucky-iterator.pull-one;
-    $lucky-iterator = Seq.new($lucky-iterator) # rewrap
-                      .rotor(  $val - 1 - 2 - ++$ => 1, # some elems are already behind
-                              ($val - 1           => 1) xx ∞)
-                      .flat.iterator;
-    $val
-} ... *;
+# Some sort of bug: https://github.com/ajs/perl6-Math-Sequences/pull/47
+# # kickstart the sequence manually to make sure we don't rotorize with 0 elems
+# my $lucky-iterator = ((1…∞).rotor(1 => 1).flat.rotor(2 => 1).flat).skip(2).iterator;
+# our @A000959 is export = 1, 3,
+# {
+#     my $val = $lucky-iterator.pull-one;
+#     $lucky-iterator = Seq.new($lucky-iterator) # rewrap
+#                       .rotor(  $val - 1 - 2 - ++$ => 1, # some elems are already behind
+#                               ($val - 1           => 1) xx ∞)
+#                       .flat.iterator;
+#     $val
+# } ... *;
+our @A000959 is export = 1, &NOSEQ ... *;
 # A000961 / prime powers
 our @A000961 is export = 1, &NOSEQ ... *;
 # A000984 / binomial(2n,n)
