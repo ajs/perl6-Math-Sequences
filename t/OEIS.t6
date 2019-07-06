@@ -799,6 +799,10 @@ our @core-sequences =
  10,9,8,7,6,5,4,3,2,1,13,11,9,5,3,1,14,13,11,8,7,4,
  2,1,15,13,11,9,7,5,3,1,16,15,14,13,12,11,10,9,8,7,
  6,5,4,3,2,1,17 ],
+    A025487 => [ 1,2,4,6,8,12,16,24,30,32,36,48,60,64,72,96,120,
+ 128,144,180,192,210,216,240,256,288,360,384,420,432,480,512,
+ #`{ 576,720,768,840,864,900,960,1024,1080,1152,1260,1296,1440,
+ 1536,1680,1728,1800,1920,2048,2160,2304,2310 } ],
     A027641 => [ 1,-1,1,0,-1,0,1,0,-1,0,5,0,-691,0,7,0,-3617,0,
  43867,0,-174611,0,854513,0,-236364091,0,8553103,0,
  -23749461029,0,8615841276005,0,-7709321041217,0,
@@ -916,12 +920,11 @@ for @core-sequences {
 # ...
 # 2. The OEIS is made available under the Creative Commons Attribution
 # Non-Commercial 3.0 license.
-# 
+#
 # 3. To satisfy the attribution requirements of that license (section 4(c)),
 # attributions should credit The Online Encyclopedia of Integer Sequences
 # and provide a URL to the main page https://oeis.org/ or to a specific
 # sequence (e.g. https://oeis.org/A000108).
-# 
+#
 # 4. Commercial uses may be licensed by special arrangement with the OEIS
 # Foundation Inc..
-

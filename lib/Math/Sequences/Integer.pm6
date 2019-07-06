@@ -172,7 +172,7 @@ sub factors($n is copy, :%map) is export(:support) {
             ### https://modules.perl6.org/search/?q=Prime+Factor
             ### Used with permission.
 
-            sub prime-factors ( Int $n where * > 0 ) is export {
+            sub prime-factors ( Int $n where * > 0 ) {
                 return $n if $n.is-prime;
                 return [] if $n == 1;
                 my $factor = find-factor( $n );
@@ -218,6 +218,19 @@ sub divisors($n) is export(:support) {
         }
         take $n if $n != 1;
     }
+}
+
+# Helper which fixes factors(1) to be empty
+sub prime-factors($n) is export(:support) {
+    factors($n).grep: {$^d ≥ 2}
+}
+
+# The prime signature of a number is the Bag of the positive
+# exponents that appear in its prime factorization.
+# https://en.wikipedia.org/wiki/Prime_signature
+sub prime-signature($n --> Bag:D) is export(:support) {
+    prime-factors($n).Bag\ # prime factorization bag
+        .values.Bag        # exponent bag
 }
 
 sub sigma($n, $exponent=1) is export(:support) {
@@ -458,12 +471,24 @@ our @A000688 is export = 1, &NOSEQ ... *;
 # A000720 / pi(n)
 our @A000720 is export = [\+] @A010051;
 # A000793 / Landau
-our @A000793 is export = 1, &NOSEQ ... *;
+our @A000793 is export = 1, { strict-partitions(++$).map({[lcm] $_}).max } ... *;
 # A000796 / Pi
 our @A000796 is export = lazy Pi-digits;
 # A000798 / quasi-orders or topologies
 our @A000798 is export = 1, &NOSEQ ... *;
 # A000959 / Lucky
+# Some sort of bug: https://github.com/ajs/perl6-Math-Sequences/pull/47
+# # kickstart the sequence manually to make sure we don't rotorize with 0 elems
+# my $lucky-iterator = ((1…∞).rotor(1 => 1).flat.rotor(2 => 1).flat).skip(2).iterator;
+# our @A000959 is export = 1, 3,
+# {
+#     my $val = $lucky-iterator.pull-one;
+#     $lucky-iterator = Seq.new($lucky-iterator) # rewrap
+#                       .rotor(  $val - 1 - 2 - ++$ => 1, # some elems are already behind
+#                               ($val - 1           => 1) xx ∞)
+#                       .flat.iterator;
+#     $val
+# } ... *;
 our @A000959 is export = 1, &NOSEQ ... *;
 # A000961 / prime powers
 our @A000961 is export  = (1..*).grep: { factors($_).unique == 1 };
@@ -472,7 +497,11 @@ our @A000984 is export = 𝕀.map: -> $n {2*$n choose $n};
 # A001003 / Schroeder's second problem
 our @A001003 is export = 1, &NOSEQ ... *;
 # A001006 / Motzkin
-our @A001006 is export = 1, &NOSEQ ... *;
+our @A001006 is export = 1, 1, -> $Mn2, $Mn1 {
+    state $n = 1;
+    $n++;
+    $Mn1 * (2 * $n + 1) / ($n + 2) + $Mn2 * (3 * $n - 3) / ($n + 2)
+} ... *;
 # A001034 / simple groups
 our @A001034 is export = 1, &NOSEQ ... *;
 # A001037 / irreducible polynomials
@@ -532,7 +561,12 @@ our @A001477 is export = 𝕀;
 # A001478 / negatives
 our @A001478 is export = ℕ.map: -> $n { -$n };
 # A001481 / sums of 2 squares
-our @A001481 is export = 1, &NOSEQ ... *;
+our @A001481 is export = 𝕀.grep: {
+    # Based on the comment by Jean-Christophe Hervé, 2013
+    # (Fermat's two-squares theorem)
+    .&factors.grep(* % 4 == 3)\ # interesting prime factors
+        .Bag.values.all %% 2    # have even exponents
+}
 # A001489 / negatives
 our @A001489 is export = 𝕀.map: -> $n {-$n};
 # A001511 / ruler function
@@ -678,7 +712,13 @@ our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
     }
 }
 # A008683 / Moebius
-our @A008683 is export = 1, &NOSEQ ... *;
+our @A008683 is export = ℕ.map: {
+    given .&prime-signature {
+        when *.elems    == 0 { 1 #`{ constant one   } }
+        when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
+        default              { 0 #`{ non-squarefree } }
+    }
+}
 # A010060 / Thue-Morse (first 32767 terms)
 our @A010060 is export = (0, { '0' ~ @_.join.trans( "01" => "10", :g) } ... *)[15].comb;
 # A018252 / nonprimes
@@ -693,6 +733,14 @@ our @A020652 is export = lazy gather for 2..* -> $de {
 }
 # A020653 / fractal
 our @A020653 is export = 1, 2, 1, 3, 1, 4, 3, 2, 1, 5, 1, 6, &NOSEQ ... *;
+# A025487 / products of primorials
+our @A025487 is export = ℕ.map: -> $n {
+    (1 ... ∞).first: {
+        state %cache{Bag};
+        %cache{ .&prime-signature }++;
+        %cache == $n
+    }
+}
 # A027641 / Bernoulli numerators
 our @A027641 is export = lazy gather {
                              my @a;
