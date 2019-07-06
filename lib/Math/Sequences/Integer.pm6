@@ -563,7 +563,14 @@ our @A001157 is export = ℕ.map: -> $n {
     divisors($n).map(* ** 2).sum
 }
 # A001190 / Wedderburn-Etherington
-our @A001190 is export = 1, &NOSEQ ... *;
+our @A001190 is export = 0, 1, {
+    (state $z = 2)++;
+    my \n = $z div 2;
+    $z %% 2
+    ?? sum((1..n-1).map: -> $i { @A001190[$i] * @A001190[2*n-$i-1] })
+    !! sum((1..n-1).map: -> $i { @A001190[$i] * @A001190[2*n-$i  ] })
+       + @A001190[n] * (@A001190[n] + 1) / 2;
+} ... *;
 # A001221 / omega
 our @A001221 is export = ℕ.map: -> $n {
     $n >= 2 ?? factors($n).Set.keys.elems !! 0;
