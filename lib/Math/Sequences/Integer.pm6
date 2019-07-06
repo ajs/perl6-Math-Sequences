@@ -426,7 +426,21 @@ our @A000140 is export = 1, &NOSEQ ... *;
 # A000142 / n!
 our @A000142 is export = 𝕀.map: -> $n { factorial($n) };
 # A000161 / partitions into 2 squares
-our @A000161 is export = 1, &NOSEQ ... *;
+our @A000161 is export = flat 1, {
+    state $n++;
+    my $k = (0 .. *).map({.²}).first: * >= $n, :k;
+    my @sq = (0 ..^ $k).map({.²});
+    my $cnt = ($n == $k²) ?? 1 !! 0;
+    my %seen;
+    for @sq {
+        next if %seen{$_};
+        if $n - $_ ∈ @sq {
+            $cnt++;
+            %seen{$n - $_} = True ;
+        }
+    }
+    $cnt
+}...*;
 # A000166 / derangements
 our @A000166 is export = lazy 1, -> $a {state $n++; $n*$a + (-1)**$n } ... *;
 # A000169 / labeled rooted trees
@@ -596,7 +610,7 @@ our @A001511 is export = ℕ.map: -> $n { 1 + $n.base(2).flip.index('1') };
 # A001615 / sublattices
 our @A001615 is export = 1, &NOSEQ ... *;
 # A001699 / binary trees
-our @A001699 is export = 1, &NOSEQ ... *;
+our @A001699 is export = flat 1, 1, -> $a, $b { $b * ($a + $b + $b / $a) }...*;
 # A001700 / binomial(2n+1, n+1)
 our @A001700 is export = 𝕀.map: -> $n { (2 * $n + 1) choose ($n + 1) };
 # A001519 / Fib. bisection
@@ -708,7 +722,14 @@ our @A005811 is export = lazy flat 0, 1, 2, 1, {
 # A005843 / even
 our @A005843 is export = 𝕀.map: -> $n {$n*2};
 # A006318 / royal paths or Schroeder numbers
-our @A006318 is export = 1, &NOSEQ ... *;
+our @A006318 is export = lazy gather {
+    my @Schröder = lazy [1], [1, 2], -> @b {
+        my @c = 1;
+        @c.push: (@b[$_] // 0) + @b[$_ - 1] + @c[$_ - 1] for 1..@b;
+        @c
+    } ... *;
+    @Schröder.map: { take .tail };
+};
 # A006530 / largest prime factor
 our @A006530 is export = ℕ.map: -> $n {factors($n).max};
 # A006882 / n!!
