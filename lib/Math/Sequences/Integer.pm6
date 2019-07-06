@@ -671,7 +671,7 @@ our @A002808 is export = 𝕀.grep: -> $n {
 # A003094 / connected planar graphs
 our @A003094 is export = 1, &NOSEQ ... *;
 # A003136 / Loeschian
-our @A003136 = lazy flat 0, 1, 3, (4..*).map: -> $n {
+our @A003136 is export = lazy flat 0, 1, 3, (4..*).map: -> $n {
     next if $n % 3 == 2;
     my $m = (2*sqrt($n/3)).round;
     my $val;
