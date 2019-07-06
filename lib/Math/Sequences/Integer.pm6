@@ -472,7 +472,12 @@ our @A000292 is export = 𝕀.map: -> $n { ($n*($n+1)*($n+2)) div 6 };
 # A000302 / 4^n
 our @A000302 is export = 𝕀.map: -> $n {4**$n}
 # A000311 / Schroeder's fourth
-our @A000311 is export = 1, &NOSEQ ... *;
+our @A000311 = 0, 1, {
+    state $n = 1;
+    my @seq = @_.clone;
+    ++$n;
+    -($n-1) * @seq.tail + sum (1 .. ($n - 1)).map: -> $k { ($n choose $k) * @seq[$k] * @seq[$n - $k] }
+} ... *;
 # A000312 / mappings
 our @A000312 is export = lazy 1, {state $n++; $n ** $n } ... *;
 # A000326 / pentagonal
