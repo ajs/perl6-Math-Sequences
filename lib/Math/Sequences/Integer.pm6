@@ -220,6 +220,19 @@ sub divisors($n) is export(:support) {
     }
 }
 
+# Helper which fixes factors(1) to be empty
+sub prime-factors($n) is export(:support) {
+    factors($n).grep: {$^d ≥ 2}
+}
+
+# The prime signature of a number is the Bag of the positive
+# exponents that appear in its prime factorization.
+# https://en.wikipedia.org/wiki/Prime_signature
+sub prime-signature($n --> Bag:D) is export(:support) {
+    prime-factors($n).Bag\ # prime factorization bag
+        .values.Bag        # exponent bag
+}
+
 sub sigma($n, $exponent=1) is export(:support) {
     [+] divisors($n).map: -> $j { $j ** $exponent };
 }
@@ -682,7 +695,13 @@ our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
     }
 }
 # A008683 / Moebius
-our @A008683 is export = 1, &NOSEQ ... *;
+our @A008683 is export = ℕ.map: {
+    given .&prime-signature {
+        when *.elems    == 0 { 1 #`{ constant one   } }
+        when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
+        default              { 0 #`{ non-squarefree } }
+    }
+}
 # A010060 / Thue-Morse (first 32767 terms)
 our @A010060 is export = (0, { '0' ~ @_.join.trans( "01" => "10", :g) } ... *)[15].comb;
 # A018252 / nonprimes
@@ -697,6 +716,14 @@ our @A020652 is export = lazy gather for 2..* -> $de {
 }
 # A020653 / fractal
 our @A020653 is export = 1, 2, 1, 3, 1, 4, 3, 2, 1, 5, 1, 6, &NOSEQ ... *;
+# A025487 / products of primorials
+our @A025487 is export = ℕ.map: -> $n {
+    (1 ... ∞).first: {
+        state %cache{Bag};
+        %cache{ .&prime-signature }++;
+        %cache == $n
+    }
+}
 # A027641 / Bernoulli numerators
 our @A027641 is export = lazy gather {
                              my @a;
