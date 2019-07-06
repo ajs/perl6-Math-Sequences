@@ -104,12 +104,12 @@ if you wish to use their ASCII equivalents this table will help you out:
 * `ℕ` - `Naturals.new.from(1)`
 * `ℝ` - `Reals.new`
 
-The following are 'ASCII equivalent' constants:
+The following, respectively, are defined 'ASCII equivalent' constants for each of the above:
 
-* 'ZZ'
-* 'II'
-* 'NN'
-* 'RR'
+* `Z`
+* `I`
+* `N`
+* `R`
 
 ### Entering symbols
 
