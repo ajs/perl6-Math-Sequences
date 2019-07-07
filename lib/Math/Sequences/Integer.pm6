@@ -841,7 +841,7 @@ our @A027642 is export = lazy gather {
 # A035099 / j_2
 our @A035099 is export = 1, 40, 276, -2048, 11202, -49152, 184024, &NOSEQ ... *;
 # A038566 / fractal
-our @A038566 is export = 1, 1, 1, 2, 1, 3, 1, 2, 3, 4, 1, 5, &NOSEQ ... *;
+our @A038566 is export = lazy flat 1, (2..*).map: { (^$_).grep: * gcd $_ == 1 };
 # A038567 / fractal
 our @A038567 is export = 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, &NOSEQ ... *;
 # A038568 / fractal
