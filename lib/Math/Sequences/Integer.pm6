@@ -317,6 +317,16 @@ sub Eulers-number ( Int $terms = 264 ) {
     (sum map { FatRat.new(1,factorial($_)) }, ^$terms).substr(0,$terms*1.9).FatRat
 }
 
+# Stirling numbers of the second kind
+multi Sterling2 (0, 0) is export(:support) { 1 }
+multi Sterling2 (Int \n where * > 0, 0) is export(:support) { 0 }
+multi Sterling2 (Int \n, Int \k where * == n) is export(:support) { 1 }
+multi Sterling2 (Int \n, Int \k) is export(:support) {
+    1/factorial(k) * sum (0 .. k).map: -> \j {
+        (-1)**j * (k choose j) * (k - j)**n
+    }
+}
+
 sub Horadam( Int $p, Int $q, Int $r, Int $s ) {
   my @horadam = $p, $q, {$^n1 × $r + $^n2 × $s} … ∞;
   return @horadam;
@@ -756,7 +766,7 @@ our @A007318 is export = 𝕀.triangle.map: -> ($n,$k) { $n choose $k };
 # A008275 / Stirling 1
 our @A008275 is export = 1, &NOSEQ ... *;
 # A008277 / Stirling 2
-our @A008277 is export = 1, &NOSEQ ... *;
+our @A008277 is export = flat (1..*).map: -> $s { (1..$s).map: { Sterling2($s, $_) } };
 # A008279 / permutations k at a time
 our @A008279 is export = 𝕀.triangle.map: -> ($n,$k) {
     factorial($n)/factorial($n-$k);
