@@ -509,7 +509,14 @@ our @A000609 is export = 1, &NOSEQ ... *;
 # A000670 / preferential arrangements
 our @A000670 is export = 1, &NOSEQ ... *;
 # A000688 / abelian groups
-our @A000688 is export = 1, &NOSEQ ... *;
+our @A000688 is export our @A000688 = (1..*).map: {
+    # @A000041 NYA. Hardcoded list, will fail at term 2 ** 173526
+    state @a = <1 1 2 3 5 7 11 15 22 30 42 56 77 101 135 176 231 297 385 490 627
+          792 1002 1255 1575 1958 2436 3010 3718 4565 5604 6842 8349 10143 12310
+          14883 17977 21637 26015 31185 37338 44583 53174 63261 75175 89134
+          105558 124754 147273 173525>».Int;
+    @a[.&factors.Bag.values.max]
+};
 # A000720 / pi(n)
 our @A000720 is export = [\+] @A010051;
 # A000793 / Landau
