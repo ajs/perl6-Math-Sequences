@@ -813,7 +813,7 @@ our @A006530 is export = ℕ.map: -> $n {factors($n).max};
 # A006882 / n!!
 our @A006882 is export = 1, 1, -> $a, $b { (state $n = 2)++ * $a } ... *;
 # A006894 / 3-trees
-our @A006894 is export = 1, &NOSEQ ... *;
+our @A006894 is export = 1, 2, -> $n { $n * ($n + 1) / 2 + 1 } ... *;
 # A006966 / lattices
 our @A006966 is export = 1, 1, 1, 1, 2, 5, 15, 53, 222, 1078, 5994, 37622,
                          262776, 2018305, 16873364, 152233518, 1471613387,
