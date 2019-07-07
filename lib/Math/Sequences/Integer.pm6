@@ -681,7 +681,13 @@ our @A002530 is export = 0, |𝕀.map: -> $n {
 # A002531 / sqrt(3)
 our @A002531 is export = @A080040 Z/ 𝕀.map: -> $n { (2*2**($n div 2)) }
 # A002572 / binary rooted trees
-our @A002572 is export = 1, &NOSEQ ... *;
+sub binary-rooted-tree (Int \c, Int \d) {
+    return 0 if c < 0 or d < 0;
+    return 1 if c == d;
+    state %seen;
+    sum (1 .. 2*c).map: -> \j { %seen{"{j}|{d - c}"} //= binary-rooted-tree(j, d - c) }
+}
+our @A002572 is export = (0..*).map: { binary-rooted-tree(1, $_) };
 # A002620 / quarter-squares
 our @A002620 is export = 𝕀.map: -> $n { ($n**2 / 4).floor };
 # A002654 / re: sums of squares
