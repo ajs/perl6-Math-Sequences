@@ -640,7 +640,7 @@ our @A001699 is export = flat 1, 1, -> $a, $b { $b * ($a + $b + $b / $a) }...*;
 # A001700 / binomial(2n+1, n+1)
 our @A001700 is export = 𝕀.map: -> $n { (2 * $n + 1) choose ($n + 1) };
 # A001519 / Fib. bisection
-our @A001519 is export = 1, &NOSEQ ... *;
+our @A001519 is export = 1, 1, -> $n2, $n1 { 3 * $n1 - $n2 } ... *;
 # A001764 / binomial(3n,n)/(2n+1)
 our @A001764 is export = 𝕀.map: -> $n { (3*$n choose $n)/(2*$n+1) };
 # A001906 / Fib. bisection
