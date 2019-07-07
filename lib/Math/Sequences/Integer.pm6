@@ -843,7 +843,9 @@ our @A035099 is export = 1, 40, 276, -2048, 11202, -49152, 184024, &NOSEQ ... *;
 # A038566 / fractal
 our @A038566 is export = lazy flat 1, (2..*).map: { (^$_).grep: * gcd $_ == 1 };
 # A038567 / fractal
-our @A038567 is export = 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, &NOSEQ ... *;
+our @A038567 is export = lazy flat 1, (2..*).map: -> $d {
+    (1 ..^ $d).map( { $_ / $d } ).grep( { .denominator == $d } ).map: { .denominator }
+};
 # A038568 / fractal
 our @A038568 is export = 1, 1, 2, 1, 3, 2, 3, 1, 4, 3, 4, 1, &NOSEQ ... *;
 # A038569 / fractal
