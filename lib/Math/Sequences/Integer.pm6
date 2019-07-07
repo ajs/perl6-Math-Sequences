@@ -294,6 +294,14 @@ sub totient ($n) {
     +(^$n).grep: * gcd $n == 1
 }
 
+sub moebius ($n) {
+    given $n.&prime-signature {
+        when *.elems    == 0 { 1 #`{ constant one   } }
+        when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
+        default              { 0 #`{ non-squarefree } }
+    }
+}
+
 # The number of k-ary necklaces of length n.
 sub necklaces ($n, :ary($k) = 2) {
     return 1 if $n == 0;
@@ -403,8 +411,11 @@ our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
 our @A000043 is export = lazy 𝕀.grep: { .is-prime and (2**$_-1).is-prime };
 # A000045 / Fibonacci
 our @A000045 is export = 0, 1, * + * ... *;
-# A000048 / necklaces
-our @A000048 is export = 1, 1, 1, 1, 2, 3, 5, 9, 16, 28, 51, &NOSEQ ... *;
+# A000048 / necklaces-two-color-interchangable
+our @A000048 is export = 𝕀.map: anon sub ($n) {
+    return 1 if $n == 0;
+    (2*$n) R/ sum divisors($n).grep(* !%% 2).map: -> $d { moebius($d) * 2**($n / $d) }
+}
 # A000055 / trees
 our @A000055 is export = 1, 1, 1, 1, 2, 3, 6, 11, 23, 47, 106, &NOSEQ ... *;
 # A000058 / Sylvester
@@ -852,13 +863,7 @@ our @A008292 is export = |ℕ.triangle.map: -> ($n,$k) {
     }
 }
 # A008683 / Moebius
-our @A008683 is export = ℕ.map: {
-    given .&prime-signature {
-        when *.elems    == 0 { 1 #`{ constant one   } }
-        when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
-        default              { 0 #`{ non-squarefree } }
-    }
-}
+our @A008683 is export = ℕ.map: &moebius;
 # A010060 / Thue-Morse (first 32767 terms)
 our @A010060 is export = (0, { '0' ~ @_.join.trans( "01" => "10", :g) } ... *)[15].comb;
 # A018252 / nonprimes
