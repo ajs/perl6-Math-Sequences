@@ -544,7 +544,8 @@ our @A000688 is export = (1..*).map: {
           792 1002 1255 1575 1958 2436 3010 3718 4565 5604 6842 8349 10143 12310
           14883 17977 21637 26015 31185 37338 44583 53174 63261 75175 89134
           105558 124754 147273 173525>».Int;
-    @a[.&factors.Bag.values.max]
+    my @f = .&factors.Bag.grep( *.value > 1 )».value || 0;
+    [*] @f.map: { @a[$_] }
 };
 # A000720 / pi(n)
 our @A000720 is export = [\+] @A010051;
@@ -667,7 +668,7 @@ our @A001519 is export = 1, 1, -> $n2, $n1 { 3 * $n1 - $n2 } ... *;
 # A001764 / binomial(3n,n)/(2n+1)
 our @A001764 is export = 𝕀.map: -> $n { (3*$n choose $n)/(2*$n+1) };
 # A001906 / Fib. bisection
-our @A001906 is export = 1, &NOSEQ ... *;
+our @A001906 is export = 0, 1, -> $a, $b { 3*$b - $a } ... *;
 # A001969 / evil
 our @A001969 is export = 𝕀.grep: -> $n { $n.base(2).comb('1') %% 2 };
 # A002033 / perfect partitions
@@ -715,7 +716,13 @@ our @A002530 is export = 0, |𝕀.map: -> $n {
 # A002531 / sqrt(3)
 our @A002531 is export = @A080040 Z/ 𝕀.map: -> $n { (2*2**($n div 2)) }
 # A002572 / binary rooted trees
-our @A002572 is export = 1, &NOSEQ ... *;
+sub binary-rooted-tree (Int \c, Int \d) {
+    return 0 if c < 0 or d < 0;
+    return 1 if c == d;
+    state %seen;
+    sum (1 .. 2*c).map: -> \j { %seen{"{j}|{d - c}"} //= binary-rooted-tree(j, d - c) }
+}
+our @A002572 is export = (0..*).map: { binary-rooted-tree(1, $_) };
 # A002620 / quarter-squares
 our @A002620 is export = 𝕀.map: -> $n { ($n**2 / 4).floor };
 # A002654 / re: sums of squares
