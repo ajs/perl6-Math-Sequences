@@ -290,11 +290,11 @@ sub strict-partitions(Int:D $n, Int :$target=$n) is export(:support) {
     }
 }
 
-sub totient ($n) is export (:support) {
+sub totient ($n) is export(:support) {
     +(^$n).grep: * gcd $n == 1
 }
 
-sub moebius ($n) is export (:support) {
+sub moebius ($n) is export(:support) {
     given $n.&prime-signature {
         when *.elems    == 0 { 1 #`{ constant one   } }
         when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
