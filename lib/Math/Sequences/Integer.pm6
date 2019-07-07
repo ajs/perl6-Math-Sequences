@@ -516,7 +516,19 @@ our @A000583 is export = 𝕀.map: -> $n {$n ** 4}
 # A000593 / sum odd divisors
 our @A000593 is export = {state $n++; sum $n.&divisors.grep: * % 2 } ... *;
 # A000594 / Ramanujan tau
-our @A000594 is export = 1, &NOSEQ ... *;
+our @A000594 is export = 1, {
+    (state $i = 1)++;
+    my $s = 0;
+    my $t = 1;
+    my $u = 0;
+    for 1..$i -> $j {
+        $t += 9 * $j;
+        $u += $j;
+        last if $i <= $u;
+        $s += (-1) ** ($j % 2 + 1) * (2 * $j + 1) * ($i - $t) * @A000594[$i-$u-1];
+    }
+    $s / ($i - 1);
+} ... *;
 # A000602 / hydrocarbons
 our @A000602 is export = 1, &NOSEQ ... *;
 # A000609 / threshold functions
