@@ -317,6 +317,16 @@ sub Eulers-number ( Int $terms = 264 ) {
     (sum map { FatRat.new(1,factorial($_)) }, ^$terms).substr(0,$terms*1.9).FatRat
 }
 
+# Stirling numbers of the second kind
+multi Sterling2 (0, 0) is export(:support) { 1 }
+multi Sterling2 (Int \n where * > 0, 0) is export(:support) { 0 }
+multi Sterling2 (Int \n, Int \k where * == n) is export(:support) { 1 }
+multi Sterling2 (Int \n, Int \k) is export(:support) {
+    1/factorial(k) * sum (0 .. k).map: -> \j {
+        (-1)**j * (k choose j) * (k - j)**n
+    }
+}
+
 sub Horadam( Int $p, Int $q, Int $r, Int $s ) {
   my @horadam = $p, $q, {$^n1 × $r + $^n2 × $s} … ∞;
   return @horadam;
@@ -516,7 +526,14 @@ our @A000609 is export = 2, 4, 14, 104, 1882, 94572, 15028134,
 # A000670 / preferential arrangements
 our @A000670 is export = 1, &NOSEQ ... *;
 # A000688 / abelian groups
-our @A000688 is export = 1, &NOSEQ ... *;
+our @A000688 = (1..*).map: {
+    # @A000041 NYI. Hardcoded list, will fail at term 2 ** 173526
+    state @a = <1 1 2 3 5 7 11 15 22 30 42 56 77 101 135 176 231 297 385 490 627
+          792 1002 1255 1575 1958 2436 3010 3718 4565 5604 6842 8349 10143 12310
+          14883 17977 21637 26015 31185 37338 44583 53174 63261 75175 89134
+          105558 124754 147273 173525>».Int;
+    @a[.&factors.Bag.values.max]
+};
 # A000720 / pi(n)
 our @A000720 is export = [\+] @A010051;
 # A000793 / Landau
@@ -778,7 +795,7 @@ our @A007318 is export = 𝕀.triangle.map: -> ($n,$k) { $n choose $k };
 # A008275 / Stirling 1
 our @A008275 is export = 1, &NOSEQ ... *;
 # A008277 / Stirling 2
-our @A008277 is export = 1, &NOSEQ ... *;
+our @A008277 is export = flat (1..*).map: -> $s { (1..$s).map: { Sterling2($s, $_) } };
 # A008279 / permutations k at a time
 our @A008279 is export = 𝕀.triangle.map: -> ($n,$k) {
     factorial($n)/factorial($n-$k);
