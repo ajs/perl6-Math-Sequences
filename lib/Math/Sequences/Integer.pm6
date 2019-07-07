@@ -650,7 +650,12 @@ our @A001969 is export = 𝕀.grep: -> $n { $n.base(2).comb('1') %% 2 };
 # A002033 / perfect partitions
 our @A002033 is export = 1, &NOSEQ ... *;
 # A002083 / Narayana-Zidek-Capell
-our @A002083 is export = 1, &NOSEQ ... *;
+our @A002083 is export = 1, 1, 1, -> $a1 {
+    (state $n = 3)++;
+    $n %% 2
+    ?? 2 * $a1
+    !! 2 * $a1 - @A002083[($n - 1) / 2 - 1]
+} ... *;
 # A002106 / transitive perm. groups
 our @A002106 is export = 1, 1, 2, 5, 5, 16, 7, 50, 34, 45, 8, 301, 9, 63, 104,
                          1954, 10, 983, 8, 1117, 164, 59, 7, 25000, 211, 96,
