@@ -611,7 +611,10 @@ our @A001006 is export = 1, 1, -> $Mn2, $Mn1 {
 # A001034 / simple groups
 our @A001034 is export = 1, &NOSEQ ... *;
 # A001037 / irreducible polynomials
-our @A001037 is export = 1, &NOSEQ ... *;
+our @A001037 is export = 𝕀.map: anon sub ($n) {
+    return 1 if $n == 0;
+    $n R/ sum divisors($n).map: -> $d { moebius($d) * 2**($n / $d) }
+}
 # A001045 / Jacobsthal
 our @A001045 is export = 0, 1, -> $a, $b { 2 * $a + $b } ... *;
 # A001055 / multiplicative partition function
