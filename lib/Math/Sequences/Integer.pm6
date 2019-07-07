@@ -898,9 +898,15 @@ our @A038567 is export = lazy flat 1, (2..*).map: -> $d {
     (1 ..^ $d).map( { $_ / $d } ).grep( { .denominator == $d } ).map: { .denominator }
 };
 # A038568 / fractal
-our @A038568 is export = 1, 1, 2, 1, 3, 2, 3, 1, 4, 3, 4, 1, &NOSEQ ... *;
+our @A038568 is export  = lazy flat 1, (2..*).map: -> $d {
+    (1 ..^ $d).map( { $_ / $d } ).grep( { .denominator == $d } )\
+    .map( { $_, .denominator / .numerator } ).flat.map: { .numerator }
+};
 # A038569 / fractal
-our @A038569 is export = 1, 2, 1, 3, 1, 3, 2, 4, 1, 4, 3, 5, &NOSEQ ... *;
+our @A038569 is export = lazy flat 1, (2..*).map: -> $d {
+    (1 ..^ $d).map( { $_ / $d } ).grep( { .denominator == $d } )\
+    .map( { $_, .denominator / .numerator } ).flat.map: { .denominator }
+};
 # A049310 / Chebyshev
 our @A049310 is export = 𝕀.triangle.map: -> ($n, $k) {
     if $n < $k or ($n+$k) !%% 2 { 0 }
