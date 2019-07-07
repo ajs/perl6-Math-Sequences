@@ -328,8 +328,8 @@ sub FatPi($digits=100) is export {
   FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
 }
 
-sub Eulers-numbera ( Int $terms = 500 ) is export(:support) {
-    # Generates decimal digits of e acurate at least up to term.
+sub Eulers-number ( Int $terms = 500 ) is export(:support) {
+    # Generates decimal digits of e accurate at least up to term.
     # Returns first 500 decimal digits by default as a trade-off
     # between completeness and run time.
     (sum map { FatRat.new(1,factorial($_)) }, ^(ceiling($terms * .66) max 100))\
