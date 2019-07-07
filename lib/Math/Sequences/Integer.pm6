@@ -290,6 +290,16 @@ sub strict-partitions(Int:D $n, Int :$target=$n) is export(:support) {
     }
 }
 
+sub totient ($n) {
+    +(^$n).grep: * gcd $n == 1
+}
+
+# The number of k-ary necklaces of length n.
+sub necklaces ($n, :ary($k) = 2) {
+    return 1 if $n == 0;
+    $n R/ sum divisors($n).map: -> $d { totient($d) * $k**($n / $d) }
+}
+
 # https://mail.python.org/pipermail/edu-sig/2012-December/010721.html
 sub Pi-digits is export(:support) {
     my ($q, $r, $t) = 1, 180, 60;
@@ -361,7 +371,7 @@ our @A000007 is export = 𝕀.map: -> $n { 0 ** $n };
 # A000009 / distinct partitions
 our @A000009 is export = 𝕀.map: { strict-partitions($^i).elems };
 # A000010 / totient
-our @A000010 is export = ℕ.map: -> $t { +(^$t).grep: * gcd $t == 1 };
+our @A000010 is export = ℕ.map: &totient;
 # A000012 / 1's
 our @A000012 is export = 1 xx *;
 # A000014 / series-reduced trees
@@ -373,7 +383,7 @@ our @A000027 is export = |ℕ; # We chose 𝕀[0]=0, OEIS chose 𝕀[0]=1
 # A000029 / necklaces
 our @A000029 is export = 1, 2, 3, 4, 6, 8, 13, 18, 30, 46, 78, &NOSEQ ... *;
 # A000031 / necklaces
-our @A000031 is export = 1, 2, 3, 4, 6, 8, 14, 20, 36, 60, 108, &NOSEQ ... *;
+our @A000031 is export = 𝕀.map: &necklaces;
 # A000032 / Lucas
 our @A000032 is export = 2, 1, * + * ... *;
 our @sequence-Lucas is export =  @A000032;
