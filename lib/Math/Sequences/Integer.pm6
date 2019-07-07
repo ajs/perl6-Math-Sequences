@@ -763,7 +763,7 @@ our @A003418 is export = 𝕀.map: -> $n { [lcm] 1..$n };
 # A003484 / Hurwitz-Radon
 our @A003484 is export = 1, &NOSEQ ... *;
 # A004011 / D_4
-our @A004011 is export = 1, &NOSEQ ... *;
+our @A004011 is export = 1, |(1..Inf).map( -> $n { 24 * sum(divisors($n).map( -> $d { $d % 2 * $d } )) } );
 # A004018 / square lattice
 our @A004018 is export = 1, &NOSEQ ... *;
 # A004526 / ints repeated
