@@ -772,7 +772,12 @@ our @A005117 is export  = ℕ.grep: { my @v = .&factors.Bag.values; @v.sum/@v <=
 # A005130 / Robbins
 our @A005130 is export = lazy 1, 1, -> $a {state $n++; $a * factorial($n) * factorial(3*$n+1) / factorial(2*$n) / factorial(2*$n+1) } ... *;
 # A005230 / Stern
-our @A005230 is export = 1, &NOSEQ ... *;
+our @A005230 is export = 1, {
+    (state $n)++;
+    my $m = ceiling (sqrt(8 * $n + 1) - 1) / 2;
+    sum @A005230[$n - $m .. $n - 1]
+} ... *;
+
 # A005408 / odd
 our @A005408 is export = 𝕀.map: -> $n {$n*2+1};
 # A005470 / planar graphs
