@@ -290,11 +290,11 @@ sub strict-partitions(Int:D $n, Int :$target=$n) is export(:support) {
     }
 }
 
-sub totient ($n) {
+sub totient ($n) is export (:support) {
     +(^$n).grep: * gcd $n == 1
 }
 
-sub moebius ($n) {
+sub moebius ($n) is export (:support) {
     given $n.&prime-signature {
         when *.elems    == 0 { 1 #`{ constant one   } }
         when *.keys.max == 1 { .{1} %% 2 ?? 1 !! -1   }
@@ -328,11 +328,12 @@ sub FatPi($digits=100) is export {
   FatRat.new(+([~] Pi-digits[^($digits)]), 10**($digits-1));
 }
 
-sub Eulers-number ( Int $terms = 264 ) {
-    # Generates approximately 1.9 accurate digits of e per term.
-    # Returns first 500 digits by default as a trade-off
+sub Eulers-numbera ( Int $terms = 500 ) is export(:support) {
+    # Generates decimal digits of e acurate at least up to term.
+    # Returns first 500 decimal digits by default as a trade-off
     # between completeness and run time.
-    (sum map { FatRat.new(1,factorial($_)) }, ^$terms).substr(0,$terms*1.9).FatRat
+    (sum map { FatRat.new(1,factorial($_)) }, ^(ceiling($terms * .66) max 100))\
+    .substr(0, $terms+2).FatRat
 }
 
 # Stirling numbers of the second kind

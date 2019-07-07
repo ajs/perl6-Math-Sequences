@@ -60,10 +60,16 @@ To gain access to these, use:
     use Math::Sequences::Integer :support;
 
 * `$a choose $b`
-  The choose and ichoose (for integer-only results) infix operators
+  (binomial) The choose and ichoose (for integer-only results) infix operators
   return the binomial coefficient on the inputs.
 * `binpart($n)`
   The binary partitions of n.
+* `Entringer($n, $k)`
+   Alternating permutation (or zigzag permutation) of the set 1 through n, taken
+   k at a time, where each is an arrangement that is alternately greater or less
+   than the preceding.
+* `Eulers-number($terms)`
+   Returns digits of e to terms places after the decimal as a FatRat.
 * `factorial($n)`
   The factorial of n.
 * `factors($n, :%map)`
@@ -73,9 +79,15 @@ To gain access to these, use:
 * `divisors($n)`
   The unique list of whole divisors of n. e.g. `divisors(6)` gives
   `(1, 2, 3, 6)`.
+* `moebius($n)`
+   The Möbius number of n.
 * `sigma($n, $exponent=1)`
   The sum of positive divisors function σ. The optional exponent is
   the power to which each divisor is raised before summing.
+* `Sterling2($n, $k)`
+  The number of ways to partition a set of n objects into k non-empty subsets.
+* `totient($n)`
+  The numbers from zero to n that are co-prime to n.
 * `planar-partitions($n)`
   The planar partitions of n. http://mathworld.wolfram.com/PlanePartition.html
 * `strict-partitions($n)`
