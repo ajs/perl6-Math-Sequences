@@ -915,7 +915,10 @@ our @A055512 is export = 1, 1, 2, 6, 36, 380, 6390, 157962, 5396888, 243179064,
 # A070939 / binary length
 our @A070939 is export = 𝕀.map: { .base(2).chars };
 # A074206 / ordered factorizations
-our @A074206 is export = 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 3, 1, &NOSEQ ... *;
+our @A074206 is export = 0, 1, {
+    (state $n = 1)++;
+    sum (@A074206[$_] for divisors($n)[0..*-2])
+} ... *;
 # A104725 / complementing systems
 our @A104725 is export = 0, 1, 1, 1, 2, 1, 3, 1, 5, 2, 3, 1, &NOSEQ ... *;
 # A226898 / Hooley's Delta
