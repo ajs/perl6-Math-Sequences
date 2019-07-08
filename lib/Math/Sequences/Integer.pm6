@@ -336,6 +336,16 @@ sub Eulers-number ( Int $terms = 500 ) is export(:support) {
     .substr(0, $terms+2).FatRat
 }
 
+# Stirling numbers of the first kind
+multi Sterling1 (0, 0) is export(:support) { 1 }
+multi Sterling1 (Int \n where * > 0, 0) is export(:support) { 0 }
+multi Sterling1 ( 0, Int \k where * > 0) is export(:support) { 0 }
+multi Sterling1 (Int \n, Int \k) is export(:support) {
+    state %seen;
+    (%seen{"{n - 1}|{k - 1}"} //= Sterling1(n - 1, k - 1)) -
+    (n - 1) * (%seen{"{n - 1}|{k}"} //= Sterling1(n - 1, k))
+}
+
 # Stirling numbers of the second kind
 multi Sterling2 (0, 0) is export(:support) { 1 }
 multi Sterling2 (Int \n where * > 0, 0) is export(:support) { 0 }
@@ -853,7 +863,7 @@ our @A006966 is export = 1, 1, 1, 1, 2, 5, 15, 53, 222, 1078, 5994, 37622,
 # A007318 / Pascal's triangle
 our @A007318 is export = 𝕀.triangle.map: -> ($n,$k) { $n choose $k };
 # A008275 / Stirling 1
-our @A008275 is export = 1, &NOSEQ ... *;
+our @A008275 is export = flat (1..*).map: -> $s { (1..$s).map: { Sterling1($s, $_) } };
 # A008277 / Stirling 2
 our @A008277 is export = flat (1..*).map: -> $s { (1..$s).map: { Sterling2($s, $_) } };
 # A008279 / permutations k at a time
