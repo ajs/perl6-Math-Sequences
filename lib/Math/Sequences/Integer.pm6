@@ -275,7 +275,7 @@ sub strict-partitions(Int:D $n, Int :$target=$n) is export(:support) {
     return strict-partitions($n.abs, :$target).map({.map: {-$_}}) if $n < 0;
     return [$n] if $n==0 and not $target;
     $target > 0 or die "\$target($target) cannot be < 0";
-    gather for min($n,$target)...1 -> $i {
+    gather loop (my $i = min($n,$target); $i > 0; $i--) {
         given ($target)-$i -> $remain {
             when  $remain < 0 { next }
             when $remain == 0 { take [$i] }
