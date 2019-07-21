@@ -283,7 +283,7 @@ sub strict-partitions(Int:D $n, Int :$target=$n) is export(:support) {
             default {
                 for strict-partitions($i-1, :target($remain)) -> $rest {
                     # Merge and add to results
-                    take ($i, $rest).map: |*;
+                    take ($i.Array, $rest.Array).map: |*;
                 }
             }
         }
