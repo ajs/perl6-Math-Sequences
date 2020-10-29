@@ -337,20 +337,20 @@ sub Eulers-number ( Int $terms = 500 ) is export(:support) {
 }
 
 # Stirling numbers of the first kind
-multi Sterling1 (0, 0) is export(:support) { 1 }
-multi Sterling1 (Int \n where * > 0, 0) is export(:support) { 0 }
-multi Sterling1 ( 0, Int \k where * > 0) is export(:support) { 0 }
-multi Sterling1 (Int \n, Int \k) is export(:support) {
+multi Stirling1 (0, 0) is export(:support) { 1 }
+multi Stirling1 (Int \n where * > 0, 0) is export(:support) { 0 }
+multi Stirling1 ( 0, Int \k where * > 0) is export(:support) { 0 }
+multi Stirling1 (Int \n, Int \k) is export(:support) {
     state %seen;
-    (%seen{"{n - 1}|{k - 1}"} //= Sterling1(n - 1, k - 1)) -
-    (n - 1) * (%seen{"{n - 1}|{k}"} //= Sterling1(n - 1, k))
+    (%seen{"{n - 1}|{k - 1}"} //= Stirling1(n - 1, k - 1)) -
+    (n - 1) * (%seen{"{n - 1}|{k}"} //= Stirling1(n - 1, k))
 }
 
 # Stirling numbers of the second kind
-multi Sterling2 (0, 0) is export(:support) { 1 }
-multi Sterling2 (Int \n where * > 0, 0) is export(:support) { 0 }
-multi Sterling2 (Int \n, Int \k where * == n) is export(:support) { 1 }
-multi Sterling2 (Int \n, Int \k) is export(:support) {
+multi Stirling2 (0, 0) is export(:support) { 1 }
+multi Stirling2 (Int \n where * > 0, 0) is export(:support) { 0 }
+multi Stirling2 (Int \n, Int \k where * == n) is export(:support) { 1 }
+multi Stirling2 (Int \n, Int \k) is export(:support) {
     1/factorial(k) * sum (0 .. k).map: -> \j {
         (-1)**j * (k choose j) * (k - j)**n
     }
@@ -863,9 +863,9 @@ our @A006966 is export = 1, 1, 1, 1, 2, 5, 15, 53, 222, 1078, 5994, 37622,
 # A007318 / Pascal's triangle
 our @A007318 is export = 𝕀.triangle.map: -> ($n,$k) { $n choose $k };
 # A008275 / Stirling 1
-our @A008275 is export = flat (1..*).map: -> $s { (1..$s).map: { Sterling1($s, $_) } };
+our @A008275 is export = flat (1..*).map: -> $s { (1..$s).map: { Stirling1($s, $_) } };
 # A008277 / Stirling 2
-our @A008277 is export = flat (1..*).map: -> $s { (1..$s).map: { Sterling2($s, $_) } };
+our @A008277 is export = flat (1..*).map: -> $s { (1..$s).map: { Stirling2($s, $_) } };
 # A008279 / permutations k at a time
 our @A008279 is export = 𝕀.triangle.map: -> ($n,$k) {
     factorial($n)/factorial($n-$k);
