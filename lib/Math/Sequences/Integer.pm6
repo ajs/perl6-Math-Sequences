@@ -417,7 +417,13 @@ our @A000035 is export = |(0,1) xx *;
 # A000040 / primes
 our @A000040 is export = lazy 𝕀.grep: {.is-prime};
 # A000041 / partitions
-our @A000041 is export = 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, &NOSEQ ... *;
+our @A000041 is export = 1, { partition-sum(++$) } … *;
+my @A000041-adder = lazy [\+] flat 1, ( (1 .. *) Z (1 .. *).map: * × 2 + 1 );
+sub partition-sum ($n) {
+    sum @A000041[$n X- @A000041-adder[^(@A000041-adder.first: * > $n, :k)]]
+        Z× (flat (1, 1, -1, -1) xx *)
+}
+
 # A000043 / Mersenne
 our @A000043 is export = lazy 𝕀.grep: { .is-prime and (2**$_-1).is-prime };
 # A000045 / Fibonacci
