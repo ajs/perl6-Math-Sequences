@@ -84,9 +84,9 @@ To gain access to these, use:
 * `sigma($n, $exponent=1)`
   The sum of positive divisors function σ. The optional exponent is
   the power to which each divisor is raised before summing.
-* `Sterling1($n, $k)`
+* `Stirling1($n, $k)`
   Count permutations according to their number of cycles.
-* `Sterling2($n, $k)`
+* `Stirling2($n, $k)`
   The number of ways to partition a set of n objects into k non-empty subsets.
 * `totient($n)`
   The numbers from zero to n that are co-prime to n.
